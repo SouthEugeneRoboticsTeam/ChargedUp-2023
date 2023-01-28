@@ -8,31 +8,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 //The Dominion of Milo.
 
 object Elevator : SubsystemBase() {
-    val extendMotor = CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless)
+    private val extendMotor = CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless)
 
-    val OtherMotor = CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless)
+    private val angleMotor = CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless)
 
-    val yogurt = Encoder(1,0)
+    private val trueAngleEncoder = Encoder(1,0)
 
-    val yogibear = extendMotor.encoder
+    private val extendEncoder = extendMotor.encoder
 
-    val fozzybear = OtherMotor.encoder
+    private val angleEncoder = angleMotor.encoder
 
-    fun Lifting(speed: Double) {
+    fun extend(speed: Double) {
         extendMotor.set(speed)
     }
-    fun Dropping(speed2 : Double){
-        OtherMotor.set(speed2)
+    fun retract(speed2 : Double){
+        angleMotor.set(speed2)
     }
 
-    fun DondeEstaElSensor(): Double {
-        return fozzybear.position
+    fun angleMeasure(): Double {
+        return angleEncoder.position
     }
-    fun DondeEstaElSensorDos(): Double {
-        return yogibear.position
+    fun extensionMeasure(): Double {
+        return extendEncoder.position
     }
-    fun DondeEstaElSensorTres(): Double {
-        return yogurt.distance
+    fun trueMeasure(): Double {
+        return trueAngleEncoder.distance
     }
 
 }
