@@ -7,4 +7,5 @@ object TunedConstants {
 }
 
 object ElectronicIDs {
+    val clawMotorId = -1
 }
