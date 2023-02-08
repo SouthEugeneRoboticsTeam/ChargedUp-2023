@@ -1,8 +1,8 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import java.io.File
 
 object Output {
