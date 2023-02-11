@@ -3,6 +3,8 @@ package org.sert2521.chargedup2023
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import org.sert2521.chargedup2023.subsystems.Elevator
 import java.io.File
 
 object Output {
@@ -15,6 +17,15 @@ object Output {
             DataLogManager.start(storageDevices[0].absolutePath)
             DriverStation.startDataLog(DataLogManager.getLog())
         }
+
+        values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
+        values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
+
+        bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
+        bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })
+
+        bools.add(Pair("Elevator Angle At Top") { Elevator.angleAtTop() })
+        bools.add(Pair("Elevator Angle At Bottom") { Elevator.angleAtBottom() })
 
         update()
     }
