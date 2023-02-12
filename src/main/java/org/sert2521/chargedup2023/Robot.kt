@@ -7,6 +7,10 @@ import org.sert2521.chargedup2023.commands.JoystickDrive
 object Robot : TimedRobot() {
     private val commandScheduler = CommandScheduler.getInstance()
 
+    init {
+        Input
+    }
+
     override fun robotPeriodic() {
         commandScheduler.run()
 
