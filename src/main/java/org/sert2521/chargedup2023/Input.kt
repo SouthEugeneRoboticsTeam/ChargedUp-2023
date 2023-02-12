@@ -6,11 +6,11 @@ object Input {
     private val joystick = XboxController(0)
 
     fun getX(): Double {
-        return joystick.leftX
+        return -joystick.leftX
     }
 
     fun getY(): Double {
-        return joystick.leftY
+        return -joystick.leftY
     }
 
     fun getRot(): Double {

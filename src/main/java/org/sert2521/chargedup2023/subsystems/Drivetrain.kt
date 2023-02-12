@@ -42,7 +42,7 @@ class SwerveModule(private val powerMotor: CANSparkMax,
             anglePID.enableContinuousInput(-PI * 2, PI * 2)
         }
 
-        setMotorMode(brakeMode)
+        setMotorMode(!brakeMode)
 
         position = SwerveModulePosition(getDistance(), getAngle())
 
@@ -160,7 +160,9 @@ object Drivetrain : SubsystemBase() {
             val angleMotor = CANSparkMax(moduleData.angleMotorID, CANSparkMaxLowLevel.MotorType.kBrushless)
 
             modulePositions.add(moduleData.position)
-            modulesList.add(createModule(powerMotor, angleMotor, moduleData))
+            val module = createModule(powerMotor, angleMotor, moduleData)
+            module.isSafetyEnabled = true
+            modulesList.add(module)
         }
 
         modules = modulesList.toTypedArray()
@@ -210,10 +212,10 @@ object Drivetrain : SubsystemBase() {
 
         for (module in modules) {
             module.updateState()
-            val pos = module.position
-            pos.angle += Rotation2d(PI / 2)
-            positions.add(pos)
+            println(module.position.angle)
+            positions.add(module.position)
         }
+        println()
 
         val positionsArray = positions.toTypedArray()
 

@@ -28,10 +28,10 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
 
     override fun execute() {
         var currX = Input.getX()
-        var currY = Input.getY() * ConfigConstants.driveSpeed
+        var currY = Input.getY()
 
         val sqrMagnitude = currX.pow(2) + currY.pow(2)
-        if (sqrMagnitude <= ConfigConstants.joystickDeadband * ConfigConstants.joystickDeadband) {
+        if (sqrMagnitude <= ConfigConstants.joystickDeadband.pow(2)) {
             currX = 0.0
             currY = 0.0
         } else if (sqrMagnitude > 1) {
@@ -50,7 +50,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         val diffX = x - currX
         val diffY = y - currY
         val rateChangeSqr = diffX.pow(2) + diffY.pow(2)
-        if (rateChangeSqr <= ConfigConstants.joystickChangeSpeed * ConfigConstants.joystickChangeSpeed) {
+        if (rateChangeSqr <= ConfigConstants.joystickChangeSpeed.pow(2)) {
             x = currX
             y = currY
         } else {
@@ -64,7 +64,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             rot = 0.0
         }
 
-        if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband * ConfigConstants.powerDeadband && abs(rot) <= ConfigConstants.rotDeadband) {
+        if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2) && abs(rot) <= ConfigConstants.rotDeadband) {
             // Fix
             // Drivetrain.enterBrakePos()
             Drivetrain.stop()
