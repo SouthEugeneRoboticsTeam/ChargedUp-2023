@@ -34,14 +34,14 @@ object Input {
     }
 
     fun getX(): Double {
-        return -joystick.leftX
+        return -driverController.leftX
     }
 
     fun getY(): Double {
-        return -joystick.leftY
+        return -driverController.leftY
     }
 
     fun getRot(): Double {
-        return joystick.rightX
+        return driverController.rightX
     }
 }
