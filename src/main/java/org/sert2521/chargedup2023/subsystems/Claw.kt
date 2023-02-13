@@ -14,7 +14,7 @@ object Claw : SubsystemBase() {
     val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
 
     init {
-        motor.setSmartCurrentLimit(20, 45)
+        motor.setSmartCurrentLimit(30, 45)
     }
 
 

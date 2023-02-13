@@ -13,13 +13,16 @@ class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val a
 
 object PhysicalConstants {
     const val elevatorExtensionConversion = ((8.375) - (40.5625)) / (-1.071426391601562 - 70.07333374023438) / 100.0
-    const val elevatorAngleConversion = 2.0 * PI / 2048.0
+    const val elevatorAngleConversion = -2 * PI
+    const val elevatorFlipOffset = 0.085541770703388 - PI
+    const val elevatorAngleOffset = -0.638255487307134
 
     const val elevatorExtensionTop = 18.807661056518555 / 100.0
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
+    const val elevatorExtensionMinAngle = 0.05
 
-    const val elevatorAngleTop = 0.9
-    const val elevatorAngleBottom = 0.006902913545485
+    const val elevatorAngleTop = 1.0//1.09
+    const val elevatorAngleBottom = 0.01//0.0
 
     const val halfSideLength = 0.286378246381
 
@@ -34,19 +37,19 @@ object PhysicalConstants {
 
 object TunedConstants {
     const val extensionResetSpeed = -0.1
-    const val angleResetSpeed = -0.05
 
     const val elevatorExtensionP = 4.5
-    const val elevatorExtensionI = 0.0
-    const val elevatorExtensionD = 0.0
+    const val elevatorExtensionI = 0.1
+    const val elevatorExtensionD = 0.5
 
     const val elevatorAngleS = 0.0
+    // Should multiple G by extension
     const val elevatorAngleG = 0.15
     const val elevatorAngleV = 0.0
 
-    const val elevatorAngleP = 2.5
-    const val elevatorAngleI = 0.0
-    const val elevatorAngleD = 0.0
+    const val elevatorAngleP = 1.1
+    const val elevatorAngleI = 0.05
+    const val elevatorAngleD = 0.5
 
     const val swervePowerS = 1.20983
     const val swervePowerV = 4.601311978
@@ -62,6 +65,23 @@ object TunedConstants {
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
     val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
+
+    const val elevatorExtensionMinAngleTarget = 0.1
+
+    const val elevatorExtensionTolerance = 0.025
+}
+
+object ConfigConstants {
+    const val drivetrainOptimized = true
+
+    const val powerDeadband = 0.1
+    const val rotDeadband = 0.1
+    const val joystickDeadband = 0.1
+
+    const val driveSpeed = 1.0
+    const val rotSpeed = 1.0
+
+    const val joystickChangeSpeed = 0.4
 }
 
 object ElectronicIDs {
@@ -70,13 +90,10 @@ object ElectronicIDs {
     const val elevatorMotorTwo = 10
     const val elevatorAngleMotor = 5
 
-    const val elevatorEncoderA = 5
-    const val elevatorEncoderB = 6
+    const val elevatorEncoder = 5
 
     const val elevatorUpperExtension = 2
     const val elevatorLowerExtension = 1
-
-    const val elevatorLowerAngle = 3
 
     val swerveModuleData = mutableListOf(
         SwerveModuleData(Translation2d(halfSideLength, -halfSideLength), 4, 3, 14, -2.27 + PI, true),

@@ -212,10 +212,8 @@ object Drivetrain : SubsystemBase() {
 
         for (module in modules) {
             module.updateState()
-            println(module.position.angle)
             positions.add(module.position)
         }
-        println()
 
         val positionsArray = positions.toTypedArray()
 
