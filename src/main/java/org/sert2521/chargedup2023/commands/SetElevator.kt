@@ -1,41 +1,49 @@
 package org.sert2521.chargedup2023.commands
 
-import edu.wpi.first.math.controller.ArmFeedforward
-import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.CommandBase
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand
-import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
 
-class SetElevator(private val extension: Double, private val angle: Double) : CommandBase() {
-    private val anglePID = PIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD)
-    private val angleFeedforward = ArmFeedforward(TunedConstants.elevatorAngleS, TunedConstants.elevatorAngleG, TunedConstants.elevatorAngleV)
+class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
+    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
 
-    private val extensionPID = PIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD)
+    private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
 
     init {
         addRequirements(Elevator)
 
+        anglePID.setTolerance(TunedConstants.elevatorAngleTolerance)
         extensionPID.setTolerance(TunedConstants.elevatorExtensionTolerance)
     }
 
     override fun initialize() {
-        anglePID.reset()
-        extensionPID.reset()
+        anglePID.reset(Elevator.angleMeasure())
+
+        extensionPID.reset(Elevator.extensionMeasure())
     }
 
-    // Make it stay above the extension safe limit until extension is in bounds
     override fun execute() {
-        val angleTarget: Double = if (angle >= TunedConstants.elevatorExtensionMinAngleTarget || (extensionPID.atSetpoint() && Elevator.extensionInited)) {
+        val angleTarget = if (angle >= TunedConstants.elevatorExtensionMinAngleTarget || extensionPID.atSetpoint()) {
             angle
         } else {
             TunedConstants.elevatorExtensionMinAngleTarget
         }
 
-        Elevator.setAngle(angleFeedforward.calculate(angleTarget, 0.0) + anglePID.calculate(Elevator.angleMeasure(), angleTarget))
-        Elevator.setExtend(extensionPID.calculate(Elevator.extensionMeasure(), extension))
+        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget) + TunedConstants.elevatorAngleG + Elevator.extensionMeasure() * TunedConstants.elevatorAngleGPerMeter)
+
+        val extensionTarget = if (Elevator.extensionSafe()) {
+            extension
+        } else {
+            Elevator.extensionMeasure()
+        }
+
+        Elevator.setExtend(extensionPID.calculate(Elevator.extensionMeasure(), extensionTarget))
+    }
+
+    override fun isFinished(): Boolean {
+        return ends && anglePID.atGoal() && extensionPID.atGoal()
     }
 
     override fun end(interrupted: Boolean) {

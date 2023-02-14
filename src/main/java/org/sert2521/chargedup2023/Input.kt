@@ -40,8 +40,8 @@ object Input {
         outtake.onFalse(InstantCommand({ clawCommandDirection?.cancel(); clawCommandDirection = null }))
 
         // Replace with constants
-        liftBottom.onTrue(SetElevator(0.02, 0.01))
-        liftMid.onTrue(SetElevator(0.19, 0.65))
+        liftBottom.onTrue(SetElevator(0.02, 0.01, false))
+        liftMid.onTrue(SetElevator(0.19, 0.65, false))
     }
 
     fun getX(): Double {

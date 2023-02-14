@@ -6,7 +6,6 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import org.sert2521.chargedup2023.PhysicalConstants.halfSideLength
 import kotlin.math.PI
 
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
@@ -36,20 +35,30 @@ object PhysicalConstants {
 }
 
 object TunedConstants {
-    const val extensionResetSpeed = -0.1
+    const val extensionResetVoltage = -1.0
 
     const val elevatorExtensionP = 4.5
     const val elevatorExtensionI = 0.1
     const val elevatorExtensionD = 0.5
 
-    const val elevatorAngleS = 0.0
-    // Should multiple G by extension
+    const val elevatorExtensionMaxV = 0.0
+    const val elevatorExtensionMaxA = 0.0
+
     const val elevatorAngleG = 0.15
-    const val elevatorAngleV = 0.0
+    const val elevatorAngleGPerMeter = 0.0
+    const val startKg = 0.0
 
     const val elevatorAngleP = 1.1
     const val elevatorAngleI = 0.05
     const val elevatorAngleD = 0.5
+
+    const val elevatorAngleMaxV = 0.0
+    const val elevatorAngleMaxA = 0.0
+
+    const val elevatorExtensionMinAngleTarget = 0.1
+
+    const val elevatorAngleTolerance = 0.01
+    const val elevatorExtensionTolerance = 0.025
 
     const val swervePowerS = 1.20983
     const val swervePowerV = 4.601311978
@@ -65,10 +74,6 @@ object TunedConstants {
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
     val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
-
-    const val elevatorExtensionMinAngleTarget = 0.1
-
-    const val elevatorExtensionTolerance = 0.025
 }
 
 object ConfigConstants {
@@ -96,10 +101,10 @@ object ElectronicIDs {
     const val elevatorLowerExtension = 1
 
     val swerveModuleData = mutableListOf(
-        SwerveModuleData(Translation2d(halfSideLength, -halfSideLength), 4, 3, 14, -2.27 + PI, true),
-        SwerveModuleData(Translation2d(-halfSideLength, -halfSideLength), 2, 1, 16, -1.63 - PI / 2, true),
-        SwerveModuleData(Translation2d(halfSideLength, halfSideLength), 12, 11, 13, -0.76 + PI, true),
-        SwerveModuleData(Translation2d(-halfSideLength, halfSideLength), 7, 8, 15, -4.10, true))
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 3, 14, -2.27 + PI, true),
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 2, 1, 16, -1.63 - PI / 2, true),
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI, true),
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10, true))
 
     const val camName = ""
 

@@ -1,16 +1,15 @@
 package org.sert2521.chargedup2023.subsystems
 
-import com.revrobotics.AbsoluteEncoder
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
 import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj.DutyCycle
 import edu.wpi.first.wpilibj.DutyCycleEncoder
-import edu.wpi.first.wpilibj.Encoder
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
+import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
 
 object Elevator : SubsystemBase() {
@@ -37,6 +36,8 @@ object Elevator : SubsystemBase() {
         extendEncoder.positionConversionFactor = PhysicalConstants.elevatorExtensionConversion
 
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
+
+        defaultCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false) })
     }
 
     override fun periodic() {
@@ -55,7 +56,7 @@ object Elevator : SubsystemBase() {
         }
 
         if (!extensionInited && safe) {
-            extendMotorOne.set(TunedConstants.extensionResetSpeed)
+            extendMotorOne.setVoltage(TunedConstants.extensionResetVoltage)
         }
 
         if (!safe || (extendMotorOne.get() > 0 && atTopExtension) || (extendMotorOne.get() < 0 && atBottomExtension)) {
@@ -70,19 +71,23 @@ object Elevator : SubsystemBase() {
     fun setExtend(speed: Double) {
         if (extensionInited && extensionSafe()) {
             if (!((speed > 0 && extensionAtTop()) || (speed < 0 && extensionAtBottom()))) {
-                extendMotorOne.set(speed)
+                extendMotorOne.setVoltage(speed)
             }
         }
     }
 
     fun setAngle(speed : Double){
         if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
-            angleMotor.set(speed)
+            angleMotor.setVoltage(speed)
         }
     }
 
     fun extensionMeasure(): Double {
-        return extendEncoder.position
+        return if (!extensionInited) {
+            0.0
+        } else {
+            extendEncoder.position
+        }
     }
 
     fun angleMeasure(): Double {
