@@ -20,8 +20,8 @@ object PhysicalConstants {
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
     const val elevatorExtensionMinAngle = 0.05
 
-    const val elevatorAngleTop = 1.0//1.09
-    const val elevatorAngleBottom = 0.01//0.0
+    const val elevatorAngleTop = 1.05//1.09
+    const val elevatorAngleBottom = 0.0//-0.01
 
     const val halfSideLength = 0.286378246381
 
@@ -37,28 +37,24 @@ object PhysicalConstants {
 object TunedConstants {
     const val extensionResetVoltage = -1.0
 
-    const val elevatorExtensionP = 4.5
-    const val elevatorExtensionI = 0.1
-    const val elevatorExtensionD = 0.5
+    const val elevatorExtensionP = 50.0
+    const val elevatorExtensionI = 0.0
+    const val elevatorExtensionD = 0.0
 
-    const val elevatorExtensionMaxV = 0.0
-    const val elevatorExtensionMaxA = 0.0
-
-    const val elevatorAngleG = 0.15
-    const val elevatorAngleGPerMeter = 0.0
-    const val startKg = 0.0
-
-    const val elevatorAngleP = 1.1
-    const val elevatorAngleI = 0.05
-    const val elevatorAngleD = 0.5
-
-    const val elevatorAngleMaxV = 0.0
-    const val elevatorAngleMaxA = 0.0
+    const val elevatorExtensionMaxV = 0.7
+    const val elevatorExtensionMaxA = 0.7
 
     const val elevatorExtensionMinAngleTarget = 0.1
+    const val elevatorExtensionTolerance = 0.015
 
-    const val elevatorAngleTolerance = 0.01
-    const val elevatorExtensionTolerance = 0.025
+    const val elevatorAngleP = 30.0
+    const val elevatorAngleI = 0.0
+    const val elevatorAngleD = 0.0
+
+    const val elevatorAngleMaxV = 5.0
+    const val elevatorAngleMaxA = 9.0
+
+    const val elevatorAngleTolerance = 0.025
 
     const val swervePowerS = 1.20983
     const val swervePowerV = 4.601311978

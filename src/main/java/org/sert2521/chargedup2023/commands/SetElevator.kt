@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
 
+// Maybe have very small feedforward especially angle which is about 0.02rad below goal
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
     private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
 
@@ -31,7 +32,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             TunedConstants.elevatorExtensionMinAngleTarget
         }
 
-        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget) + TunedConstants.elevatorAngleG + Elevator.extensionMeasure() * TunedConstants.elevatorAngleGPerMeter)
+        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget))
 
         val extensionTarget = if (Elevator.extensionSafe()) {
             extension

@@ -37,7 +37,9 @@ object Elevator : SubsystemBase() {
 
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
 
-        defaultCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false) })
+        val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false) })
+        holdCommand.addRequirements(this)
+        defaultCommand = holdCommand
     }
 
     override fun periodic() {
@@ -59,11 +61,11 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(TunedConstants.extensionResetVoltage)
         }
 
-        if (!safe || (extendMotorOne.get() > 0 && atTopExtension) || (extendMotorOne.get() < 0 && atBottomExtension)) {
+        if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
         }
 
-        if ((angleMotor.get() > 0 && angleAtTop()) || (angleMotor.get() < 0 && angleAtBottom())) {
+        if ((angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
             angleMotor.stopMotor()
         }
     }

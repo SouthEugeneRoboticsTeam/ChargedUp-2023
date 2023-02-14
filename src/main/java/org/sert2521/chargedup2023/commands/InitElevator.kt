@@ -26,7 +26,9 @@ class InitElevator : CommandBase() {
     }
 
     override fun execute() {
-        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget) + TunedConstants.startKg)
+        val a = anglePID.calculate(Elevator.angleMeasure(), angleTarget)
+        println(a)
+        Elevator.setAngle(a)
     }
 
     override fun isFinished(): Boolean {

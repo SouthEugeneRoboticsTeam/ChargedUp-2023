@@ -5,7 +5,7 @@ import org.sert2521.chargedup2023.subsystems.Claw
 import org.sert2521.chargedup2023.subsystems.GamePieces
 
 //kai moment
-class ClawIntake(private val gamePiece: GamePieces) : CommandBase() {
+class ClawIntake(private val gamePiece: GamePieces, private val power: Double) : CommandBase() {
 
     init {
         addRequirements(Claw)
@@ -14,9 +14,9 @@ class ClawIntake(private val gamePiece: GamePieces) : CommandBase() {
 
 
         if (gamePiece == GamePieces.CUBE){
-            Claw.setMotor(0.5)
+            Claw.setMotor(power)
         }else{
-            Claw.setMotor(-0.5)
+            Claw.setMotor(-power)
         }
 
     }
