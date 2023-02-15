@@ -64,7 +64,7 @@ object TunedConstants {
     const val swervePowerI = 0.0
     const val swervePowerD = 0.0
 
-    const val swerveAngleP = 0.3
+    const val swerveAngleP = 0.5
     const val swerveAngleI = 0.0
     const val swerveAngleD = 0.0
 

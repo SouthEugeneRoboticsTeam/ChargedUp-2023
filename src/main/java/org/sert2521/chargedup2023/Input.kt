@@ -35,10 +35,10 @@ object Input {
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
 
         //Intaking a cone is the same as outtaking a cube
-        intakeSetOne.onTrue(ClawIntake(GamePieces.CONE, 0.7))
+        intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, 0.7))
         intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
 
-        intakeSetTwo.onTrue(ClawIntake(GamePieces.CUBE, 0.7))
+        intakeSetTwo.whileTrue(ClawIntake(GamePieces.CUBE, 0.7))
         intakeSetTwo.onTrue(InstantCommand({ lastPiece = GamePieces.CONE }))
 
         var clawCommandDirection: ClawIntake? = null

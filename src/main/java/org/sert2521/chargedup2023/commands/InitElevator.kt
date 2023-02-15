@@ -26,9 +26,7 @@ class InitElevator : CommandBase() {
     }
 
     override fun execute() {
-        val a = anglePID.calculate(Elevator.angleMeasure(), angleTarget)
-        println(a)
-        Elevator.setAngle(a)
+        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget))
     }
 
     override fun isFinished(): Boolean {
