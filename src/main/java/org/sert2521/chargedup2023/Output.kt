@@ -3,6 +3,7 @@ package org.sert2521.chargedup2023
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import org.sert2521.chargedup2023.subsystems.Elevator
 import java.io.File
 
@@ -11,6 +12,8 @@ object Output {
     private val bools = mutableListOf<Pair<String, () -> Boolean>>()
 
     init {
+        LiveWindow.disableAllTelemetry()
+
         val storageDevices = File("/media").listFiles()!!
         if (storageDevices.isNotEmpty()) {
             DataLogManager.start(storageDevices[0].absolutePath)
