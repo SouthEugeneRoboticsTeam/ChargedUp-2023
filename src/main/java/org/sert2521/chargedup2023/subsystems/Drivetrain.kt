@@ -44,20 +44,12 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 
         setMotorMode(!brakeMode)
 
-        position = SwerveModulePosition(getDistance(), getAngle())
+        position = SwerveModulePosition(powerMotor.encoder.position, getAngle())
 
         powerMotor.inverted = inverted
 
         powerMotor.encoder.positionConversionFactor = PhysicalConstants.powerEncoderMultiplierPosition
         powerMotor.encoder.velocityConversionFactor = PhysicalConstants.powerEncoderMultiplierVelocity
-    }
-
-    private fun getDistance(): Double {
-        return powerMotor.encoder.position
-    }
-
-    private fun getVelocity(): Double {
-        return powerMotor.encoder.velocity
     }
 
     private fun getAngle(): Rotation2d {
@@ -81,8 +73,8 @@ class SwerveModule(private val powerMotor: CANSparkMax,
     // Should be called in periodic
     fun updateState() {
         val angle = getAngle()
-        state = SwerveModuleState(getVelocity(), angle)
-        position = SwerveModulePosition(getDistance(), angle)
+        state = SwerveModuleState(powerMotor.encoder.velocity, angle)
+        position = SwerveModulePosition(powerMotor.encoder.position, angle)
     }
 
     fun set(wanted: SwerveModuleState) {
@@ -95,9 +87,8 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 
         val feedforward = powerFeedforward.calculate(optimized.speedMetersPerSecond)
         val pid = powerPID.calculate(state.speedMetersPerSecond, optimized.speedMetersPerSecond)
-        // Figure out voltage stuff
-        // Could multiply by cos angle
-        // Why isn't motor.inverted working
+
+        // Why isn't motor.inverted working if it isn't
         if (!inverted) {
             powerMotor.set((feedforward + pid) / 12.0)
         } else {
@@ -155,6 +146,7 @@ object Drivetrain : SubsystemBase() {
         val modulePositions = mutableListOf<Translation2d>()
         val modulesList = mutableListOf<SwerveModule>()
 
+        // Maybe the module should create the motors
         for (moduleData in ElectronicIDs.swerveModuleData) {
             val powerMotor = CANSparkMax(moduleData.powerMotorID, CANSparkMaxLowLevel.MotorType.kBrushless)
             val angleMotor = CANSparkMax(moduleData.angleMotorID, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -196,6 +188,7 @@ object Drivetrain : SubsystemBase() {
             true
         )
     }
+
     override fun periodic() {
         val res = cam.latestResult
         if (res != prevRes) {
