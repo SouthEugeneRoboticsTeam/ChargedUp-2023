@@ -24,6 +24,7 @@ object Elevator : SubsystemBase() {
         private set
 
     private val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
+    // Maybe add filter?
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     init {

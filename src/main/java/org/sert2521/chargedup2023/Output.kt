@@ -26,6 +26,9 @@ object Output {
         bools.add(Pair("Elevator Angle At Top") { Elevator.angleAtTop() })
         bools.add(Pair("Elevator Angle At Bottom") { Elevator.angleAtBottom() })
 
+        bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
+        bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
+
         update()
     }
 
