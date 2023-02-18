@@ -27,6 +27,10 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
     }
 
     override fun execute() {
+        val currentTime = Timer.getFPGATimestamp()
+        val diffTime = (currentTime - prevTime)
+        prevTime = currentTime
+
         var currX = Input.getX()
         var currY = Input.getY()
 
@@ -42,10 +46,6 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
 
         currX *= ConfigConstants.driveSpeed
         currY *= ConfigConstants.driveSpeed
-
-        val currentTime = Timer.getFPGATimestamp()
-        val diffTime = (currentTime - prevTime)
-        prevTime = currentTime
 
         val diffX = x - currX
         val diffY = y - currY
@@ -65,8 +65,6 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         }
 
         if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2) && abs(rot) <= ConfigConstants.rotDeadband) {
-            // Fix
-            // Drivetrain.enterBrakePos()
             Drivetrain.stop()
         } else {
             if (fieldOrientated) {
