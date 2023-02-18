@@ -11,13 +11,11 @@ enum class GamePieces {
 }
 
 object Claw : SubsystemBase() {
-    val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
+    private val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
 
     init {
         motor.setSmartCurrentLimit(30, 45)
     }
-
-
 
     fun setMotor(speed:Double){
         motor.set(speed)

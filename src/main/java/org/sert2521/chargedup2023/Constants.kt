@@ -20,7 +20,7 @@ object PhysicalConstants {
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
     const val elevatorExtensionMinAngle = 0.05
 
-    const val elevatorAngleTop = 1.05//1.09
+    const val elevatorAngleTop = 0.5//1.05//1.09
     const val elevatorAngleBottom = 0.0//-0.01
 
     const val halfSideLength = 0.286378246381
@@ -64,7 +64,7 @@ object TunedConstants {
     const val swervePowerI = 0.0
     const val swervePowerD = 0.0
 
-    const val swerveAngleP = 0.3
+    const val swerveAngleP = 0.5
     const val swerveAngleI = 0.0
     const val swerveAngleD = 0.0
 
