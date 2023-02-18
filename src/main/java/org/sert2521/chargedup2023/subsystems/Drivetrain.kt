@@ -9,14 +9,13 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.kinematics.*
+import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.MotorSafety
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.photonvision.PhotonCamera
 import org.photonvision.targeting.PhotonPipelineResult
 import org.sert2521.chargedup2023.*
-import kotlin.math.PI
-import kotlin.math.atan2
-import kotlin.math.pow
+import kotlin.math.*
 
 class SwerveModule(private val powerMotor: CANSparkMax,
                    private val powerFeedforward: SimpleMotorFeedforward,
@@ -257,6 +256,15 @@ object Drivetrain : SubsystemBase() {
         }
 
         feed()
+    }
+
+    fun getTiltDirection(): Translation2d {
+        val unNormalized = Translation2d(Units.degreesToRadians(imu.pitch.toDouble()), Units.degreesToRadians(imu.roll.toDouble()))
+        return unNormalized / unNormalized.norm
+    }
+
+    fun getTilt(): Double {
+        return atan(sqrt(tan(imu.pitch.toDouble()).pow(2) + tan(imu.roll.toDouble()).pow(2)))
     }
 
     fun enterBrakePos() {
