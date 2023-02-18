@@ -44,12 +44,12 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 
         setMotorMode(!brakeMode)
 
-        position = SwerveModulePosition(powerMotor.encoder.position, getAngle())
-
         powerMotor.inverted = inverted
 
         powerMotor.encoder.positionConversionFactor = PhysicalConstants.powerEncoderMultiplierPosition
         powerMotor.encoder.velocityConversionFactor = PhysicalConstants.powerEncoderMultiplierVelocity
+
+        position = SwerveModulePosition(powerMotor.encoder.position, getAngle())
     }
 
     private fun getAngle(): Rotation2d {
@@ -63,6 +63,7 @@ class SwerveModule(private val powerMotor: CANSparkMax,
     fun setOptimize(value: Boolean) {
         doesOptimize = value
 
+        // Should these be halved
         if (doesOptimize) {
             anglePID.enableContinuousInput(-PI, PI)
         } else {
@@ -86,7 +87,11 @@ class SwerveModule(private val powerMotor: CANSparkMax,
         }
 
         val feedforward = powerFeedforward.calculate(optimized.speedMetersPerSecond)
-        val pid = powerPID.calculate(state.speedMetersPerSecond, optimized.speedMetersPerSecond)
+        val pid = if (inverted) {
+            powerPID.calculate(-state.speedMetersPerSecond, optimized.speedMetersPerSecond)
+        } else {
+            powerPID.calculate(state.speedMetersPerSecond, optimized.speedMetersPerSecond)
+        }
 
         // Why isn't motor.inverted working if it isn't
         if (!inverted) {
@@ -169,8 +174,8 @@ object Drivetrain : SubsystemBase() {
         val positionsArray = positions.toTypedArray()
 
         kinematics = SwerveDriveKinematics(*modulePositions.toTypedArray())
-        poseEstimator = SwerveDrivePoseEstimator(kinematics, imu.rotation2d, positionsArray, Pose2d(), TunedConstants.stateDeviations, TunedConstants.globalDeviations)
-        odometry = SwerveDriveOdometry(kinematics, imu.rotation2d, positionsArray)
+        poseEstimator = SwerveDrivePoseEstimator(kinematics, -imu.rotation2d, positionsArray, Pose2d(), TunedConstants.stateDeviations, TunedConstants.globalDeviations)
+        odometry = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray)
     }
 
     private fun createModule(powerMotor: CANSparkMax, angleMotor: CANSparkMax, moduleData: SwerveModuleData): SwerveModule {
@@ -210,8 +215,8 @@ object Drivetrain : SubsystemBase() {
 
         val positionsArray = positions.toTypedArray()
 
-        pose = poseEstimator.update(imu.rotation2d, positionsArray)
-        odometry.update(imu.rotation2d, positionsArray)
+        pose = poseEstimator.update(-imu.rotation2d, positionsArray)
+        odometry.update(-imu.rotation2d, positionsArray)
     }
 
     fun setOptimize(value: Boolean) {
@@ -234,8 +239,8 @@ object Drivetrain : SubsystemBase() {
 
         val positionsArray = positions.toTypedArray()
 
-        odometry.resetPosition(imu.rotation2d, positionsArray, pose)
-        poseEstimator.resetPosition(imu.rotation2d, positionsArray, pose)
+        odometry.resetPosition(-imu.rotation2d, positionsArray, pose)
+        poseEstimator.resetPosition(-imu.rotation2d, positionsArray, pose)
     }
 
     fun getAccelSqr(): Double {

@@ -33,7 +33,7 @@ class CharacterizationModule(private val powerMotor: CANSparkMax,
     var position: SwerveModulePosition
 
     init {
-        anglePID.enableContinuousInput(-PI * 2, PI * 2)
+        anglePID.enableContinuousInput(-PI, PI)
 
         powerMotor.idleMode = CANSparkMax.IdleMode.kBrake
         angleMotor.idleMode = CANSparkMax.IdleMode.kBrake
@@ -69,7 +69,7 @@ class CharacterizationModule(private val powerMotor: CANSparkMax,
             powerMotor.set(voltage)
         }
 
-        angleMotor.set(anglePID.calculate(state.angle.radians, 0.0))
+        angleMotor.set(anglePID.calculate(state.angle.radians, PI / 2))
     }
 
     override fun stopMotor() {
@@ -86,7 +86,7 @@ private enum class TestType {
     QUASISTATIC, DYNAMIC, OTHER
 }
 
-class DrivetrainCharacterization : TimedRobot(0.005) {
+object DrivetrainCharacterization : TimedRobot(0.005) {
     private val imu = AHRS()
 
     private val data = ArrayList<Double>(dataSize)
@@ -114,7 +114,7 @@ class DrivetrainCharacterization : TimedRobot(0.005) {
 
             modulePositions.add(moduleData.position)
             val module = CharacterizationModule(powerMotor, angleMotor, CANCoder(moduleData.angleEncoderID), moduleData.angleOffset, PIDController(TunedConstants.swerveAngleP, TunedConstants.swerveAngleI, TunedConstants.swerveAngleD), moduleData.inverted, SwerveModuleState())
-            module.isSafetyEnabled = true
+            //module.isSafetyEnabled = true
 
             if (moduleData.position.x == PhysicalConstants.halfSideLength) {
                 rightModules.add(module)
@@ -217,7 +217,30 @@ class DrivetrainCharacterization : TimedRobot(0.005) {
     private fun sendData() {
         SmartDashboard.putBoolean("SysIdOverflow", data.size > dataSize)
         val dataString = data.toString()
-        SmartDashboard.putString("SysIdTelemetry", data.toString().substring(1, dataString.length - 1))
+
+        var testName = ""
+        if (testType == TestType.QUASISTATIC) {
+            if (voltageCommand > 0) {
+                testName = "slow-forward"
+            }
+
+            if (voltageCommand < 0) {
+                testName = "slow-backward"
+            }
+        }
+
+        if (testType == TestType.DYNAMIC) {
+            if (voltageCommand > 0) {
+                testName = "fast-forward"
+            }
+
+            if (voltageCommand < 0) {
+                testName = "fast-backward"
+            }
+        }
+
+        SmartDashboard.putString("SysIdTelemetry", testName + ";" + data.toString().substring(1, dataString.length - 1).filter { it != ' ' })
+        SmartDashboard.putNumber("SysIdAckNumber", SmartDashboard.getNumber("SysIdAckNumber", 0.0) + 1.0)
         reset()
     }
 
@@ -232,10 +255,11 @@ class DrivetrainCharacterization : TimedRobot(0.005) {
 
     private fun pushNTDiagnostics() {
         update()
+        // I don't know why the minus signs
         SmartDashboard.putNumber("Left Position", leftModules[0].position.distanceMeters)
-        SmartDashboard.putNumber("Right Position", rightModules[0].position.distanceMeters)
+        SmartDashboard.putNumber("Right Position", -rightModules[0].position.distanceMeters)
         SmartDashboard.putNumber("Left Velocity", leftModules[0].state.speedMetersPerSecond)
-        SmartDashboard.putNumber("Right Velocity", rightModules[0].state.speedMetersPerSecond)
+        SmartDashboard.putNumber("Right Velocity", -rightModules[0].state.speedMetersPerSecond)
         SmartDashboard.putNumber("Gyro Reading", Math.toRadians(imu.angle))
         SmartDashboard.putNumber("Gyro Rate", Math.toRadians(imu.rate))
     }

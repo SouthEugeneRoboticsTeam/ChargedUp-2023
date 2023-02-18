@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
-import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
 
@@ -59,7 +59,7 @@ object Elevator : SubsystemBase() {
         }
 
         if (!extensionInited && safe) {
-            extendMotorOne.setVoltage(TunedConstants.extensionResetVoltage)
+            extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
         if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {

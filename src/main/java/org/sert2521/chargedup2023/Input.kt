@@ -1,10 +1,15 @@
 package org.sert2521.chargedup2023
 
+import com.pathplanner.lib.PathPlanner
+import com.pathplanner.lib.auto.PIDConstants
+import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
+import org.sert2521.chargedup2023.ConfigConstants.autoConstraints
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.SetElevator
 import org.sert2521.chargedup2023.subsystems.Drivetrain
@@ -30,6 +35,18 @@ object Input {
 
     private var lastPiece = GamePieces.CUBE
 
+    private val autoBuilder = SwerveAutoBuilder(
+        Drivetrain::pose,
+        Drivetrain::setNewPose,
+        PIDConstants(TunedConstants.swerveAutoPowerP, TunedConstants.swerveAutoPowerI, TunedConstants.swerveAutoPowerD),
+        PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
+        Drivetrain::drive,
+        ConfigConstants.eventMap,
+        //figure this out
+        true,
+        Drivetrain
+    )
+
     init {
         // Replace numbers with constants
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
@@ -54,15 +71,19 @@ object Input {
         liftIntake.onTrue(SetElevator(0.0, 0.01, false))
     }
 
+    fun getAuto(): Command? {
+        return autoBuilder.fullAuto(PathPlanner.loadPath("Test", autoConstraints))
+    }
+
     fun getX(): Double {
-        return -driverController.leftX
+        return driverController.leftX
     }
 
     fun getY(): Double {
-        return -driverController.leftY
+        return driverController.leftY
     }
 
     fun getRot(): Double {
-        return driverController.rightX
+        return -driverController.rightX
     }
 }

@@ -24,6 +24,10 @@ object Robot : TimedRobot() {
         JoystickDrive(true).schedule()
     }
 
+    override fun autonomousInit() {
+        Input.getAuto()?.schedule()
+    }
+
     override fun disabledExit() {
         if (!Elevator.extensionInited) {
             InitElevator().withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).schedule()
