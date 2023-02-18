@@ -7,7 +7,11 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.wpilibj2.command.InstantCommand
+import org.sert2521.chargedup2023.commands.ClawIntake
+import org.sert2521.chargedup2023.commands.GamePieces
 import org.sert2521.chargedup2023.commands.SetElevator
+import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.PI
 
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
@@ -23,7 +27,7 @@ object PhysicalConstants {
     const val elevatorExtensionMinAngle = 0.05
 
     const val elevatorAngleTop = 0.95//1.05//1.09
-    const val elevatorAngleBottom = 0.0//-0.01
+    const val elevatorAngleBottom = 0.02//-0.01
 
     const val halfSideLength = 0.286378246381
 
@@ -70,11 +74,11 @@ object TunedConstants {
     const val swerveAngleI = 0.0
     const val swerveAngleD = 0.0
 
-    const val swerveAutoPowerP = 0.0
-    const val swerveAutoPowerI = 0.0
-    const val swerveAutoPowerD = 0.0
+    const val swerveAutoDistanceP = 0.5
+    const val swerveAutoDistanceI = 0.0
+    const val swerveAutoDistanceD = 0.0
 
-    const val swerveAutoAngleP = 0.0
+    const val swerveAutoAngleP = 3.0
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
@@ -86,7 +90,6 @@ object TunedConstants {
     const val balanceAngleMaxA = 0.0
 
     const val balanceAngleTolerance = 0.0
-    const val balanceAngleRateTolerance = 0.0
     const val balanceAngleStart = 0.0
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
@@ -102,14 +105,20 @@ object ConfigConstants {
     const val rotDeadband = 0.1
     const val joystickDeadband = 0.1
 
-    const val driveSpeed = 1.0
-    const val rotSpeed = 1.0
+    const val driveSpeed = 1.5
+    const val rotSpeed = 2.0
 
     const val joystickChangeSpeed = 0.4
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(0.0, 0.93, true),
-        "Elevator Cube Intake" to SetElevator(0.0, 0.05, true))
-    val autoConstraints = PathConstraints(1.0, 1.0)
+        "Elevator Cone Outtake" to SetElevator(0.20, 0.7, true),
+        "Claw Cone Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(1.0),
+        "Elevator Cube Intake" to SetElevator(0.0, 0.05, true),
+        "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
+        "Claw Stop" to InstantCommand({  }, Claw),
+        "Elevator Cube Outtake" to SetElevator(0.18, 0.55, true).withTimeout(1.0),
+        "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true))
+    val autoConstraints = PathConstraints(0.5, 0.5)
 }
 
 object ElectronicIDs {

@@ -38,9 +38,9 @@ object Input {
     private var lastPiece = GamePieces.CUBE
 
     private val autoBuilder = SwerveAutoBuilder(
-        Drivetrain::pose,
+        Drivetrain::getPose,
         Drivetrain::setNewPose,
-        PIDConstants(TunedConstants.swerveAutoPowerP, TunedConstants.swerveAutoPowerI, TunedConstants.swerveAutoPowerD),
+        PIDConstants(TunedConstants.swerveAutoDistanceP, TunedConstants.swerveAutoDistanceI, TunedConstants.swerveAutoDistanceD),
         PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
         Drivetrain::drive,
         ConfigConstants.eventMap,
@@ -78,7 +78,7 @@ object Input {
     }
 
     fun getAuto(): Command? {
-        return autoBuilder.fullAuto(PathPlanner.loadPath("Test", autoConstraints))
+        return autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", autoConstraints))
     }
 
     fun getX(): Double {

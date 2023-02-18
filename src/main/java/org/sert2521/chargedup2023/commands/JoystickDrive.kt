@@ -68,8 +68,8 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             Drivetrain.stop()
         } else {
             if (fieldOrientated) {
-                // Maybe option to use odometryPose
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, Drivetrain.odometryPose.rotation))
+                // Maybe use rotation not based on vision
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, Drivetrain.getPose().rotation))
             } else {
                 Drivetrain.drive(ChassisSpeeds(x, y, rot))
             }

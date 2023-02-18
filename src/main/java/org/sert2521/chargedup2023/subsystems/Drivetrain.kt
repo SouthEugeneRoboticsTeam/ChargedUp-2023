@@ -133,14 +133,9 @@ object Drivetrain : SubsystemBase() {
 
     private val kinematics: SwerveDriveKinematics
     private var modules: Array<SwerveModule>
-    private val odometry: SwerveDriveOdometry
     private val poseEstimator: SwerveDrivePoseEstimator
 
-    var pose = Pose2d()
-
-    var odometryPose = Pose2d()
-        private set
-        get() = odometry.poseMeters
+    private var pose = Pose2d()
 
     // False is broken
     var doesOptimize = ConfigConstants.drivetrainOptimized
@@ -174,7 +169,11 @@ object Drivetrain : SubsystemBase() {
 
         kinematics = SwerveDriveKinematics(*modulePositions.toTypedArray())
         poseEstimator = SwerveDrivePoseEstimator(kinematics, -imu.rotation2d, positionsArray, Pose2d(), TunedConstants.stateDeviations, TunedConstants.globalDeviations)
-        odometry = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray)
+    }
+
+    // Fix this nonsense
+    fun getPose(): Pose2d {
+        return Pose2d(pose.y, pose.x, -pose.rotation)
     }
 
     private fun createModule(powerMotor: CANSparkMax, angleMotor: CANSparkMax, moduleData: SwerveModuleData): SwerveModule {
@@ -215,7 +214,6 @@ object Drivetrain : SubsystemBase() {
         val positionsArray = positions.toTypedArray()
 
         pose = poseEstimator.update(-imu.rotation2d, positionsArray)
-        odometry.update(-imu.rotation2d, positionsArray)
     }
 
     fun setOptimize(value: Boolean) {
@@ -227,7 +225,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun setNewPose(newPose: Pose2d) {
-        pose = newPose
+        pose = Pose2d(newPose.y, newPose.x, -newPose.rotation)
 
         val positions = mutableListOf<SwerveModulePosition>()
 
@@ -238,7 +236,6 @@ object Drivetrain : SubsystemBase() {
 
         val positionsArray = positions.toTypedArray()
 
-        odometry.resetPosition(-imu.rotation2d, positionsArray, pose)
         poseEstimator.resetPosition(-imu.rotation2d, positionsArray, pose)
     }
 

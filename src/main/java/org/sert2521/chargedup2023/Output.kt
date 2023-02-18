@@ -41,7 +41,7 @@ object Output {
     }
 
     fun update() {
-        field.robotPose = Drivetrain.pose
+        field.robotPose = Drivetrain.getPose()
 
         for (value in values) {
             SmartDashboard.putNumber("Output/${value.first}", value.second())
