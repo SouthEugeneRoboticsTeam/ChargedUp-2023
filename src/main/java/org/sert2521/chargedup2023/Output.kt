@@ -4,12 +4,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
+import edu.wpi.first.wpilibj.smartdashboard.Field2d
+import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
 import java.io.File
 
 object Output {
     private val values = mutableListOf<Pair<String, () -> Double>>()
     private val bools = mutableListOf<Pair<String, () -> Boolean>>()
+    private val field = Field2d()
 
     init {
         LiveWindow.disableAllTelemetry()
@@ -32,10 +35,14 @@ object Output {
         bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
         bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
 
+        SmartDashboard.putData(field)
+
         update()
     }
 
     fun update() {
+        field.robotPose = Drivetrain.pose
+
         for (value in values) {
             SmartDashboard.putNumber("Output/${value.first}", value.second())
         }

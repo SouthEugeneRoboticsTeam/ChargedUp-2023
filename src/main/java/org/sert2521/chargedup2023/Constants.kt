@@ -18,11 +18,11 @@ object PhysicalConstants {
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
 
-    const val elevatorExtensionTop = 18.807661056518555 / 100.0
+    const val elevatorExtensionTop = 0.198848411440849
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
     const val elevatorExtensionMinAngle = 0.05
 
-    const val elevatorAngleTop = 0.9//1.05//1.09
+    const val elevatorAngleTop = 0.95//1.05//1.09
     const val elevatorAngleBottom = 0.0//-0.01
 
     const val halfSideLength = 0.286378246381
@@ -37,7 +37,7 @@ object PhysicalConstants {
 }
 
 object TunedConstants {
-    const val elevatorExtensionP = 50.0
+    const val elevatorExtensionP = 100.0
     const val elevatorExtensionI = 0.0
     const val elevatorExtensionD = 0.0
 
@@ -47,7 +47,7 @@ object TunedConstants {
     const val elevatorExtensionMinAngleTarget = 0.1
     const val elevatorExtensionTolerance = 0.015
 
-    const val elevatorAngleP = 30.0
+    const val elevatorAngleP = 60.0
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
@@ -96,7 +96,8 @@ object ConfigConstants {
 
     const val joystickChangeSpeed = 0.4
 
-    val eventMap = mapOf("Elevator Move" to SetElevator(0.0, 0.93, false))
+    val eventMap = mapOf("Elevator Drive" to SetElevator(0.0, 0.93, true),
+        "Elevator Cube Intake" to SetElevator(0.0, 0.05, true))
     val autoConstraints = PathConstraints(1.0, 1.0)
 }
 
