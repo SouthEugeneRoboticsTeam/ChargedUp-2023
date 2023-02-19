@@ -262,12 +262,12 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun getTiltDirection(): Translation2d {
-        val unNormalized = Translation2d(Units.degreesToRadians(imu.pitch.toDouble()), Units.degreesToRadians(imu.roll.toDouble()))
+        val unNormalized = Translation2d(atan(Units.degreesToRadians(imu.roll.toDouble())), atan(Units.degreesToRadians(imu.pitch.toDouble())))
         return unNormalized / unNormalized.norm
     }
 
     fun getTilt(): Double {
-        return atan(sqrt(tan(imu.pitch.toDouble()).pow(2) + tan(imu.roll.toDouble()).pow(2)))
+        return atan(sqrt(tan(Units.degreesToRadians(imu.pitch.toDouble())).pow(2) + tan(Units.degreesToRadians(imu.roll.toDouble())).pow(2)))
     }
 
     fun enterBrakePos() {

@@ -65,7 +65,11 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         }
 
         if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2) && abs(rot) <= ConfigConstants.rotDeadband) {
-            Drivetrain.stop()
+            if (Input.getBrakePos()) {
+                Drivetrain.enterBrakePos()
+            } else {
+                Drivetrain.stop()
+            }
         } else {
             if (fieldOrientated) {
                 // Maybe use rotation not based on vision

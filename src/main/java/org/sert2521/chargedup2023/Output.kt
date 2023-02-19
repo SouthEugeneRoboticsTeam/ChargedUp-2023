@@ -26,6 +26,8 @@ object Output {
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
 
+        values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
+
         bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
         bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })
 

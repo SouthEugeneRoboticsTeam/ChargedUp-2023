@@ -10,7 +10,6 @@ import kotlin.math.abs
 
 class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() {
     private val tiltFilter = LinearFilter.movingAverage(25)
-    private var tilt = 0.0
 
     init {
         addRequirements(Drivetrain)
@@ -18,7 +17,6 @@ class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() 
 
     override fun initialize() {
         tiltFilter.reset()
-        tilt = 0.0
     }
 
     override fun execute() {
@@ -26,7 +24,7 @@ class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() 
     }
 
     override fun isFinished(): Boolean {
-        return abs(tiltFilter.calculate(tilt)) >= TunedConstants.balanceAngleStart
+        return abs(tiltFilter.calculate(Drivetrain.getTilt())) >= TunedConstants.balanceAngleStart
     }
 
     override fun end(interrupted: Boolean) {
