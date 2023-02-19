@@ -1,6 +1,5 @@
 package org.sert2521.chargedup2023
 
-import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
-import org.sert2521.chargedup2023.ConfigConstants.autoConstraints
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 
@@ -65,15 +63,15 @@ object Input {
         outtake.onFalse(InstantCommand({ clawCommandDirection?.cancel(); clawCommandDirection = null }))
 
         // Add feedforward
-        liftDrive.onTrue(SetElevator(0.0, 0.93, false))
+        liftDrive.onTrue(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))
         // This 0.20 is in place of a feedforward
-        liftConeHigh.onTrue(SetElevator(0.20, 0.7, false))
-        liftCubeHigh.onTrue(SetElevator(0.18, 0.55, false))
-        liftMid.onTrue(SetElevator(0.065, 0.57, false))
-        liftLow.onTrue(SetElevator(0.0, 0.22, false))
-        liftIntakeDown.onTrue(SetElevator(0.0, 0.01, false))
-        liftIntakeCube.onTrue(SetElevator(0.0, 0.05, false))
-        liftIntakeCone.onTrue(SetElevator(0.0, 0.13, false))
+        liftConeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false))
+        liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
+        liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
+        liftLow.onTrue(SetElevator(PhysicalConstants.elevatorExtensionLow, PhysicalConstants.elevatorAngleLow, false))
+        liftIntakeDown.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
+        liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
+        liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
     }
 
     fun getAuto(): Command? {

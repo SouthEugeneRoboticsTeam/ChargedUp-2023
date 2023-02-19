@@ -1,7 +1,6 @@
 package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.math.controller.ProfiledPIDController
-import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.Timer
@@ -14,8 +13,6 @@ import kotlin.math.sign
 class Balance : CommandBase() {
     // This doesn't exactly make sense
     private val tiltPID = ProfiledPIDController(TunedConstants.balanceAngleP, TunedConstants.balanceAngleI, TunedConstants.balanceAngleD, TrapezoidProfile.Constraints(TunedConstants.balanceAngleMaxV, TunedConstants.balanceAngleMaxA))
-    private val tiltFilter = LinearFilter.movingAverage(25)
-    private val tiltRateFilter = LinearFilter.movingAverage(25)
 
     private var prevTilt = 0.0
     private var prevTime = 0.0
@@ -28,24 +25,20 @@ class Balance : CommandBase() {
         val tilt = Drivetrain.getTilt()
         tiltPID.reset(tilt)
 
-        tiltFilter.reset()
-        tiltRateFilter.reset()
-
         prevTilt = tilt
         prevTime = Timer.getFPGATimestamp()
     }
 
     override fun execute() {
-        val tilt = Drivetrain.getTilt()
         val currentTime = Timer.getFPGATimestamp()
         val diffTime = (currentTime - prevTime)
         prevTime = currentTime
 
-        val tiltRate = tiltRateFilter.calculate((tilt - prevTilt) / diffTime)
-        val tiltFiltered = tiltFilter.calculate(tilt)
+        val tilt = Drivetrain.getTilt()
+        val tiltRate = (tilt - prevTilt) / diffTime
         prevTilt = tilt
 
-        if ((sign(tiltRate) != sign(tiltFiltered) && abs(tiltRate) >= TunedConstants.balanceAngleSignificantRate) || abs(tiltFiltered) <= TunedConstants.balanceAngleTolerance) {
+        if ((sign(tiltRate) != sign(tilt) && abs(tiltRate) >= TunedConstants.balanceAngleSignificantRate) || abs(tilt) <= TunedConstants.balanceAngleTolerance) {
             tiltPID.calculate(tilt, tilt)
             Drivetrain.enterBrakePos()
         } else {

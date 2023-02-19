@@ -23,11 +23,30 @@ object PhysicalConstants {
     const val elevatorAngleOffset = -0.638255487307134
 
     const val elevatorExtensionTop = 0.198848411440849
+    // Double check this
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
+
+    const val elevatorAngleTop = 0.95
+    const val elevatorAngleBottom = 0.02
     const val elevatorExtensionMinAngle = 0.05
 
-    const val elevatorAngleTop = 0.95//1.05//1.09
-    const val elevatorAngleBottom = 0.02//-0.01
+    const val elevatorExtensionDrive = 0.0
+    const val elevatorExtensionConeHigh = 0.2
+    const val elevatorExtensionCubeHigh = 0.18
+    const val elevatorExtensionMid = 0.065
+    const val elevatorExtensionLow = 0.0
+    const val elevatorExtensionConeTippedIntake = 0.0
+    const val elevatorExtensionCubeIntake = 0.0
+    const val elevatorExtensionConeUpIntake = 0.0
+
+    const val elevatorAngleDrive = 0.93
+    const val elevatorAngleConeHigh = 0.7
+    const val elevatorAngleCubeHigh = 0.55
+    const val elevatorAngleMid = 0.57
+    const val elevatorAngleLow = 0.22
+    const val elevatorAngleConeTippedIntake = 0.01
+    const val elevatorAngleCubeIntake = 0.05
+    const val elevatorAngleConeUpIntake = 0.13
 
     const val halfSideLength = 0.286378246381
 
@@ -111,13 +130,13 @@ object ConfigConstants {
 
     const val joystickChangeSpeed = 0.4
 
-    val eventMap = mapOf("Elevator Drive" to SetElevator(0.0, 0.93, true),
-        "Elevator Cone Outtake" to SetElevator(0.20, 0.7, true),
-        "Claw Cone Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(1.0),
-        "Elevator Cube Intake" to SetElevator(0.0, 0.05, true),
+    val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+        "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
+        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(1.0),
+        "Elevator Intake Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
-        "Elevator Cube Outtake" to SetElevator(0.18, 0.55, true).withTimeout(1.0),
+        "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true))
     val autoConstraints = PathConstraints(0.5, 0.5)
 }
