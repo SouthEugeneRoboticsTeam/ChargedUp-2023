@@ -31,6 +31,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         val diffTime = (currentTime - prevTime)
         prevTime = currentTime
 
+        val slow = Input.getSlow()
         var currX = Input.getX()
         var currY = Input.getY()
 
@@ -44,8 +45,9 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             currY /= magnitude
         }
 
-        currX *= ConfigConstants.driveSpeed
-        currY *= ConfigConstants.driveSpeed
+        val trueSpeed = ConfigConstants.driveSpeed - (ConfigConstants.slowDriveSpeed * slow)
+        currX *= trueSpeed
+        currY *= trueSpeed
 
         val diffX = x - currX
         val diffY = y - currY
@@ -59,10 +61,12 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             y -= diffY / diffTime * ConfigConstants.joystickChangeSpeed / rateChange
         }
 
-        var rot = Input.getRot() * ConfigConstants.rotSpeed
+        var rot = Input.getRot()
         if (abs(rot) <= ConfigConstants.joystickDeadband) {
             rot = 0.0
         }
+
+        rot *= ConfigConstants.rotSpeed - (ConfigConstants.slowRotSpeed * slow)
 
         if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2) && abs(rot) <= ConfigConstants.rotDeadband) {
             if (Input.getBrakePos()) {

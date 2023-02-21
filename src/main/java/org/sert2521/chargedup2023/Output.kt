@@ -37,7 +37,7 @@ object Output {
         bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
         bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
 
-        SmartDashboard.putData(field)
+        SmartDashboard.putData("Output/Field", field)
 
         update()
     }

@@ -8,9 +8,7 @@ import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj2.command.InstantCommand
-import org.sert2521.chargedup2023.commands.ClawIntake
-import org.sert2521.chargedup2023.commands.GamePieces
-import org.sert2521.chargedup2023.commands.SetElevator
+import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.PI
 
@@ -26,8 +24,8 @@ object PhysicalConstants {
     // Double check this
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
 
-    const val elevatorAngleTop = 0.95
-    const val elevatorAngleBottom = 0.02
+    const val elevatorAngleTop = 1.19
+    const val elevatorAngleBottom = 0.005
     const val elevatorExtensionMinAngle = 0.05
 
     const val elevatorExtensionDrive = 0.0
@@ -39,10 +37,10 @@ object PhysicalConstants {
     const val elevatorExtensionCubeIntake = 0.0
     const val elevatorExtensionConeUpIntake = 0.0
 
-    const val elevatorAngleDrive = 0.93
+    const val elevatorAngleDrive = 1.19
     const val elevatorAngleConeHigh = 0.7
     const val elevatorAngleCubeHigh = 0.55
-    const val elevatorAngleMid = 0.57
+    const val elevatorAngleMid = 0.63
     const val elevatorAngleLow = 0.22
     const val elevatorAngleConeTippedIntake = 0.01
     const val elevatorAngleCubeIntake = 0.05
@@ -125,8 +123,10 @@ object ConfigConstants {
     const val rotDeadband = 0.1
     const val joystickDeadband = 0.1
 
-    const val driveSpeed = 1.5
-    const val rotSpeed = 2.0
+    const val driveSpeed = 3.5
+    const val slowDriveSpeed = 2.0
+    const val rotSpeed = 2.5
+    const val slowRotSpeed = 1.5
 
     const val joystickChangeSpeed = 0.4
 
@@ -137,8 +137,9 @@ object ConfigConstants {
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
-        "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true))
-    val autoConstraints = PathConstraints(0.5, 0.5)
+        "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
+        "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.75, 0.0)).andThen(Balance()))
+    val autoConstraints = PathConstraints(1.0, 0.75)
 }
 
 object ElectronicIDs {

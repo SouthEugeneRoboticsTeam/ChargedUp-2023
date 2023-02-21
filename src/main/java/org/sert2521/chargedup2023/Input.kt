@@ -1,11 +1,13 @@
 package org.sert2521.chargedup2023
 
+import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
@@ -34,6 +36,7 @@ object Input {
 
     private var lastPiece = GamePieces.CUBE
 
+    val autoChooser = SendableChooser<Command?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
         Drivetrain::setNewPose,
@@ -41,12 +44,21 @@ object Input {
         PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
         Drivetrain::drive,
         ConfigConstants.eventMap,
-        //figure this out
+        // Figure this out
         true,
         Drivetrain
     )
 
     init {
+        autoChooser.setDefaultOption("Nothing", null)
+        autoChooser.addOption("Drive Forward", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Forward", ConfigConstants.autoConstraints)))
+        autoChooser.addOption("Drive Onto Charge Station Right", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Right", ConfigConstants.autoConstraints)))
+        autoChooser.addOption("Drive Onto Charge Station Left", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Left", ConfigConstants.autoConstraints)))
+        autoChooser.addOption("Drop Off Cone And Leave", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drop Off Cone And Leave", ConfigConstants.autoConstraints)))
+        autoChooser.addOption("Test", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints)))
+
+        SmartDashboard.putData("Auto Chooser", autoChooser)
+
         // Replace numbers with constants
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
 
@@ -75,11 +87,15 @@ object Input {
     }
 
     fun getAuto(): Command? {
-        return OntoChargeStation(Translation2d(-0.5, 0.0)).andThen(Balance())//autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", autoConstraints))
+        return autoChooser.selected
     }
 
     fun getBrakePos(): Boolean {
         return driverController.xButton
+    }
+
+    fun getSlow(): Double {
+        return driverController.rightTriggerAxis
     }
 
     fun getX(): Double {

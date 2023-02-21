@@ -1,0 +1,101 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.8233636467272936,
+        "y": 4.971905943811888
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.5555591111182223,
+        "y": 4.4118728237456475
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Elevator Drive",
+          "Elevator Cone High",
+          "Claw Outtake",
+          "Elevator Drive"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.668301336602674,
+        "y": 4.581185162370325
+      },
+      "prevControl": {
+        "x": 5.899883799767601,
+        "y": 4.542113084226169
+      },
+      "nextControl": {
+        "x": 5.899883799767601,
+        "y": 4.542113084226169
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.313802627605255,
+        "y": 3.4611189222378447
+      },
+      "prevControl": {
+        "x": 6.03012406024812,
+        "y": 3.61740723481447
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Drive Back Onto Charge Station"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.3636363636363636,
+      "names": [
+        "Elevator Cube Intake"
+      ]
+    },
+    {
+      "position": 0.8545454545454546,
+      "names": [
+        "Claw Outtake"
+      ]
+    },
+    {
+      "position": 1.199999999999999,
+      "names": [
+        "Claw Stop",
+        "Elevator Drive"
+      ]
+    }
+  ]
+}
