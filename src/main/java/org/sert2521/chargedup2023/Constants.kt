@@ -72,6 +72,9 @@ object TunedConstants {
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
+    const val elevatorAngleG = 0.0
+    const val elevatorAngleGPerMeter = 0.0
+
     const val elevatorAngleMaxV = 5.0
     const val elevatorAngleMaxA = 9.0
 
@@ -133,7 +136,7 @@ object ConfigConstants {
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
         "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(1.0),
-        "Elevator Intake Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
+        "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),

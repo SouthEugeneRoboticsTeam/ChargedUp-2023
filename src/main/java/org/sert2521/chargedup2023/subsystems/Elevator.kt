@@ -38,8 +38,7 @@ object Elevator : SubsystemBase() {
 
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
 
-        // Check this
-        val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false) })
+        val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false).schedule() })
         holdCommand.addRequirements(this)
         defaultCommand = holdCommand
     }
