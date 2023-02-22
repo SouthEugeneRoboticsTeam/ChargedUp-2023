@@ -6,8 +6,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ElectronicIDs
 
 object Claw : SubsystemBase() {
-    val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
+    private val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
 
+    init {
+        motor.setSmartCurrentLimit(45, 45)
+    }
 
     fun setMotor(speed:Double){
         motor.set(speed)
