@@ -114,6 +114,7 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
+    const val angleResetVoltage = 1.0
 
     const val drivetrainOptimized = true
 
@@ -127,6 +128,8 @@ object ConfigConstants {
     const val slowRotSpeed = 1.5
 
     const val joystickChangeSpeed = 0.4
+
+    const val resetAngle = 0.5
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),

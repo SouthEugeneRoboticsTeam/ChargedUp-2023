@@ -23,6 +23,9 @@ object Elevator : SubsystemBase() {
     var extensionInited = false
         private set
 
+    var angleInited = false
+        private set
+
     private val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
     // Maybe add filter?
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
@@ -49,6 +52,8 @@ object Elevator : SubsystemBase() {
         val atBottomExtension = extensionAtBottom()
         val safe = extensionSafe()
 
+        val atTopAngle = angleAtTop()
+
         if (atTopExtension) {
             extendEncoder.position = PhysicalConstants.elevatorExtensionTop
             extensionInited = true
@@ -61,6 +66,14 @@ object Elevator : SubsystemBase() {
 
         if (!extensionInited && safe) {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
+        }
+
+        if (atTopAngle) {
+            angleInited = true
+        }
+
+        if (!angleInited) {
+            extendMotorOne.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
         if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
@@ -81,8 +94,10 @@ object Elevator : SubsystemBase() {
     }
 
     fun setAngle(speed : Double){
-        if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
-            angleMotor.setVoltage(speed)
+        if (angleInited) {
+            if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
+                angleMotor.setVoltage(speed)
+            }
         }
     }
 
