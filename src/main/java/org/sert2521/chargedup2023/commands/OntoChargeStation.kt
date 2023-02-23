@@ -8,7 +8,6 @@ import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import kotlin.math.abs
 
-// Maybe make field oriented <1.0, 0.0> is forward I think
 class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() {
     private val tiltFilter = LinearFilter.movingAverage(25)
 
@@ -21,7 +20,7 @@ class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() 
     }
 
     override fun execute() {
-        Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
+        Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(driveVector.x, driveVector.y, 0.0, Drivetrain.getPose().rotation))
     }
 
     override fun isFinished(): Boolean {

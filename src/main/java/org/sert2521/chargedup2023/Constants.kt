@@ -99,15 +99,11 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val balanceAngleP = 3.0
-    const val balanceAngleI = 0.0
-    const val balanceAngleD = 0.0
-
-    const val balanceAngleMaxV = 0.7
-    const val balanceAngleMaxA = 1.5
-
-    const val balanceAngleTolerance = 0.03
-    const val balanceAngleSignificantRate = 0.15
+    const val balanceSpeedStart = 0.7
+    const val balanceSpeedEnd = 0.3
+    const val balanceAngleSignificantRateStart = 0.15
+    const val balanceAngleSignificantRateEnd = 0.05
+    const val balanceAngleTolerance = 0.04
     const val balanceAngleStart = 0.1
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)

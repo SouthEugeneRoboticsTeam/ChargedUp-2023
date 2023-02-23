@@ -28,7 +28,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
 
     override fun execute() {
         val currentTime = Timer.getFPGATimestamp()
-        val diffTime = (currentTime - prevTime)
+        val diffTime = currentTime - prevTime
         prevTime = currentTime
 
         val slow = Input.getSlow()
