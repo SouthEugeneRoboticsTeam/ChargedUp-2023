@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ConfigConstants
+import org.sert2521.chargedup2023.ConfigConstants.angleInitAngle
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.commands.SetElevator
@@ -52,8 +53,6 @@ object Elevator : SubsystemBase() {
         val atBottomExtension = extensionAtBottom()
         val safe = extensionSafe()
 
-        val atTopAngle = angleAtTop()
-
         if (atTopExtension) {
             extendEncoder.position = PhysicalConstants.elevatorExtensionTop
             extensionInited = true
@@ -68,7 +67,7 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
-        if (atTopAngle) {
+        if (angleMeasure() >= angleInitAngle) {
             angleInited = true
         }
 

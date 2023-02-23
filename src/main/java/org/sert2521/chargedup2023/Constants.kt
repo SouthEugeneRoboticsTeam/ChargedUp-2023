@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.cos
 
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
@@ -56,6 +59,21 @@ object PhysicalConstants {
 
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
+
+    private val a = 0.04
+    private val b = 0.67
+
+    fun minAngleWithExtension(extension: Double): Double {
+        if (abs(extension) <= a) {
+            return Double.NEGATIVE_INFINITY
+        }
+
+        return acos(a / extension) - b
+    }
+
+    fun maxExtensionWithAngle(angle: Double): Double {
+        return a / cos(angle + b)
+    }
 }
 
 object TunedConstants {
@@ -114,7 +132,9 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
-    const val angleResetVoltage = 1.0
+    const val angleInitAngle = 1.12
+    const val angleResetVoltage = 2.0
+    const val resetAngle = 0.98
 
     const val drivetrainOptimized = true
 
@@ -128,8 +148,6 @@ object ConfigConstants {
     const val slowRotSpeed = 1.5
 
     const val joystickChangeSpeed = 0.4
-
-    const val resetAngle = 0.5
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),

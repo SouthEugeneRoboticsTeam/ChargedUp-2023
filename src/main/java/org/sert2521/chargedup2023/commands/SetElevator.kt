@@ -3,8 +3,11 @@ package org.sert2521.chargedup2023.commands
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.CommandBase
+import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
+import kotlin.math.max
+import kotlin.math.min
 
 // Maybe have very small feedforward especially angle which is about 0.02rad below goal
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
@@ -38,15 +41,17 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             TunedConstants.elevatorExtensionMaxAngleTarget
         }
 
-        Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget))
-
         val extensionTarget = if (Elevator.extensionSafe()) {
             extension
         } else {
             Elevator.extensionMeasure()
         }
 
-        Elevator.setExtend(extensionPID.calculate(Elevator.extensionMeasure(), extensionTarget))
+        val angleMeasure = Elevator.angleMeasure()
+        val extensionMeasure = Elevator.extensionMeasure()
+
+        Elevator.setAngle(anglePID.calculate(angleMeasure, max(angleTarget, PhysicalConstants.minAngleWithExtension(extension))))
+        Elevator.setExtend(extensionPID.calculate(extensionMeasure, min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(extension))))
     }
 
     override fun isFinished(): Boolean {
