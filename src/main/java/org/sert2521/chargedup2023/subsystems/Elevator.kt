@@ -109,7 +109,8 @@ object Elevator : SubsystemBase() {
     }
 
     fun extensionSafe(): Boolean {
-        return angleMeasure() >= PhysicalConstants.elevatorExtensionMinAngle
+        val angleMeasure = angleMeasure()
+        return angleMeasure >= PhysicalConstants.elevatorExtensionMinAngle && angleMeasure <= PhysicalConstants.elevatorExtensionMaxAngle
     }
 
     fun angleAtTop(): Boolean {

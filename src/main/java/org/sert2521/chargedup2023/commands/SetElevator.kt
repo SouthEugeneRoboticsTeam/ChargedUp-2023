@@ -12,6 +12,10 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
     private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
 
+    private val angleTooLow = angle > TunedConstants.elevatorExtensionMinAngleTarget
+    private val angleTooHigh = angle < TunedConstants.elevatorExtensionMaxAngleTarget
+    private val angleSafe = (!angleTooLow && !angleTooHigh)
+
     init {
         addRequirements(Elevator)
 
@@ -26,10 +30,12 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
     }
 
     override fun execute() {
-        val angleTarget = if (angle >= TunedConstants.elevatorExtensionMinAngleTarget || extensionPID.atSetpoint()) {
+        val angleTarget = if (angleSafe || extensionPID.atSetpoint()) {
             angle
-        } else {
+        } else if (angleTooLow) {
             TunedConstants.elevatorExtensionMinAngleTarget
+        } else {
+            TunedConstants.elevatorExtensionMaxAngleTarget
         }
 
         Elevator.setAngle(anglePID.calculate(Elevator.angleMeasure(), angleTarget))
