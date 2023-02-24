@@ -42,6 +42,7 @@ object Elevator : SubsystemBase() {
 
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
 
+        // Check
         val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false).schedule() })
         holdCommand.addRequirements(this)
         defaultCommand = holdCommand
@@ -71,7 +72,7 @@ object Elevator : SubsystemBase() {
         }
 
         if (!angleInited) {
-            extendMotorOne.setVoltage(ConfigConstants.angleResetVoltage)
+            angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
         if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {

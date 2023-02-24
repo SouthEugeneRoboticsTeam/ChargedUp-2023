@@ -16,8 +16,8 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
     private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
 
-    private val angleTooLow = angle > TunedConstants.elevatorExtensionMinAngleTarget
-    private val angleTooHigh = angle < TunedConstants.elevatorExtensionMaxAngleTarget
+    private val angleTooLow = angle < TunedConstants.elevatorExtensionMinAngleTarget
+    private val angleTooHigh = angle > TunedConstants.elevatorExtensionMaxAngleTarget
     private val angleSafe = (!angleTooLow && !angleTooHigh)
 
     init {
@@ -45,8 +45,9 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val extensionMeasure = Elevator.extensionMeasure()
         val angleMeasure = Elevator.angleMeasure()
 
-        val anglePIDResult = anglePID.calculate(angleMeasure, max(angleTarget, PhysicalConstants.minAngleWithExtension(extension)))
-        val g = cos(anglePID.setpoint.position) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
+        val safeAngleTarget = max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure))
+        val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
+        val g = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
 
         Elevator.setAngle(anglePIDResult + g)
 
@@ -55,7 +56,8 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         } else {
             extensionMeasure
         }
-        Elevator.setExtend(extensionPID.calculate(extensionMeasure, min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(extension))))
+
+        Elevator.setExtend(extensionPID.calculate(extensionMeasure, min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure))))
     }
 
     override fun isFinished(): Boolean {

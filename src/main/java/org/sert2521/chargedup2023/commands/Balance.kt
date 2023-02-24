@@ -1,5 +1,6 @@
 package org.sert2521.chargedup2023.commands
 
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
@@ -11,6 +12,7 @@ class Balance : CommandBase() {
     private var prevTilt = 0.0
     private var prevTime = 0.0
     private var hasTipped = false
+    private var tiltRateFilter = LinearFilter.movingAverage(20)
 
     init {
         addRequirements(Drivetrain)
@@ -20,6 +22,8 @@ class Balance : CommandBase() {
         prevTime = Timer.getFPGATimestamp()
         prevTilt = Drivetrain.getTilt()
         hasTipped = false
+
+        tiltRateFilter.reset()
     }
 
     override fun execute() {
@@ -28,7 +32,7 @@ class Balance : CommandBase() {
         prevTime = currentTime
 
         val tilt = Drivetrain.getTilt()
-        val tiltRate = (tilt - prevTilt) / diffTime
+        val tiltRate = tiltRateFilter.calculate(abs((tilt - prevTilt) / diffTime))
         prevTilt = tilt
 
         val angleInBounds = abs(tilt) <= TunedConstants.balanceAngleTolerance
@@ -37,11 +41,11 @@ class Balance : CommandBase() {
             hasTipped = true
         } else {
             val balanceSignificantRate = if (hasTipped) { TunedConstants.balanceAngleSignificantRateEnd } else { TunedConstants.balanceAngleSignificantRateStart }
-            if (tiltRate <= -balanceSignificantRate) {
+            if (tiltRate >= balanceSignificantRate) {
                 Drivetrain.enterBrakePos()
             } else {
                 val balanceSpeed = if (hasTipped) { TunedConstants.balanceSpeedEnd } else { TunedConstants.balanceSpeedStart }
-                val driveVector = -Drivetrain.getTiltDirection() * balanceSpeed
+                val driveVector = Drivetrain.getTiltDirection() * balanceSpeed
                 Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
             }
         }

@@ -72,10 +72,16 @@ object PhysicalConstants {
     }
 
     fun maxExtensionWithAngle(angle: Double): Double {
-        return a / cos(angle + b)
+        val max = a / cos(angle + b)
+        if (max < 0) {
+            return Double.POSITIVE_INFINITY
+        }
+
+        return max
     }
 }
 
+// Move some of these to config constants
 object TunedConstants {
     const val elevatorExtensionP = 100.0
     const val elevatorExtensionI = 0.0
@@ -122,10 +128,10 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val balanceSpeedStart = 0.7
-    const val balanceSpeedEnd = 0.3
-    const val balanceAngleSignificantRateStart = 0.15
-    const val balanceAngleSignificantRateEnd = 0.05
+    const val balanceSpeedStart = 0.6
+    const val balanceSpeedEnd = 0.4
+    const val balanceAngleSignificantRateStart = 0.4
+    const val balanceAngleSignificantRateEnd = 0.15
     const val balanceAngleTolerance = 0.04
     const val balanceAngleStart = 0.1
 
@@ -135,8 +141,8 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
-    const val angleInitAngle = 1.12
-    const val angleResetVoltage = 2.0
+    const val angleInitAngle = 1.14
+    const val angleResetVoltage = 5.5
     const val resetAngle = 0.98
 
     const val drivetrainOptimized = true
