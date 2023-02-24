@@ -1,32 +1,25 @@
 package org.sert2521.chargedup2023.commands
 
-import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import kotlin.math.abs
-import kotlin.math.sign
 
 class Balance : CommandBase() {
-    // This doesn't exactly make sense
-    private val tiltPID = ProfiledPIDController(TunedConstants.balanceAngleP, TunedConstants.balanceAngleI, TunedConstants.balanceAngleD, TrapezoidProfile.Constraints(TunedConstants.balanceAngleMaxV, TunedConstants.balanceAngleMaxA))
-
     private var prevTilt = 0.0
     private var prevTime = 0.0
+    private var hasTipped = false
 
     init {
         addRequirements(Drivetrain)
     }
 
     override fun initialize() {
-        val tilt = Drivetrain.getTilt()
-        tiltPID.reset(tilt)
-
-        prevTilt = tilt
         prevTime = Timer.getFPGATimestamp()
+        prevTilt = Drivetrain.getTilt()
+        hasTipped = false
     }
 
     override fun execute() {
@@ -38,13 +31,19 @@ class Balance : CommandBase() {
         val tiltRate = (tilt - prevTilt) / diffTime
         prevTilt = tilt
 
-        if ((sign(tiltRate) != sign(tilt) && abs(tiltRate) >= TunedConstants.balanceAngleSignificantRate) || abs(tilt) <= TunedConstants.balanceAngleTolerance) {
-            tiltPID.calculate(tilt, tilt)
+        val angleInBounds = abs(tilt) <= TunedConstants.balanceAngleTolerance
+        if (angleInBounds) {
             Drivetrain.enterBrakePos()
+            hasTipped = true
         } else {
-            val speed = tiltPID.calculate(tilt, 0.0)
-            val driveVector = -Drivetrain.getTiltDirection() * speed
-            Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
+            val balanceSignificantRate = if (hasTipped) { TunedConstants.balanceAngleSignificantRateEnd } else { TunedConstants.balanceAngleSignificantRateStart }
+            if (tiltRate <= -balanceSignificantRate) {
+                Drivetrain.enterBrakePos()
+            } else {
+                val balanceSpeed = if (hasTipped) { TunedConstants.balanceSpeedEnd } else { TunedConstants.balanceSpeedStart }
+                val driveVector = -Drivetrain.getTiltDirection() * balanceSpeed
+                Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
+            }
         }
     }
 

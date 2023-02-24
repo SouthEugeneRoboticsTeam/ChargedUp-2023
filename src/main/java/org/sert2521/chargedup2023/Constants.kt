@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.cos
 
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
@@ -25,6 +28,7 @@ object PhysicalConstants {
     const val elevatorExtensionBottom = 0.226211532950401 / 100.0
 
     const val elevatorAngleTop = 1.19
+    const val elevatorExtensionMaxAngle = 1.05
     const val elevatorAngleBottom = 0.005
     const val elevatorExtensionMinAngle = 0.05
 
@@ -55,6 +59,21 @@ object PhysicalConstants {
 
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
+
+    private val a = 0.04
+    private val b = 0.67
+
+    fun minAngleWithExtension(extension: Double): Double {
+        if (abs(extension) <= a) {
+            return Double.NEGATIVE_INFINITY
+        }
+
+        return acos(a / extension) - b
+    }
+
+    fun maxExtensionWithAngle(angle: Double): Double {
+        return a / cos(angle + b)
+    }
 }
 
 object TunedConstants {
@@ -65,6 +84,7 @@ object TunedConstants {
     const val elevatorExtensionMaxV = 0.7
     const val elevatorExtensionMaxA = 0.7
 
+    const val elevatorExtensionMaxAngleTarget = 1.0
     const val elevatorExtensionMinAngleTarget = 0.1
     const val elevatorExtensionTolerance = 0.015
 
@@ -102,15 +122,11 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val balanceAngleP = 3.0
-    const val balanceAngleI = 0.0
-    const val balanceAngleD = 0.0
-
-    const val balanceAngleMaxV = 0.7
-    const val balanceAngleMaxA = 1.5
-
-    const val balanceAngleTolerance = 0.03
-    const val balanceAngleSignificantRate = 0.15
+    const val balanceSpeedStart = 0.7
+    const val balanceSpeedEnd = 0.3
+    const val balanceAngleSignificantRateStart = 0.15
+    const val balanceAngleSignificantRateEnd = 0.05
+    const val balanceAngleTolerance = 0.04
     const val balanceAngleStart = 0.1
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
@@ -119,6 +135,9 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
+    const val angleInitAngle = 1.12
+    const val angleResetVoltage = 2.0
+    const val resetAngle = 0.98
 
     const val drivetrainOptimized = true
 

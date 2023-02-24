@@ -29,7 +29,8 @@ object Robot : TimedRobot() {
     }
 
     override fun disabledExit() {
-        if (!Elevator.extensionInited) {
+        // Make it maybe drive while initing
+        if (!Elevator.extensionInited || !Elevator.angleInited) {
             val initElevator = InitElevator().withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
             val auto = Input.getAuto()
             if (auto != null && isAutonomous) {

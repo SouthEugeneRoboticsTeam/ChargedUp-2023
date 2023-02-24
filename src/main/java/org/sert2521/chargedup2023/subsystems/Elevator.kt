@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ConfigConstants
+import org.sert2521.chargedup2023.ConfigConstants.angleInitAngle
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.commands.SetElevator
@@ -21,6 +22,9 @@ object Elevator : SubsystemBase() {
     private val lowerExtension = DigitalInput(ElectronicIDs.elevatorLowerExtension)
 
     var extensionInited = false
+        private set
+
+    var angleInited = false
         private set
 
     private val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -62,6 +66,14 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
+        if (angleMeasure() >= angleInitAngle) {
+            angleInited = true
+        }
+
+        if (!angleInited) {
+            extendMotorOne.setVoltage(ConfigConstants.angleResetVoltage)
+        }
+
         if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
         }
@@ -80,8 +92,10 @@ object Elevator : SubsystemBase() {
     }
 
     fun setAngle(speed : Double){
-        if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
-            angleMotor.setVoltage(speed)
+        if (angleInited) {
+            if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
+                angleMotor.setVoltage(speed)
+            }
         }
     }
 
@@ -108,7 +122,8 @@ object Elevator : SubsystemBase() {
     }
 
     fun extensionSafe(): Boolean {
-        return angleMeasure() >= PhysicalConstants.elevatorExtensionMinAngle
+        val angleMeasure = angleMeasure()
+        return angleMeasure >= PhysicalConstants.elevatorExtensionMinAngle && angleMeasure <= PhysicalConstants.elevatorExtensionMaxAngle
     }
 
     fun angleAtTop(): Boolean {
