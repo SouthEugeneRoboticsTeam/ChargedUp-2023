@@ -10,10 +10,7 @@ import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.acos
-import kotlin.math.cos
+import kotlin.math.*
 
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
@@ -60,19 +57,66 @@ object PhysicalConstants {
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
 
-    private val a = 0.04
-    private val b = 0.67
+    // Polar is annoying
+    // This takes points and makes them into a bunch of lines in polar coords
+    // Then it uses them as boundaries
+    private val safePoints = arrayOf(Pair(0.0, 0.0), Pair(1.0, 1.0), Pair(3.0, 2.0))
+    private val safeLineDefinitions = generateLineDefinitions(safePoints)
+    private val safeLineBounds = generateLineBounds(safePoints)
+
+    private fun generateLineDefinitions(points: Array<Pair<Double, Double>>): Array<Pair<Double, Double>> {
+        val lineDefinitions = mutableListOf<Pair<Double, Double>>()
+        for (i in 0 until points.size - 1) {
+            val x = points[i].first
+            val y = points[i].second
+            val m = (y - points[i + 1].second) / (x - points[i + 1].first)
+            val mSqrdPlusOne = m.pow(2) + 1
+            lineDefinitions.add(Pair((m * x - y) * sqrt(mSqrdPlusOne) / mSqrdPlusOne, atan(1 / m)))
+        }
+
+        return lineDefinitions.toTypedArray()
+    }
+
+    private fun generateLineBounds(points: Array<Pair<Double, Double>>): Array<Pair<Double, Double>> {
+        val lineBounds = mutableListOf<Pair<Double, Double>>()
+        for (i in 1 until points.size - 1) {
+            val x = points[i].first
+            val y = points[i].second
+            lineBounds.add(Pair(sqrt(x.pow(2) + y.pow(2)), atan2(x, y)))
+        }
+
+        return lineBounds.toTypedArray()
+    }
 
     fun minAngleWithExtension(extension: Double): Double {
-        if (abs(extension) <= a) {
+        var lineDefinitionIndex = 0
+        for (i in safeLineBounds.indices) {
+            if (extension > safeLineBounds[i].first) {
+                lineDefinitionIndex = i + 1
+                break
+            }
+        }
+
+        val definition = safeLineDefinitions[lineDefinitionIndex]
+
+        if (abs(extension) <= definition.first) {
             return Double.NEGATIVE_INFINITY
         }
 
-        return acos(a / extension) - b
+        return acos(definition.first / extension) - definition.second
     }
 
     fun maxExtensionWithAngle(angle: Double): Double {
-        return a / cos(angle + b)
+        var lineDefinitionIndex = 0
+        for (i in safeLineBounds.indices) {
+            if (angle > safeLineBounds[i].second) {
+                lineDefinitionIndex = i + 1
+                break
+            }
+        }
+
+        val definition = safeLineDefinitions[lineDefinitionIndex]
+        return definition.first / cos(angle + definition.second)
     }
 }
 
