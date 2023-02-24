@@ -34,7 +34,7 @@ object PhysicalConstants {
 
     const val elevatorExtensionDrive = 0.0
     const val elevatorExtensionConeHigh = 0.2
-    const val elevatorExtensionCubeHigh = 0.18
+    const val elevatorExtensionCubeHigh = 0.19
     const val elevatorExtensionMid = 0.065
     const val elevatorExtensionLow = 0.0
     const val elevatorExtensionConeTippedIntake = 0.0
@@ -92,7 +92,7 @@ object TunedConstants {
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
-    const val elevatorAngleG = 0.0
+    const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
     const val elevatorAngleMaxV = 5.0
@@ -147,8 +147,8 @@ object ConfigConstants {
 
     const val driveSpeed = 3.5
     const val slowDriveSpeed = 2.0
-    const val rotSpeed = 2.5
-    const val slowRotSpeed = 1.5
+    const val rotSpeed = 3.5
+    const val slowRotSpeed = 2.5
 
     const val joystickChangeSpeed = 0.4
 
@@ -179,7 +179,7 @@ object ElectronicIDs {
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 3, 14, -2.27 + PI / 2 + 4.62, true),
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 2, 1, 16, -1.63 - PI + 4.79, true),
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43, true),
-        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 4.95, true))
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12, true))
 
     const val camName = ""
 
