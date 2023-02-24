@@ -11,8 +11,7 @@ import kotlin.math.abs
 class Balance : CommandBase() {
     private var prevTilt = 0.0
     private var prevTime = 0.0
-    private var hasTipped = false
-    private var tiltRateFilter = LinearFilter.movingAverage(20)
+    private var tiltRateFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
 
     init {
         addRequirements(Drivetrain)
@@ -21,7 +20,6 @@ class Balance : CommandBase() {
     override fun initialize() {
         prevTime = Timer.getFPGATimestamp()
         prevTilt = Drivetrain.getTilt()
-        hasTipped = false
 
         tiltRateFilter.reset()
     }
@@ -38,14 +36,11 @@ class Balance : CommandBase() {
         val angleInBounds = abs(tilt) <= TunedConstants.balanceAngleTolerance
         if (angleInBounds) {
             Drivetrain.enterBrakePos()
-            hasTipped = true
         } else {
-            val balanceSignificantRate = if (hasTipped) { TunedConstants.balanceAngleSignificantRateEnd } else { TunedConstants.balanceAngleSignificantRateStart }
-            if (tiltRate >= balanceSignificantRate) {
+            if (tiltRate >= TunedConstants.balanceAngleSignificantRate) {
                 Drivetrain.enterBrakePos()
             } else {
-                val balanceSpeed = if (hasTipped) { TunedConstants.balanceSpeedEnd } else { TunedConstants.balanceSpeedStart }
-                val driveVector = Drivetrain.getTiltDirection() * balanceSpeed
+                val driveVector = Drivetrain.getTiltDirection() * TunedConstants.balanceSpeed
                 Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
             }
         }

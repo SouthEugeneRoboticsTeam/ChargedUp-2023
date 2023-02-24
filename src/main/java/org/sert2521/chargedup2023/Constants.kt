@@ -60,8 +60,8 @@ object PhysicalConstants {
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
 
-    private val a = 0.04
-    private val b = 0.67
+    private val a = 0.01
+    private val b = 0.8
 
     fun minAngleWithExtension(extension: Double): Double {
         if (abs(extension) <= a) {
@@ -128,12 +128,14 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val balanceSpeedStart = 0.6
-    const val balanceSpeedEnd = 0.4
-    const val balanceAngleSignificantRateStart = 0.4
-    const val balanceAngleSignificantRateEnd = 0.15
+    const val filterTaps = 20
+
+    const val balanceSpeed = 0.4
+    const val balanceAngleSignificantRate = 0.15
     const val balanceAngleTolerance = 0.04
+
     const val balanceAngleStart = 0.1
+    const val balanceDriveUpSpeed = 1.2
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
     val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
@@ -166,7 +168,7 @@ object ConfigConstants {
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
-        "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.75, 0.0)).andThen(Balance()))
+        "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))
     val autoConstraints = PathConstraints(1.0, 0.75)
 }
 

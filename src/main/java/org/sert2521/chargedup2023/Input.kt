@@ -4,7 +4,6 @@ import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -88,7 +87,7 @@ object Input {
     }
 
     fun getAuto(): Command? {
-        return SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false).alongWith(OntoChargeStation(Translation2d(-0.5, 0.0)).andThen(Balance()))//autoChooser.selected
+        return autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints))//SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true).andThen(OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))//autoChooser.selected
     }
 
     fun getBrakePos(): Boolean {
