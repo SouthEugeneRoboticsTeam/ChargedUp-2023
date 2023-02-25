@@ -34,6 +34,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         extensionPID.reset(Elevator.extensionMeasure())
     }
 
+    // Clamping the target is kind of just in case
     override fun execute() {
         val angleTarget = if (angleSafe || extensionPID.atSetpoint()) {
             angle

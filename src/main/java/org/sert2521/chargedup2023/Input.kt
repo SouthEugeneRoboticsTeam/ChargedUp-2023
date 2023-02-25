@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Drivetrain
+import java.io.File
 
 object Input {
     // Replace with constants
@@ -36,7 +37,7 @@ object Input {
 
     private var lastPiece = GamePieces.CUBE
 
-    val autoChooser = SendableChooser<Command?>()
+    private val autoChooser = SendableChooser<Command?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
         Drivetrain::setNewPose,
@@ -44,18 +45,18 @@ object Input {
         PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
         Drivetrain::drive,
         ConfigConstants.eventMap,
-        // Figure this out
         true,
         Drivetrain
     )
 
     init {
         autoChooser.setDefaultOption("Nothing", null)
-        autoChooser.addOption("Drive Forward", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Forward", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drive Onto Charge Station Right", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Right", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drive Onto Charge Station Left", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Left", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drop Off Cone And Leave", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drop Off Cone And Leave", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Test", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints)))
+        val pathFiles = File("/home/lvuser/deploy/pathplanner").listFiles()
+        if (pathFiles != null) {
+            for (pathFile in pathFiles) {
+                autoChooser.addOption(pathFile.nameWithoutExtension, autoBuilder.fullAuto(PathPlanner.loadPathGroup(pathFile.absolutePath, ConfigConstants.autoConstraints)))
+            }
+        }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
@@ -87,7 +88,7 @@ object Input {
     }
 
     fun getAuto(): Command? {
-        return autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints))//SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true).andThen(OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))//autoChooser.selected
+        return autoChooser.selected
     }
 
     fun getBrakePos(): Boolean {

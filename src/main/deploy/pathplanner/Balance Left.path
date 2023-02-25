@@ -2,24 +2,21 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.875459750919502,
-        "y": 4.945857891715784
+        "x": 2.6048052096104195,
+        "y": 4.620257240514482
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.16483832967666,
-        "y": 4.659329318658638
+        "x": 5.070061613683226,
+        "y": 4.915114347868927
       },
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Elevator Drive",
-          "Elevator Cone High",
-          "Claw Outtake",
           "Elevator Drive"
         ],
         "executionBehavior": "sequential",
@@ -29,22 +26,24 @@
     },
     {
       "anchorPoint": {
-        "x": 6.004076008152016,
-        "y": 4.763521527043054
+        "x": 5.522187044374089,
+        "y": 2.835965671931344
       },
       "prevControl": {
-        "x": 4.897033794067588,
-        "y": 4.880737761475523
+        "x": 6.665150056899021,
+        "y": 5.002541675728011
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "Drive Back Onto Charge Station"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
