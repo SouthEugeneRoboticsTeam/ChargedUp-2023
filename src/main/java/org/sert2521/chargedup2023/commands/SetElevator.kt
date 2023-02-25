@@ -1,5 +1,6 @@
 package org.sert2521.chargedup2023.commands
 
+import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.CommandBase
@@ -45,10 +46,9 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val extensionMeasure = Elevator.extensionMeasure()
         val angleMeasure = Elevator.angleMeasure()
 
-        val safeAngleTarget = max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure))
+        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorExtensionMinAngle, PhysicalConstants.elevatorExtensionMaxAngle)
         val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
         val g = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
-
         Elevator.setAngle(anglePIDResult + g)
 
         val extensionTarget = if (Elevator.extensionSafe()) {
@@ -57,7 +57,8 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             extensionMeasure
         }
 
-        Elevator.setExtend(extensionPID.calculate(extensionMeasure, min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure))))
+        val safeExtensionTarget = clamp(min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure)), PhysicalConstants.elevatorExtensionMinAngle, PhysicalConstants.elevatorExtensionMaxAngle)
+        Elevator.setExtend(extensionPID.calculate(extensionMeasure, safeExtensionTarget))
     }
 
     override fun isFinished(): Boolean {

@@ -60,8 +60,8 @@ object PhysicalConstants {
     // Polar is annoying
     // This takes points and makes them into a bunch of lines in polar coords
     // Then it uses them as boundaries
-    private val extensionExtra = 0.0
-    private val safePoints = arrayOf(Pair(0.0, 0.0), Pair(1.0, 1.0), Pair(3.0, 2.0))
+    private const val extensionExtra = 0.7747
+    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(0.85, 0.2), Pair(1.0, 0.3))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -83,7 +83,7 @@ object PhysicalConstants {
         for (i in 1 until points.size - 1) {
             val x = points[i].first
             val y = points[i].second
-            lineBounds.add(Pair(sqrt(x.pow(2) + y.pow(2)), atan2(x, y)))
+            lineBounds.add(Pair(sqrt(x.pow(2) + y.pow(2)), atan2(y, x)))
         }
 
         return lineBounds.toTypedArray()
@@ -120,11 +120,11 @@ object PhysicalConstants {
         val definition = safeLineDefinitions[lineDefinitionIndex]
 
         val max = definition.first / cos(angle + definition.second)
-        if (max < 0) {
+        if (max < 0.0) {
             return Double.POSITIVE_INFINITY
         }
 
-        return max
+        return max - extensionExtra
     }
 }
 
