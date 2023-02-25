@@ -34,12 +34,12 @@ object PhysicalConstants {
 
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
-    const val ledRightLength = 10
-    const val ledLeftLength = 10
 
-    val ledPurpleHSV = arrayOf(300, 100, 50)
+    const val ledLength = 37
 
-    val ledYellowHSV = arrayOf(60, 100, 50)
+    val ledPurpleHSV = arrayOf(145, 255, 255)
+
+    val ledYellowHSV = arrayOf(10, 255, 255)
 
 }
 
@@ -138,7 +138,5 @@ object ElectronicIDs {
 
     const val camName = ""
 
-
-    const val ledRight = 2
-    const val ledLeft = 6
+    const val ledId = 0
 }

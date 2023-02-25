@@ -6,18 +6,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.LedFlash
 import org.sert2521.chargedup2023.commands.LedIdle
-import org.sert2521.chargedup2023.subsystems.LEDSides
 import org.sert2521.chargedup2023.subsystems.LEDs
 
 import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.Joystick
-import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.InstantCommand
-import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.ConfigConstants.autoConstraints
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.GamePieces
@@ -58,6 +53,11 @@ object Input {
         Drivetrain
     )
 
+    private val ledCube = JoystickButton(gunnerController, 3)
+
+    private val ledCone = JoystickButton(gunnerController, 4)
+
+
     init {
         // Replace numbers with constants
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
@@ -84,6 +84,15 @@ object Input {
         liftIntakeDown.onTrue(SetElevator(0.0, 0.01, false))
         liftIntakeCube.onTrue(SetElevator(0.0, 0.05, false))
         liftIntakeCone.onTrue(SetElevator(0.0, 0.13, false))
+
+        val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
+        val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
+
+
+        ledCube.toggleOnTrue(currentCubePattern)
+
+
+        ledCone.toggleOnTrue(currentConePattern)
     }
 
     fun getAuto(): Command? {
@@ -101,37 +110,5 @@ object Input {
     fun getRot(): Double {
         return -driverController.rightX
     }
-    private val driverController = XboxController(0)
 
-    private val gunnerController = Joystick(1)
-
-    private val intakeSetOne = JoystickButton(driverController, 3)
-
-    private val intakeSetTwo = JoystickButton(driverController, 2)
-
-    private val outtake = JoystickButton(driverController, 1)
-
-    private val ledCube = JoystickButton(gunnerController, 3)
-
-    private val ledCone = JoystickButton(gunnerController, 4)
-
-    private val currentLedPatter = 1
-
-
-    init {
-
-
-        var currentCubePattern: LedFlash = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2])
-        var currentConePattern: LedFlash = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2])
-        var ledRainbow: LedIdle = LedIdle()
-
-
-        ledCube.toggleOnTrue(currentCubePattern)
-
-
-        ledCone.toggleOnTrue(currentConePattern)
-
-
-
-    }
 }
