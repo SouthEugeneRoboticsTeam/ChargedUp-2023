@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Drivetrain
-import java.io.File
 
 object Input {
     // Replace with constants
@@ -22,7 +21,7 @@ object Input {
 
     private val resetAngle = JoystickButton(driverController, 4)
 
-    private val intakeSetOne = JoystickButton(gunnerController, 15)
+    //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
     private val outtake = JoystickButton(gunnerController, 13)
 
@@ -31,9 +30,10 @@ object Input {
     private val liftCubeHigh = JoystickButton(gunnerController, 7)
     private val liftMid = JoystickButton(gunnerController, 8)
     private val liftLow = JoystickButton(gunnerController, 9)
-    private val liftIntakeDown = JoystickButton(gunnerController, 10)
-    private val liftIntakeCube = JoystickButton(gunnerController, 11)
-    private val liftIntakeCone = JoystickButton(gunnerController, 12)
+    private val liftIntakeTippedCone = JoystickButton(gunnerController, 10)
+    private val liftIntakeCube = JoystickButton(gunnerController, 16)
+    private val liftIntakeCone = JoystickButton(gunnerController, 15)
+    private val liftSingleSubstation = JoystickButton(gunnerController, 12)
 
     private var lastPiece = GamePieces.CUBE
 
@@ -52,12 +52,9 @@ object Input {
     init {
         // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
-        val pathFiles = File(ConfigConstants.pathsPath).listFiles()
-        if (pathFiles != null) {
-            for (pathFile in pathFiles) {
-                // Make it not adding paths by the +
-                autoChooser.addOption(pathFile.nameWithoutExtension, autoBuilder.fullAuto(PathPlanner.loadPathGroup( pathFile.nameWithoutExtension, ConfigConstants.autoConstraints)))
-            }
+        for (name in ConfigConstants.pathNames) {
+            // Make it not adding paths by the +
+            autoChooser.addOption(name, autoBuilder.fullAuto(PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints)))
         }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
@@ -66,8 +63,8 @@ object Input {
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
 
         //Intaking a cone is the same as outtaking a cube
-        intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
-        intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
+        //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
+        //intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
 
         intakeSetTwo.whileTrue(ClawIntake(GamePieces.CUBE, false))
         intakeSetTwo.onTrue(InstantCommand({ lastPiece = GamePieces.CONE }))
@@ -84,9 +81,10 @@ object Input {
         liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
         liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
         liftLow.onTrue(SetElevator(PhysicalConstants.elevatorExtensionLow, PhysicalConstants.elevatorAngleLow, false))
-        liftIntakeDown.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
+        liftIntakeTippedCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
         liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
         liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
+        liftSingleSubstation.onTrue(SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, false))
     }
 
     fun getAuto(): Command? {
@@ -111,5 +109,9 @@ object Input {
 
     fun getRot(): Double {
         return -driverController.rightX
+    }
+
+    fun getAutoAlign(): Boolean {
+        return driverController.aButton
     }
 }

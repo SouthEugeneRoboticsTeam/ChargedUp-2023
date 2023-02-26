@@ -1,11 +1,14 @@
 package org.sert2521.chargedup2023.commands
 
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.Input
+import org.sert2521.chargedup2023.TunedConstants
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -15,8 +18,12 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
     private var y = 0.0
     private var prevTime = 0.0
 
+    private val autoAlignPID = PIDController(TunedConstants.swerveAutoAlignAngleP, TunedConstants.swerveAutoAlignAngleI, TunedConstants.swerveAutoAlignAngleD)
+
     init {
         addRequirements(Drivetrain)
+
+        autoAlignPID.enableContinuousInput(0.0, 2.0 * PI)
     }
 
     override fun initialize() {
@@ -24,6 +31,8 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         y = 0.0
 
         prevTime = Timer.getFPGATimestamp()
+
+        autoAlignPID.reset()
     }
 
     override fun execute() {
@@ -61,12 +70,18 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             y -= diffY / diffTime * ConfigConstants.joystickChangeSpeed / rateChange
         }
 
-        var rot = Input.getRot()
-        if (abs(rot) <= ConfigConstants.joystickDeadband) {
-            rot = 0.0
-        }
+        val rot = if (!Input.getAutoAlign()) {
+            var inRot = Input.getRot()
+            if (abs(inRot) <= ConfigConstants.joystickDeadband) {
+                inRot = 0.0
+            }
 
-        rot *= ConfigConstants.rotSpeed - (ConfigConstants.slowRotSpeed * slow)
+            autoAlignPID.calculate(0.0)
+
+            inRot * (ConfigConstants.rotSpeed - (ConfigConstants.slowRotSpeed * slow))
+        } else {
+            autoAlignPID.calculate(Drivetrain.getPose().rotation.radians, PI)
+        }
 
         if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2) && abs(rot) <= ConfigConstants.rotDeadband) {
             if (Input.getBrakePos()) {

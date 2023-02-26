@@ -2,6 +2,7 @@ package org.sert2521.chargedup2023.subsystems
 
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.InstantCommand
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
+import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
 
@@ -24,11 +26,11 @@ object Elevator : SubsystemBase() {
     var extensionInited = false
         private set
 
+    private val angleInitFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
     var angleInited = false
         private set
 
     private val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
-    // Maybe add filter?
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     init {
@@ -41,6 +43,10 @@ object Elevator : SubsystemBase() {
         extendEncoder.positionConversionFactor = PhysicalConstants.elevatorExtensionConversion
 
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
+
+        for (i in 0 until TunedConstants.filterTaps) {
+            angleInitFilter.calculate(0.0)
+        }
 
         // Check
         val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false).schedule() })
@@ -67,9 +73,10 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
-        // Fix bug with noise
-        if (angleMeasure() >= ConfigConstants.angleInitAngle) {
-            angleInited = true
+        if (!angleInited) {
+            if (angleInitFilter.calculate(angleMeasure()) >= ConfigConstants.angleInitAngle) {
+                angleInited = true
+            }
         }
 
         if (!angleInited) {

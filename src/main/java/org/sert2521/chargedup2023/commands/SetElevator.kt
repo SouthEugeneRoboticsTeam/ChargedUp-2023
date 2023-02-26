@@ -10,8 +10,9 @@ import org.sert2521.chargedup2023.subsystems.Elevator
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.cos
+import kotlin.math.sin
 
-// Maybe have very small feedforward especially angle which is about 0.02rad below goal
+// Slow PID under high acceleration
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
     private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
 
@@ -49,8 +50,8 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
         val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
-        val g = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
-        Elevator.setAngle(anglePIDResult + g)
+        val angleG = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
+        Elevator.setAngle(anglePIDResult + angleG)
 
         val extensionTarget = if (Elevator.extensionSafe()) {
             extension
@@ -59,7 +60,9 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         }
 
         val safeExtensionTarget = clamp(min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure)), PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
-        Elevator.setExtend(extensionPID.calculate(extensionMeasure, safeExtensionTarget))
+        val extensionPIDResult = extensionPID.calculate(extensionMeasure, safeExtensionTarget)
+        val extensionG = sin(safeAngleTarget) * (TunedConstants.elevatorExtensionG)
+        Elevator.setExtend(extensionPIDResult + extensionG)
     }
 
     override fun isFinished(): Boolean {

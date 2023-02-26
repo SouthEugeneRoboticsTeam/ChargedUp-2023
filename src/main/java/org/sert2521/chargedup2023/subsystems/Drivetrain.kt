@@ -128,7 +128,7 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 object Drivetrain : SubsystemBase() {
     private val imu = AHRS()
 
-    private val cam = PhotonCamera(ElectronicIDs.camName)
+    private val cam = PhotonCamera(ConfigConstants.camName)
     private var prevRes: PhotonPipelineResult? = null
 
     private val kinematics: SwerveDriveKinematics

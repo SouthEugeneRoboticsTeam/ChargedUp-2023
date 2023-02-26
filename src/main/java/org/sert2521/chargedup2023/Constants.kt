@@ -37,15 +37,17 @@ object PhysicalConstants {
     const val elevatorExtensionConeTippedIntake = 0.0
     const val elevatorExtensionCubeIntake = 0.0
     const val elevatorExtensionConeUpIntake = 0.0
+    const val elevatorExtensionSingleSubstation = 0.0
 
     const val elevatorAngleDrive = 1.19
-    const val elevatorAngleConeHigh = 0.69
+    const val elevatorAngleConeHigh = 0.65
     const val elevatorAngleCubeHigh = 0.55
-    const val elevatorAngleMid = 0.63
+    const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
-    const val elevatorAngleConeTippedIntake = 0.01
+    const val elevatorAngleConeTippedIntake = 0.0
     const val elevatorAngleCubeIntake = 0.02
     const val elevatorAngleConeUpIntake = 0.13
+    const val elevatorAngleSingleSubstation = 0.5
 
     const val halfSideLength = 0.286378246381
 
@@ -57,11 +59,14 @@ object PhysicalConstants {
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
 
+    // This should be moved
     // Polar is annoying
     // This takes points and makes them into a bunch of lines in polar coords
     // Then it uses them as boundaries
-    private const val extensionExtra = 0.7747
-    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(1.0, 0.8), Pair(1.5, 1.1))
+    private const val extensionExtra = 0.76
+    // There should be no vertical lines or horizontal lines one of them will break the code maybe
+    // Something seems to be wrong with y values
+    private val safePoints = arrayOf(Pair(0.775, 0.0), Pair(0.776, 1.8), Pair(1.2, 1.9))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -134,6 +139,8 @@ object TunedConstants {
     const val elevatorExtensionI = 0.0
     const val elevatorExtensionD = 0.0
 
+    const val elevatorExtensionG = 0.7
+
     const val elevatorExtensionMaxV = 0.7
     const val elevatorExtensionMaxA = 0.7
 
@@ -175,6 +182,11 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
+    const val swerveAutoAlignAngleP = 3.0
+    const val swerveAutoAlignAngleI = 0.0
+    const val swerveAutoAlignAngleD = 0.0
+
+    // This should be split up
     const val filterTaps = 20
 
     const val balanceSpeed = 0.4
@@ -190,7 +202,7 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
-    const val angleInitAngle = 1.14
+    const val angleInitAngle = 1.15
     const val angleResetVoltage = 5.5
     const val resetAngle = 0.98
 
@@ -203,9 +215,9 @@ object ConfigConstants {
     const val driveSpeed = 3.5
     const val slowDriveSpeed = 2.0
     const val rotSpeed = 3.5
-    const val slowRotSpeed = 2.5
+    const val slowRotSpeed = 2.0
 
-    const val joystickChangeSpeed = 0.4
+    const val joystickChangeSpeed = 0.6
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
@@ -218,8 +230,15 @@ object ConfigConstants {
         "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))
     val autoConstraints = PathConstraints(1.5, 1.5)
 
-    // Good name needs the slash at the end
-    const val pathsPath = "/home/lvuser/deploy/pathplanner/"
+    val pathNames = arrayOf("1 Piece Balance Left",
+                            "1 Piece Balance Right",
+                            "1 Piece Pickup Balance Right",
+                            "1 Piece Pickup Balance Right",
+                            "Balance Left",
+                            "Balance Right",
+                            "Forward")
+
+    const val camName = ""
 }
 
 object ElectronicIDs {
@@ -238,7 +257,4 @@ object ElectronicIDs {
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI / 2, true),
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI / 2, true),
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI / 2, true))
-
-    const val camName = ""
-
 }
