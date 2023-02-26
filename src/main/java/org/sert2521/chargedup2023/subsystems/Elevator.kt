@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.sert2521.chargedup2023.ConfigConstants
-import org.sert2521.chargedup2023.ConfigConstants.angleInitAngle
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
 
+// Bug with angle stopping?
 object Elevator : SubsystemBase() {
     private val extendMotorOne = CANSparkMax(ElectronicIDs.elevatorMotorOne, CANSparkMaxLowLevel.MotorType.kBrushless)
     private val extendMotorTwo = CANSparkMax(ElectronicIDs.elevatorMotorTwo, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -67,7 +67,8 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
-        if (angleMeasure() >= angleInitAngle) {
+        // Fix bug with noise
+        if (angleMeasure() >= ConfigConstants.angleInitAngle) {
             angleInited = true
         }
 

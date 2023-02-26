@@ -39,12 +39,12 @@ object PhysicalConstants {
     const val elevatorExtensionConeUpIntake = 0.0
 
     const val elevatorAngleDrive = 1.19
-    const val elevatorAngleConeHigh = 0.7
+    const val elevatorAngleConeHigh = 0.69
     const val elevatorAngleCubeHigh = 0.55
     const val elevatorAngleMid = 0.63
     const val elevatorAngleLow = 0.22
     const val elevatorAngleConeTippedIntake = 0.01
-    const val elevatorAngleCubeIntake = 0.05
+    const val elevatorAngleCubeIntake = 0.02
     const val elevatorAngleConeUpIntake = 0.13
 
     const val halfSideLength = 0.286378246381
@@ -61,7 +61,7 @@ object PhysicalConstants {
     // This takes points and makes them into a bunch of lines in polar coords
     // Then it uses them as boundaries
     private const val extensionExtra = 0.7747
-    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(0.85, 0.2), Pair(1.0, 0.3))
+    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(1.0, 0.8), Pair(1.5, 1.1))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -148,8 +148,8 @@ object TunedConstants {
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleMaxV = 5.0
-    const val elevatorAngleMaxA = 9.0
+    const val elevatorAngleMaxV = 7.0
+    const val elevatorAngleMaxA = 12.0
 
     const val elevatorAngleTolerance = 0.025
 
@@ -167,7 +167,7 @@ object TunedConstants {
     const val swerveAngleI = 0.0
     const val swerveAngleD = 0.0
 
-    const val swerveAutoDistanceP = 0.5
+    const val swerveAutoDistanceP = 2.5
     const val swerveAutoDistanceI = 0.0
     const val swerveAutoDistanceD = 0.0
 
@@ -209,21 +209,24 @@ object ConfigConstants {
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(1.0),
+        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.5),
         "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
         "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))
-    val autoConstraints = PathConstraints(1.0, 0.75)
+    val autoConstraints = PathConstraints(1.5, 1.5)
+
+    // Good name needs the slash at the end
+    const val pathsPath = "/home/lvuser/deploy/pathplanner/"
 }
 
 object ElectronicIDs {
     const val clawMotorId = 9
     const val elevatorMotorOne = 6
     const val elevatorMotorTwo = 10
-    const val elevatorAngleMotor = 5
+    const val elevatorAngleMotor = 3
 
     const val elevatorEncoder = 5
 
@@ -231,10 +234,10 @@ object ElectronicIDs {
     const val elevatorLowerExtension = 1
 
     val swerveModuleData = mutableListOf(
-        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 3, 14, -2.27 + PI / 2 + 4.62, true),
-        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 2, 1, 16, -1.63 - PI + 4.79, true),
-        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43, true),
-        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12, true))
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 5, 14, -2.27 + PI / 2 + 4.62 + 1.54 - PI / 2, true),
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI / 2, true),
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI / 2, true),
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI / 2, true))
 
     const val camName = ""
 

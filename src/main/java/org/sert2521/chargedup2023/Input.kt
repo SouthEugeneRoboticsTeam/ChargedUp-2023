@@ -50,11 +50,13 @@ object Input {
     )
 
     init {
+        // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
-        val pathFiles = File("/home/lvuser/deploy/pathplanner").listFiles()
+        val pathFiles = File(ConfigConstants.pathsPath).listFiles()
         if (pathFiles != null) {
             for (pathFile in pathFiles) {
-                autoChooser.addOption(pathFile.nameWithoutExtension, autoBuilder.fullAuto(PathPlanner.loadPathGroup(pathFile.absolutePath, ConfigConstants.autoConstraints)))
+                // Make it not adding paths by the +
+                autoChooser.addOption(pathFile.nameWithoutExtension, autoBuilder.fullAuto(PathPlanner.loadPathGroup( pathFile.nameWithoutExtension, ConfigConstants.autoConstraints)))
             }
         }
 
