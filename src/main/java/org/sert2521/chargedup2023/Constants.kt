@@ -126,6 +126,12 @@ object PhysicalConstants {
 
         return max
     }
+
+    const val ledLength = 37
+
+    val ledPurpleHSV = arrayOf(145, 255, 255)
+
+    val ledYellowHSV = arrayOf(10, 255, 255)
 }
 
 // Move some of these to config constants
@@ -238,4 +244,5 @@ object ElectronicIDs {
 
     const val camName = ""
 
+    const val ledId = 0
 }

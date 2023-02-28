@@ -1,17 +1,19 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.XboxController
+import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.Joystick
-import edu.wpi.first.wpilibj.XboxController
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.InstantCommand
-import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.*
+import org.sert2521.chargedup2023.ConfigConstants.autoConstraints
+import org.sert2521.chargedup2023.commands.ClawIntake
+import org.sert2521.chargedup2023.commands.GamePieces
+import org.sert2521.chargedup2023.commands.SetElevator
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 
 object Input {
@@ -49,6 +51,11 @@ object Input {
         Drivetrain
     )
 
+    private val ledCube = JoystickButton(gunnerController, 3)
+
+    private val ledCone = JoystickButton(gunnerController, 4)
+
+
     init {
         autoChooser.setDefaultOption("Nothing", null)
         autoChooser.addOption("Drive Forward", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Forward", ConfigConstants.autoConstraints)))
@@ -84,6 +91,15 @@ object Input {
         liftIntakeDown.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
         liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
         liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
+        val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
+        val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
+
+
+        ledCube.toggleOnTrue(currentCubePattern)
+
+
+        ledCone.toggleOnTrue(currentConePattern)
+
     }
 
     fun getAuto(): Command? {

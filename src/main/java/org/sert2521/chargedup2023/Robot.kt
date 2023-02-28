@@ -23,7 +23,6 @@ object Robot : TimedRobot() {
 
     override fun robotPeriodic() {
         commandScheduler.run()
-
         Output.update()
     }
 
