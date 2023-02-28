@@ -24,7 +24,7 @@ object Input {
 
     private val resetAngle = JoystickButton(driverController, 4)
 
-    private val intakeSetOne = JoystickButton(gunnerController, 15)
+    //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
     private val outtake = JoystickButton(gunnerController, 13)
 
@@ -33,13 +33,14 @@ object Input {
     private val liftCubeHigh = JoystickButton(gunnerController, 7)
     private val liftMid = JoystickButton(gunnerController, 8)
     private val liftLow = JoystickButton(gunnerController, 9)
-    private val liftIntakeDown = JoystickButton(gunnerController, 10)
-    private val liftIntakeCube = JoystickButton(gunnerController, 11)
-    private val liftIntakeCone = JoystickButton(gunnerController, 12)
+    private val liftIntakeTippedCone = JoystickButton(gunnerController, 10)
+    private val liftIntakeCube = JoystickButton(gunnerController, 16)
+    private val liftIntakeCone = JoystickButton(gunnerController, 15)
+    private val liftSingleSubstation = JoystickButton(gunnerController, 12)
 
     private var lastPiece = GamePieces.CUBE
 
-    val autoChooser = SendableChooser<Command?>()
+    private val autoChooser = SendableChooser<Command?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
         Drivetrain::setNewPose,
@@ -47,7 +48,6 @@ object Input {
         PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
         Drivetrain::drive,
         ConfigConstants.eventMap,
-        // Figure this out
         true,
         Drivetrain
     )
@@ -58,12 +58,12 @@ object Input {
 
 
     init {
+        // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
-        autoChooser.addOption("Drive Forward", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Forward", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drive Onto Charge Station Right", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Right", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drive Onto Charge Station Left", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drive Onto Charge Station Left", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Drop Off Cone And Leave", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Drop Off Cone And Leave", ConfigConstants.autoConstraints)))
-        autoChooser.addOption("Test", autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints)))
+        for (name in ConfigConstants.pathNames) {
+            // Make it not adding paths by the +
+            autoChooser.addOption(name, autoBuilder.fullAuto(PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints)))
+        }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
@@ -71,8 +71,8 @@ object Input {
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
 
         //Intaking a cone is the same as outtaking a cube
-        intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
-        intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
+        //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
+        //intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
 
         intakeSetTwo.whileTrue(ClawIntake(GamePieces.CUBE, false))
         intakeSetTwo.onTrue(InstantCommand({ lastPiece = GamePieces.CONE }))
@@ -89,22 +89,20 @@ object Input {
         liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
         liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
         liftLow.onTrue(SetElevator(PhysicalConstants.elevatorExtensionLow, PhysicalConstants.elevatorAngleLow, false))
-        liftIntakeDown.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
+        liftIntakeTippedCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
         liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
         liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
+        liftSingleSubstation.onTrue(SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, false))
+
         val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
         val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
 
-
         ledCube.toggleOnTrue(currentCubePattern)
-
-
         ledCone.toggleOnTrue(currentConePattern)
-
     }
 
     fun getAuto(): Command? {
-        return autoBuilder.fullAuto(PathPlanner.loadPathGroup("Test", ConfigConstants.autoConstraints))//SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true).andThen(OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))//autoChooser.selected
+        return autoChooser.selected
     }
 
     fun getBrakePos(): Boolean {
@@ -125,5 +123,9 @@ object Input {
 
     fun getRot(): Double {
         return -driverController.rightX
+    }
+
+    fun getAutoAlign(): Boolean {
+        return driverController.aButton
     }
 }

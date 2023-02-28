@@ -1,5 +1,6 @@
 package org.sert2521.chargedup2023.commands
 
+import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.CommandBase
@@ -9,8 +10,9 @@ import org.sert2521.chargedup2023.subsystems.Elevator
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.cos
+import kotlin.math.sin
 
-// Maybe have very small feedforward especially angle which is about 0.02rad below goal
+// Slow PID under high acceleration
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
     private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
 
@@ -33,6 +35,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         extensionPID.reset(Elevator.extensionMeasure())
     }
 
+    // Clamping the target is kind of just in case
     override fun execute() {
         val angleTarget = if (angleSafe || extensionPID.atSetpoint()) {
             angle
@@ -45,11 +48,10 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val extensionMeasure = Elevator.extensionMeasure()
         val angleMeasure = Elevator.angleMeasure()
 
-        val safeAngleTarget = max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure))
+        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
-        val g = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
-
-        Elevator.setAngle(anglePIDResult + g)
+        val angleG = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
+        Elevator.setAngle(anglePIDResult + angleG)
 
         val extensionTarget = if (Elevator.extensionSafe()) {
             extension
@@ -57,7 +59,10 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             extensionMeasure
         }
 
-        Elevator.setExtend(extensionPID.calculate(extensionMeasure, min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure))))
+        val safeExtensionTarget = clamp(min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure)), PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
+        val extensionPIDResult = extensionPID.calculate(extensionMeasure, safeExtensionTarget)
+        val extensionG = sin(safeAngleTarget) * (TunedConstants.elevatorExtensionG)
+        Elevator.setExtend(extensionPIDResult + extensionG)
     }
 
     override fun isFinished(): Boolean {

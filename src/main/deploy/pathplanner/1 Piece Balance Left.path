@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.875459750919502,
-        "y": 4.971905943811888
+        "y": 4.945857891715784
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6206792413584834,
-        "y": 4.685377370754742
+        "x": 3.16483832967666,
+        "y": 4.659329318658638
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -29,19 +29,19 @@
     },
     {
       "anchorPoint": {
-        "x": 6.668301336602674,
-        "y": 4.581185162370325
+        "x": 5.375031242273542,
+        "y": 4.772661687785855
       },
       "prevControl": {
-        "x": 5.899883799767601,
-        "y": 4.542113084226169
+        "x": 4.267989028189113,
+        "y": 4.889877922218324
       },
       "nextControl": {
-        "x": 5.899883799767601,
-        "y": 4.542113084226169
+        "x": 6.48207345635797,
+        "y": 4.655445453353386
       },
-      "holonomicAngle": 0,
-      "isReversal": true,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
@@ -54,12 +54,12 @@
     },
     {
       "anchorPoint": {
-        "x": 5.326826653653307,
-        "y": 3.2527345054690113
+        "x": 5.373452155574302,
+        "y": 3.2967442001607212
       },
       "prevControl": {
-        "x": 6.043148086296172,
-        "y": 3.409022818045637
+        "x": 6.487077451629718,
+        "y": 3.3174981482719788
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -69,7 +69,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Drive Back Onto Charge Station"
+          "Balance"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -77,25 +77,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 0.3636363636363636,
-      "names": [
-        "Elevator Cube Intake"
-      ]
-    },
-    {
-      "position": 0.8545454545454546,
-      "names": [
-        "Claw Outtake"
-      ]
-    },
-    {
-      "position": 1.199999999999999,
-      "names": [
-        "Claw Stop",
-        "Elevator Drive"
-      ]
-    }
-  ]
+  "markers": []
 }

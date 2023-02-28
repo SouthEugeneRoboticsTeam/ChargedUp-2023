@@ -17,10 +17,12 @@ object Output {
     init {
         LiveWindow.disableAllTelemetry()
 
-        val storageDevices = File("/media").listFiles()!!
-        if (storageDevices.isNotEmpty()) {
-            DataLogManager.start(storageDevices[0].absolutePath)
-            DriverStation.startDataLog(DataLogManager.getLog())
+        val storageDevices = File("/media").listFiles()
+        if (storageDevices != null) {
+            if (storageDevices.isNotEmpty()) {
+                DataLogManager.start(storageDevices[0].absolutePath)
+                DriverStation.startDataLog(DataLogManager.getLog())
+            }
         }
 
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
