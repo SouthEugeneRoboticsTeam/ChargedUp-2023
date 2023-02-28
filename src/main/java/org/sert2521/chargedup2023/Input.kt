@@ -1,17 +1,20 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.XboxController
+import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.Joystick
-import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.InstantCommand
-import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.*
+import org.sert2521.chargedup2023.commands.ClawIntake
+import org.sert2521.chargedup2023.commands.GamePieces
+import org.sert2521.chargedup2023.commands.SetElevator
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 
 object Input {
@@ -21,7 +24,7 @@ object Input {
 
     private val resetAngle = JoystickButton(driverController, 4)
 
-    private val intakeSetOne = JoystickButton(gunnerController, 15)
+    //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
     private val outtake = JoystickButton(gunnerController, 13)
 
@@ -30,9 +33,10 @@ object Input {
     private val liftCubeHigh = JoystickButton(gunnerController, 7)
     private val liftMid = JoystickButton(gunnerController, 8)
     private val liftLow = JoystickButton(gunnerController, 9)
-    private val liftIntakeDown = JoystickButton(gunnerController, 10)
-    private val liftIntakeCube = JoystickButton(gunnerController, 11)
-    private val liftIntakeCone = JoystickButton(gunnerController, 12)
+    private val liftIntakeTippedCone = JoystickButton(gunnerController, 10)
+    private val liftIntakeCube = JoystickButton(gunnerController, 16)
+    private val liftIntakeCone = JoystickButton(gunnerController, 15)
+    private val liftSingleSubstation = JoystickButton(gunnerController, 12)
 
     private var lastPiece = GamePieces.CUBE
 
@@ -48,6 +52,11 @@ object Input {
         Drivetrain
     )
 
+    private val ledCube = JoystickButton(gunnerController, 3)
+
+    private val ledCone = JoystickButton(gunnerController, 4)
+
+
     init {
         // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
@@ -61,8 +70,8 @@ object Input {
         resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
 
         //Intaking a cone is the same as outtaking a cube
-        intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
-        intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
+        //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
+        //intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
 
         intakeSetTwo.whileTrue(ClawIntake(GamePieces.CUBE, false))
         intakeSetTwo.onTrue(InstantCommand({ lastPiece = GamePieces.CONE }))
@@ -79,9 +88,16 @@ object Input {
         liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
         liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
         liftLow.onTrue(SetElevator(PhysicalConstants.elevatorExtensionLow, PhysicalConstants.elevatorAngleLow, false))
-        liftIntakeDown.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
+        liftIntakeTippedCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
         liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
         liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
+        liftSingleSubstation.onTrue(SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, false))
+
+        val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
+        val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
+
+        ledCube.toggleOnTrue(currentCubePattern)
+        ledCone.toggleOnTrue(currentConePattern)
     }
 
     fun getAuto(): Command? {
@@ -106,5 +122,9 @@ object Input {
 
     fun getRot(): Double {
         return -driverController.rightX
+    }
+
+    fun getAutoAlign(): Boolean {
+        return driverController.aButton
     }
 }
