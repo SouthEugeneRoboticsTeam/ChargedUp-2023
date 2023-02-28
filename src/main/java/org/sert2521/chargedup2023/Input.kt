@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Drivetrain
-import java.io.File
 
 object Input {
     // Replace with constants
@@ -52,12 +51,8 @@ object Input {
     init {
         // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
-        val pathFiles = File(ConfigConstants.pathsPath).listFiles()
-        if (pathFiles != null) {
-            for (pathFile in pathFiles) {
-                // Make it not adding paths by the +
-                autoChooser.addOption(pathFile.nameWithoutExtension, autoBuilder.fullAuto(PathPlanner.loadPathGroup( pathFile.nameWithoutExtension, ConfigConstants.autoConstraints)))
-            }
+        for (name in ConfigConstants.pathNames) {
+            autoChooser.addOption(name, autoBuilder.fullAuto(PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints)))
         }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)

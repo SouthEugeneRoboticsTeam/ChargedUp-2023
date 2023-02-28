@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.*
@@ -215,11 +216,17 @@ object ConfigConstants {
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
-        "Drive Back Onto Charge Station" to OntoChargeStation(Translation2d(-0.8, 0.0)).andThen(DriveUpChargeStation().withTimeout(1.4).andThen(Balance())))
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-0.8, 0.0)), DriveUpChargeStation().withTimeout(1.4), Balance()),
+        "Drive Over Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(0.8, 0.0)), OffChargeStation(Translation2d(0.8, 0.0))))
     val autoConstraints = PathConstraints(1.5, 1.5)
 
-    // Good name needs the slash at the end
-    const val pathsPath = "/home/lvuser/deploy/pathplanner/"
+    val pathNames = arrayOf("1 Piece Balance Left",
+                            "1 Piece Balance Right",
+                            "1 Piece Pickup Balance Left",
+                            "1 Piece Pickup Balance Right",
+                            "Balance Left",
+                            "Balance Right",
+                            "Forward")
 }
 
 object ElectronicIDs {
