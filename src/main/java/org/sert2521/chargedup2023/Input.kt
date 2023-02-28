@@ -8,9 +8,10 @@ import com.pathplanner.lib.PathPlanner
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.chargedup2023.commands.*
-import org.sert2521.chargedup2023.ConfigConstants.autoConstraints
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.GamePieces
 import org.sert2521.chargedup2023.commands.SetElevator
