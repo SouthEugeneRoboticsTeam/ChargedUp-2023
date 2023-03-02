@@ -1,10 +1,10 @@
 package org.sert2521.chargedup2023.commands
 
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.PhysicalConstants
-import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.LEDs
 import kotlin.math.min
@@ -12,7 +12,7 @@ import kotlin.math.pow
 
 class LedIdle : CommandBase() {
 
-    private var lastPose = Drivetrain.pose
+    private var lastPose = Pose2d()
 
     private var driveSpeed = 0.0
     private var hueTimer = 0.0
@@ -24,15 +24,17 @@ class LedIdle : CommandBase() {
 
     override fun initialize() {
         LEDs.setAllLEDHSV(0, 0, 0)
+
+        lastPose = Drivetrain.getPose()
     }
 
 
     override fun execute() {
+        val currPose = Drivetrain.getPose()
+        driveSpeed = 20*kotlin.math.sqrt((lastPose.x - currPose.x).pow(2) + (lastPose.y - currPose.y).pow(2))
+        lastPose = Drivetrain.getPose()
 
-        driveSpeed = 20*kotlin.math.sqrt((lastPose.x - Drivetrain.pose.x).pow(2) + (lastPose.y - Drivetrain.pose.y).pow(2))
-        lastPose = Drivetrain.pose
-
-        hueTimer += driveSpeed
+        hueTimer += 10.0*driveSpeed+0.75
 
 
         for (i in 0 until PhysicalConstants.ledLength){

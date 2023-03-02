@@ -40,7 +40,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
         val diffTime = currentTime - prevTime
         prevTime = currentTime
 
-        val slow = Input.getSlow()
+        val fast = Input.getFast()
         var currX = Input.getX()
         var currY = Input.getY()
 
@@ -54,7 +54,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
             currY /= magnitude
         }
 
-        val trueSpeed = ConfigConstants.driveSpeed - (ConfigConstants.slowDriveSpeed * slow)
+        val trueSpeed = ConfigConstants.driveSpeed + (ConfigConstants.slowDriveSpeed * fast)
         currX *= trueSpeed
         currY *= trueSpeed
 
@@ -78,7 +78,7 @@ class JoystickDrive(private val fieldOrientated: Boolean) : CommandBase() {
 
             autoAlignPID.calculate(0.0)
 
-            inRot * (ConfigConstants.rotSpeed - (ConfigConstants.slowRotSpeed * slow))
+            inRot * (ConfigConstants.rotSpeed + (ConfigConstants.slowRotSpeed * fast))
         } else {
             autoAlignPID.calculate(Drivetrain.getPose().rotation.radians, PI)
         }

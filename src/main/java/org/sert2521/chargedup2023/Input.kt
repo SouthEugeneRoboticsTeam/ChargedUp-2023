@@ -5,17 +5,23 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import com.pathplanner.lib.PathPlanner
+import com.pathplanner.lib.PathPlannerTrajectory
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.GamePieces
 import org.sert2521.chargedup2023.commands.SetElevator
+import org.sert2521.chargedup2023.subsystems.Claw
 import org.sert2521.chargedup2023.subsystems.Drivetrain
+import kotlin.math.PI
 
 object Input {
     // Replace with constants
@@ -36,11 +42,11 @@ object Input {
     private val liftIntakeTippedCone = JoystickButton(gunnerController, 10)
     private val liftIntakeCube = JoystickButton(gunnerController, 16)
     private val liftIntakeCone = JoystickButton(gunnerController, 15)
-    private val liftSingleSubstation = JoystickButton(gunnerController, 12)
+    private val liftSingleSubstation = JoystickButton(gunnerController, 11)
 
     private var lastPiece = GamePieces.CUBE
 
-    private val autoChooser = SendableChooser<Command?>()
+    private val autoChooser = SendableChooser<MutableList<PathPlannerTrajectory?>?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
         Drivetrain::setNewPose,
@@ -61,8 +67,10 @@ object Input {
         // Put these strings in constants maybe
         autoChooser.setDefaultOption("Nothing", null)
         for (name in ConfigConstants.pathNames) {
-            autoChooser.addOption(name, autoBuilder.fullAuto(PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints)))
+            autoChooser.addOption(name, PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints))
         }
+
+        autoChooser.addOption("1 Piece Balance Middle", mutableListOf(null))
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
@@ -81,9 +89,7 @@ object Input {
         outtake.onTrue(InstantCommand({ clawCommandDirection = ClawIntake(lastPiece, true); clawCommandDirection?.schedule() }))
         outtake.onFalse(InstantCommand({ clawCommandDirection?.cancel(); clawCommandDirection = null }))
 
-        // Add feedforward
         liftDrive.onTrue(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))
-        // This 0.20 is in place of a feedforward
         liftConeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false))
         liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
         liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
@@ -101,14 +107,34 @@ object Input {
     }
 
     fun getAuto(): Command? {
-        return autoChooser.selected
+        val selected = autoChooser.selected
+        return if (selected == null) {
+            null
+        } else {
+            if (selected[0] == null) {
+                SequentialCommandGroup(
+                    InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
+                    SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+                    SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
+                    ClawIntake(GamePieces.CONE, true).withTimeout(0.37),
+                    InstantCommand({  }, Claw),
+                    SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+                    OntoChargeStation(Translation2d(1.0, 0.0)),
+                    DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
+                    OntoChargeStation(Translation2d(-1.0, 0.0)),
+                    DriveUpChargeStation().withTimeout(1.4),
+                    Balance())
+            } else {
+                autoBuilder.fullAuto(selected)
+            }
+        }
     }
 
     fun getBrakePos(): Boolean {
         return driverController.xButton
     }
 
-    fun getSlow(): Double {
+    fun getFast(): Double {
         return driverController.rightTriggerAxis
     }
 

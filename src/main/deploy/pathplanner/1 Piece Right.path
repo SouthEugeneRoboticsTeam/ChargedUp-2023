@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 1.875459750919502,
-        "y": 4.945857891715784
+        "y": 0.4916409832819668
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.16483832967666,
-        "y": 4.659329318658638
+        "x": 2.891333782667566,
+        "y": 0.8823617647235296
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -29,37 +29,12 @@
     },
     {
       "anchorPoint": {
-        "x": 5.375031242273542,
-        "y": 4.772661687785855
+        "x": 6.32967665935332,
+        "y": 0.7390974781949563
       },
       "prevControl": {
-        "x": 4.267989028189113,
-        "y": 4.889877922218324
-      },
-      "nextControl": {
-        "x": 6.48207345635797,
-        "y": 4.655445453353386
-      },
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 5.373452155574302,
-        "y": 3.2967442001607212
-      },
-      "prevControl": {
-        "x": 6.487077451629718,
-        "y": 3.317498148271979
+        "x": 5.418123039349134,
+        "y": 0.7231862505722314
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -68,11 +43,8 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "Drive Back Onto Charge Station",
-          "Elevator Drive"
-        ],
-        "executionBehavior": "sequential",
+        "names": [],
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }

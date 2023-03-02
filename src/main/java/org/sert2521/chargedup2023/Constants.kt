@@ -32,7 +32,7 @@ object PhysicalConstants {
 
     const val elevatorExtensionDrive = 0.0
     const val elevatorExtensionConeHigh = 0.2
-    const val elevatorExtensionCubeHigh = 0.19
+    const val elevatorExtensionCubeHigh = 0.195
     const val elevatorExtensionMid = 0.065
     const val elevatorExtensionLow = 0.0
     const val elevatorExtensionConeTippedIntake = 0.0
@@ -42,13 +42,13 @@ object PhysicalConstants {
 
     const val elevatorAngleDrive = 1.19
     const val elevatorAngleConeHigh = 0.65
-    const val elevatorAngleCubeHigh = 0.55
+    const val elevatorAngleCubeHigh = 0.58
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
     const val elevatorAngleConeTippedIntake = 0.0
     const val elevatorAngleCubeIntake = 0.02
     const val elevatorAngleConeUpIntake = 0.13
-    const val elevatorAngleSingleSubstation = 0.5
+    const val elevatorAngleSingleSubstation = 0.675
 
     const val halfSideLength = 0.286378246381
 
@@ -133,7 +133,7 @@ object PhysicalConstants {
         return max - extensionExtra
     }
 
-    const val ledLength = 37
+    const val ledLength = 72
 
     val ledPurpleHSV = arrayOf(145, 255, 255)
 
@@ -146,26 +146,26 @@ object TunedConstants {
     const val elevatorExtensionI = 0.0
     const val elevatorExtensionD = 0.0
 
-    const val elevatorExtensionG = 0.7
+    const val elevatorExtensionG = 1.2
 
-    const val elevatorExtensionMaxV = 0.7
-    const val elevatorExtensionMaxA = 0.7
+    const val elevatorExtensionMaxV = 0.8
+    const val elevatorExtensionMaxA = 1.4
 
     const val elevatorExtensionMaxAngleTarget = 1.0
     const val elevatorExtensionMinAngleTarget = 0.1
-    const val elevatorExtensionTolerance = 0.015
+    const val elevatorExtensionTolerance = 0.01
 
-    const val elevatorAngleP = 60.0
+    const val elevatorAngleP = 80.0
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleMaxV = 7.0
-    const val elevatorAngleMaxA = 12.0
+    const val elevatorAngleMaxV = 8.0
+    const val elevatorAngleMaxA = 14.0
 
-    const val elevatorAngleTolerance = 0.025
+    const val elevatorAngleTolerance = 0.015
 
     // Sysid these all
     const val swervePowerS = 0.3
@@ -209,7 +209,7 @@ object TunedConstants {
 
 object ConfigConstants {
     const val extensionResetVoltage = -1.0
-    const val angleInitAngle = 1.15
+    const val angleInitAngle = 1.175
     const val angleResetVoltage = 5.5
     const val resetAngle = 0.98
 
@@ -219,32 +219,37 @@ object ConfigConstants {
     const val rotDeadband = 0.1
     const val joystickDeadband = 0.1
 
-    const val driveSpeed = 3.5
+    const val driveSpeed = 1.5
     const val slowDriveSpeed = 2.0
-    const val rotSpeed = 3.5
+    const val rotSpeed = 1.5
     const val slowRotSpeed = 2.0
 
-    const val joystickChangeSpeed = 0.6
+    const val joystickChangeSpeed = 0.2
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-        "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.5),
+        "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh + 0.01, PhysicalConstants.elevatorAngleConeHigh, true),
+        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.35),
         "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
-        "Elevator High Cube" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true).withTimeout(1.0),
+        "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-0.8, 0.0)), DriveUpChargeStation().withTimeout(1.4), Balance()),
-        "Drive Over Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(0.8, 0.0)), OffChargeStation(Translation2d(0.8, 0.0))))
-    val autoConstraints = PathConstraints(1.5, 1.5)
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.15), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.15), Balance()))
+    val autoConstraints = PathConstraints(1.8, 1.7)
 
     val pathNames = arrayOf("1 Piece Balance Left",
+                            "1 Piece Balance Middle",
                             "1 Piece Balance Right",
                             "1 Piece Pickup Balance Left",
                             "1 Piece Pickup Balance Right",
+                            "2 Piece Balance Left",
+                            "2 Piece Left",
                             "Balance Left",
                             "Balance Right",
-                            "Forward")
+                            "Forward",
+                            "1 Piece Left",
+                            "1 Piece Right")
 
     const val camName = ""
 }
