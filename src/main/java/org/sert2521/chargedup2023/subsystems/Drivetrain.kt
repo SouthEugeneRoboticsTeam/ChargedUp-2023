@@ -133,7 +133,7 @@ object Drivetrain : SubsystemBase() {
 
     private val kinematics: SwerveDriveKinematics
     private var modules: Array<SwerveModule>
-    private val poseEstimator: SwerveDrivePoseEstimator
+    private val poseEstimator: SwerveDriveOdometry
 
     private var pose = Pose2d()
 
@@ -168,7 +168,7 @@ object Drivetrain : SubsystemBase() {
         val positionsArray = positions.toTypedArray()
 
         kinematics = SwerveDriveKinematics(*modulePositions.toTypedArray())
-        poseEstimator = SwerveDrivePoseEstimator(kinematics, -imu.rotation2d, positionsArray, Pose2d(), TunedConstants.stateDeviations, TunedConstants.globalDeviations)
+        poseEstimator = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray, Pose2d())
     }
 
     // Fix this nonsense
@@ -193,7 +193,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     override fun periodic() {
-        val res = cam.latestResult
+        /*val res = cam.latestResult
         if (res != prevRes) {
             if (res.hasTargets()) {
                 val camToTargetTrans = res.bestTarget.bestCameraToTarget
@@ -202,7 +202,7 @@ object Drivetrain : SubsystemBase() {
             }
 
             prevRes = res
-        }
+        }*/
 
         val positions = mutableListOf<SwerveModulePosition>()
 

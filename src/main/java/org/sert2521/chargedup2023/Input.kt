@@ -29,6 +29,7 @@ object Input {
     private val gunnerController = Joystick(1)
 
     private val resetAngle = JoystickButton(driverController, 4)
+    private val slowButton = JoystickButton(driverController, 5)
 
     //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
@@ -62,6 +63,7 @@ object Input {
 
     private val ledCone = JoystickButton(gunnerController, 4)
 
+    var slowMode = false
 
     init {
         // Put these strings in constants maybe
@@ -104,6 +106,8 @@ object Input {
 
         ledCube.toggleOnTrue(currentCubePattern)
         ledCone.toggleOnTrue(currentConePattern)
+
+        slowButton.onTrue(InstantCommand({ slowMode = !slowMode }))
     }
 
     fun getAuto(): Command? {
@@ -122,7 +126,7 @@ object Input {
                     OntoChargeStation(Translation2d(1.0, 0.0)),
                     DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
                     OntoChargeStation(Translation2d(-1.0, 0.0)),
-                    DriveUpChargeStation().withTimeout(1.4),
+                    DriveUpChargeStation().withTimeout(1.3),
                     Balance())
             } else {
                 autoBuilder.fullAuto(selected)
@@ -134,8 +138,13 @@ object Input {
         return driverController.xButton
     }
 
+    // Rename fast stuff because it actually slows it
     fun getFast(): Double {
-        return driverController.rightTriggerAxis
+        return if (!slowMode) {
+            driverController.rightTriggerAxis
+        } else {
+            1.0
+        }
     }
 
     fun getX(): Double {

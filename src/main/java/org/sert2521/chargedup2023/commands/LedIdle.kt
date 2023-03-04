@@ -1,6 +1,7 @@
 package org.sert2521.chargedup2023.commands
 
 
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
@@ -17,6 +18,8 @@ class LedIdle : CommandBase() {
     private var driveSpeed = 0.0
     private var hueTimer = 0.0
 
+    private val filter = LinearFilter.movingAverage(10)
+
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
         addRequirements(LEDs)
@@ -31,7 +34,8 @@ class LedIdle : CommandBase() {
 
     override fun execute() {
         val currPose = Drivetrain.getPose()
-        driveSpeed = 20*kotlin.math.sqrt((lastPose.x - currPose.x).pow(2) + (lastPose.y - currPose.y).pow(2))
+        val rawDriveSpeed = 20*kotlin.math.sqrt((lastPose.x - currPose.x).pow(2) + (lastPose.y - currPose.y).pow(2))
+        val driveSpeed = filter.calculate(rawDriveSpeed)
         lastPose = Drivetrain.getPose()
 
         hueTimer += 10.0*driveSpeed+0.75
@@ -39,7 +43,7 @@ class LedIdle : CommandBase() {
 
         for (i in 0 until PhysicalConstants.ledLength){
             LEDs.setLEDHSV(i, hueTimer.toInt()+i*4, 255,
-                min((255.0*driveSpeed/ConfigConstants.driveSpeed).toInt(), 255).coerceAtLeast(15)
+                min((255.0*driveSpeed/1.5).toInt(), 255).coerceAtLeast(15)
             )
         }
     }

@@ -27,6 +27,7 @@ object Output {
 
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
+        values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
 
         values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
 
@@ -39,6 +40,8 @@ object Output {
         bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
         bools.add(Pair("Elevator Angle Inited") { Elevator.angleInited })
         bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
+
+        bools.add(Pair("Slow Mode") { Input.slowMode })
 
         SmartDashboard.putData("Output/Field", field)
 

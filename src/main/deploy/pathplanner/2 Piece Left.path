@@ -78,16 +78,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.556670176906864,
-        "y": 4.589271218862048
+        "x": 6.590157180314361,
+        "y": 4.67235334470669
       },
       "prevControl": {
-        "x": 5.78825264007179,
-        "y": 4.550199140717892
+        "x": 5.821739643479288,
+        "y": 4.633281266562534
       },
       "nextControl": {
-        "x": 5.78825264007179,
-        "y": 4.550199140717892
+        "x": 5.821739643479288,
+        "y": 4.633281266562534
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -131,12 +131,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.875459750919502,
-        "y": 4.3728007456014915
+        "x": 1.9145318290636584,
+        "y": 4.463968927937857
       },
       "prevControl": {
-        "x": 2.552709105418211,
-        "y": 4.5290890581781165
+        "x": 2.331300662601328,
+        "y": 4.555137110274222
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -147,8 +147,7 @@
       "stopEvent": {
         "names": [
           "Elevator Cube High",
-          "Claw Outtake",
-          "Elevator Drive"
+          "Claw Outtake"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -161,19 +160,19 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 1.2727272727272727,
+      "position": 1.0909090909090908,
       "names": [
         "Elevator Cube Intake"
       ]
     },
     {
-      "position": 2.5818181818181807,
+      "position": 2.5090909090909093,
       "names": [
         "Claw Cube Intake"
       ]
     },
     {
-      "position": 3.4181818181818167,
+      "position": 3.3818181818181796,
       "names": [
         "Elevator Drive",
         "Claw Stop"
@@ -186,7 +185,7 @@
       ]
     },
     {
-      "position": 4.527272727272726,
+      "position": 3.8727272727272704,
       "names": [
         "Elevator Cube High"
       ]

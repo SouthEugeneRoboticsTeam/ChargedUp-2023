@@ -7,6 +7,7 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
@@ -196,7 +197,7 @@ object TunedConstants {
     // This should be split up
     const val filterTaps = 20
 
-    const val balanceSpeed = 0.4
+    const val balanceSpeed = 0.2
     const val balanceAngleSignificantRate = 0.15
     const val balanceAngleTolerance = 0.04
 
@@ -219,10 +220,10 @@ object ConfigConstants {
     const val rotDeadband = 0.1
     const val joystickDeadband = 0.1
 
-    const val driveSpeed = 1.5
-    const val slowDriveSpeed = 2.0
-    const val rotSpeed = 1.5
-    const val slowRotSpeed = 2.0
+    const val driveSpeed = 3.5
+    const val driveSpeedup = 2.0
+    const val rotSpeed = 3.5
+    const val rotSpeedup = 2.0
 
     const val joystickChangeSpeed = 0.2
 
@@ -234,8 +235,8 @@ object ConfigConstants {
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.15), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.15), Balance()))
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
     val autoConstraints = PathConstraints(1.8, 1.7)
 
     val pathNames = arrayOf("1 Piece Balance Left",
@@ -249,7 +250,8 @@ object ConfigConstants {
                             "Balance Right",
                             "Forward",
                             "1 Piece Left",
-                            "1 Piece Right")
+                            "1 Piece Right",
+                            "Test")
 
     const val camName = ""
 }
