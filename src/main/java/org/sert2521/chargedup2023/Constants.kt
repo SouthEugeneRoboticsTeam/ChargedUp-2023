@@ -7,7 +7,6 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
@@ -204,8 +203,9 @@ object TunedConstants {
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
 
-    val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
-    val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
+    val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
+    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 0.5)
+    val autoVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.5)
 }
 
 object ConfigConstants {
@@ -218,7 +218,6 @@ object ConfigConstants {
 
     const val powerDeadband = 0.1
     const val rotDeadband = 0.1
-    const val joystickDeadband = 0.1
 
     const val driveSpeed = 3.5
     const val driveSpeedup = 2.0
@@ -252,8 +251,6 @@ object ConfigConstants {
                             "1 Piece Left",
                             "1 Piece Right",
                             "Test")
-
-    const val camName = ""
 }
 
 object ElectronicIDs {
@@ -274,4 +271,6 @@ object ElectronicIDs {
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI / 2, true))
 
     const val ledId = 0
+
+    const val camName = ""
 }

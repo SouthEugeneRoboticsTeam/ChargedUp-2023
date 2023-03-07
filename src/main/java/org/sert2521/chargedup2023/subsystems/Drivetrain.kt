@@ -128,14 +128,16 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 object Drivetrain : SubsystemBase() {
     private val imu = AHRS()
 
-    private val cam = PhotonCamera(ConfigConstants.camName)
+    private val cam = PhotonCamera(ElectronicIDs.camName)
     private var prevRes: PhotonPipelineResult? = null
 
     private val kinematics: SwerveDriveKinematics
     private var modules: Array<SwerveModule>
-    private val poseEstimator: SwerveDriveOdometry
+    private val odometry: SwerveDriveOdometry
+    private val poseEstimator: SwerveDrivePoseEstimator
 
     private var pose = Pose2d()
+    private var visionPose = Pose2d()
 
     // False is broken
     var doesOptimize = ConfigConstants.drivetrainOptimized
@@ -168,12 +170,18 @@ object Drivetrain : SubsystemBase() {
         val positionsArray = positions.toTypedArray()
 
         kinematics = SwerveDriveKinematics(*modulePositions.toTypedArray())
-        poseEstimator = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray, Pose2d())
+        odometry = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray, Pose2d())
+        poseEstimator = SwerveDrivePoseEstimator(kinematics, -imu.rotation2d, positionsArray, Pose2d(), TunedConstants.encoderDeviations, TunedConstants.defaultVisionDeviations)
     }
 
     // Fix this nonsense
     fun getPose(): Pose2d {
         return Pose2d(pose.y, pose.x, -pose.rotation)
+    }
+
+    // Fix this nonsense
+    fun getVisionPose(): Pose2d {
+        return Pose2d(visionPose.y, visionPose.x, -visionPose.rotation)
     }
 
     private fun createModule(powerMotor: CANSparkMax, angleMotor: CANSparkMax, moduleData: SwerveModuleData): SwerveModule {
@@ -193,7 +201,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     override fun periodic() {
-        /*val res = cam.latestResult
+        val res = cam.latestResult
         if (res != prevRes) {
             if (res.hasTargets()) {
                 val camToTargetTrans = res.bestTarget.bestCameraToTarget
@@ -202,7 +210,7 @@ object Drivetrain : SubsystemBase() {
             }
 
             prevRes = res
-        }*/
+        }
 
         val positions = mutableListOf<SwerveModulePosition>()
 
@@ -213,7 +221,8 @@ object Drivetrain : SubsystemBase() {
 
         val positionsArray = positions.toTypedArray()
 
-        pose = poseEstimator.update(-imu.rotation2d, positionsArray)
+        pose = odometry.update(-imu.rotation2d, positionsArray)
+        visionPose = poseEstimator.update(-imu.rotation2d, positionsArray)
     }
 
     fun setOptimize(value: Boolean) {
@@ -236,7 +245,22 @@ object Drivetrain : SubsystemBase() {
 
         val positionsArray = positions.toTypedArray()
 
-        poseEstimator.resetPosition(-imu.rotation2d, positionsArray, pose)
+        odometry.resetPosition(-imu.rotation2d, positionsArray, pose)
+    }
+
+    fun setNewVisionPose(newPose: Pose2d) {
+        visionPose = Pose2d(newPose.y, newPose.x, -newPose.rotation)
+
+        val positions = mutableListOf<SwerveModulePosition>()
+
+        for (module in modules) {
+            module.updateState()
+            positions.add(module.position)
+        }
+
+        val positionsArray = positions.toTypedArray()
+
+        poseEstimator.resetPosition(-imu.rotation2d, positionsArray, visionPose)
     }
 
     fun getAccelSqr(): Double {
