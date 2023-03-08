@@ -7,6 +7,7 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
@@ -59,6 +60,9 @@ object PhysicalConstants {
 
     val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
     val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
+
+    val colorToConeAngle = mapOf(Alliance.Blue to 0.0, Alliance.Red to PI)
+    val conePoints = mutableListOf(0.0, 1.0, 2.0)
 
     // This should be moved
     // Polar is annoying
@@ -189,9 +193,13 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val swerveAutoAlignAngleP = 3.0
-    const val swerveAutoAlignAngleI = 0.0
-    const val swerveAutoAlignAngleD = 0.0
+    const val swerveAlignDistanceP = 0.0
+    const val swerveAlignDistanceI = 0.0
+    const val swerveAlignDistanceD = 0.0
+
+    const val swerveAlignAngleP = 0.0
+    const val swerveAlignAngleI = 0.0
+    const val swerveAlignAngleD = 0.0
 
     // This should be split up
     const val filterTaps = 20
@@ -205,7 +213,7 @@ object TunedConstants {
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
     val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 0.5)
-    val autoVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.5)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.5)
 }
 
 object ConfigConstants {

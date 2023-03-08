@@ -5,7 +5,6 @@ import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.Input
 
 class JoystickDrive(private val fieldOrientated: Boolean) : JoystickCommand() {
-
     init {
         addRequirements(Drivetrain)
     }

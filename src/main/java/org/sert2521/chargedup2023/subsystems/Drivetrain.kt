@@ -263,6 +263,14 @@ object Drivetrain : SubsystemBase() {
         poseEstimator.resetPosition(-imu.rotation2d, positionsArray, visionPose)
     }
 
+    fun setVisionStandardDeviations() {
+        poseEstimator.setVisionMeasurementStdDevs(TunedConstants.defaultVisionDeviations)
+    }
+
+    fun setVisionAlignDeviations() {
+        poseEstimator.setVisionMeasurementStdDevs(TunedConstants.alignVisionDeviations)
+    }
+
     fun getAccelSqr(): Double {
         return (imu.worldLinearAccelY.pow(2) + imu.worldLinearAccelX.pow(2)).toDouble()
     }

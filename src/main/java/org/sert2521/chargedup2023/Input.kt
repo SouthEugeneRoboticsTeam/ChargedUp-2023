@@ -11,6 +11,8 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -161,5 +163,9 @@ object Input {
 
     fun getAutoAlign(): Boolean {
         return driverController.aButton
+    }
+
+    fun getColor(): Alliance {
+        return DriverStation.getAlliance()
     }
 }
