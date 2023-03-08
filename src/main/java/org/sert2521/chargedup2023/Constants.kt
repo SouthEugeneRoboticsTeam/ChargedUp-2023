@@ -42,7 +42,7 @@ object PhysicalConstants {
     const val elevatorExtensionSingleSubstation = 0.0
 
     const val elevatorAngleDrive = 1.19
-    const val elevatorAngleConeHigh = 0.65
+    const val elevatorAngleConeHigh = 0.68
     const val elevatorAngleCubeHigh = 0.58
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
@@ -228,9 +228,10 @@ object ConfigConstants {
     const val joystickChangeSpeed = 0.2
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-        "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh + 0.01, PhysicalConstants.elevatorAngleConeHigh, true),
-        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.35),
+        "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
+        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.4),
         "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
+        "Elevator Cone Intake" to SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, true),
         "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
@@ -251,7 +252,8 @@ object ConfigConstants {
                             "Forward",
                             "1 Piece Left",
                             "1 Piece Right",
-                            "Test")
+                            "Test",
+                            "2 Piece Pickup Left")
 
     const val camName = ""
 }

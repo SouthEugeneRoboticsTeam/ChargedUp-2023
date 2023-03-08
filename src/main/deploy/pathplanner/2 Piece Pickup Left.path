@@ -1,0 +1,284 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.875459750919502,
+        "y": 4.971905943811888
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.2531565063130126,
+        "y": 4.698401396802794
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Elevator Drive",
+          "Elevator Cone High",
+          "Claw Outtake"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.9173818347636695,
+        "y": 4.75
+      },
+      "prevControl": {
+        "x": 2.2661805323610644,
+        "y": 4.841168182336364
+      },
+      "nextControl": {
+        "x": 3.743775393529758,
+        "y": 4.634304901772748
+      },
+      "holonomicAngle": 146.30993247402017,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.3500247000494,
+        "y": 4.659329318658638
+      },
+      "prevControl": {
+        "x": 3.7875737247252093,
+        "y": 4.659329318658638
+      },
+      "nextControl": {
+        "x": 5.040298080596162,
+        "y": 4.659329318658638
+      },
+      "holonomicAngle": 90.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.590157180314361,
+        "y": 4.67235334470669
+      },
+      "prevControl": {
+        "x": 5.821739643479288,
+        "y": 4.633281266562534
+      },
+      "nextControl": {
+        "x": 5.821739643479288,
+        "y": 4.633281266562534
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.154664309328619,
+        "y": 4.8025936051872105
+      },
+      "prevControl": {
+        "x": 4.887510726792984,
+        "y": 4.780717592725587
+      },
+      "nextControl": {
+        "x": 3.2820545641091283,
+        "y": 4.828641657283315
+      },
+      "holonomicAngle": 117.80145877993415,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Drive Back Onto Charge Station",
+          "Elevator Drive"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.875459750919502,
+        "y": 4.4118728237456475
+      },
+      "prevControl": {
+        "x": 1.9536039072078144,
+        "y": 4.880737761475523
+      },
+      "nextControl": {
+        "x": 1.9536039072078144,
+        "y": 4.880737761475523
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "Elevator Cube High",
+          "Claw Outtake"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.930405860811722,
+        "y": 4.74
+      },
+      "prevControl": {
+        "x": 2.539685079370159,
+        "y": 4.841665683331367
+      },
+      "nextControl": {
+        "x": 3.687327685272306,
+        "y": 4.543048677809528
+      },
+      "holonomicAngle": 147.87500155961243,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.639403278806557,
+        "y": 4.346752693505388
+      },
+      "prevControl": {
+        "x": 5.600331200662401,
+        "y": 5.180290360580722
+      },
+      "nextControl": {
+        "x": 5.688044756778936,
+        "y": 3.3090678300946204
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.590157180314361,
+        "y": 3.356926713853428
+      },
+      "prevControl": {
+        "x": 5.808715617431235,
+        "y": 3.3699507399014803
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Claw Stop",
+          "Elevator Drive"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "before",
+        "waitTime": 0.5
+      }
+    }
+  ],
+  "maxVelocity": 1.5,
+  "maxAcceleration": 1.5,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 6.690909090909091,
+      "names": [
+        "Elevator Cone Intake"
+      ]
+    },
+    {
+      "position": 7.709090909090903,
+      "names": [
+        "Claw Cube Intake"
+      ]
+    },
+    {
+      "position": 2.0363636363636366,
+      "names": [
+        "Elevator Cube Intake"
+      ]
+    },
+    {
+      "position": 2.545454545454546,
+      "names": [
+        "Claw Cube Intake"
+      ]
+    },
+    {
+      "position": 3.345454545454546,
+      "names": [
+        "Claw Stop",
+        "Elevator Drive"
+      ]
+    },
+    {
+      "position": 0.07272727272727272,
+      "names": [
+        "Elevator Drive"
+      ]
+    },
+    {
+      "position": 4.363636363636365,
+      "names": [
+        "Elevator Cube High"
+      ]
+    }
+  ]
+}
