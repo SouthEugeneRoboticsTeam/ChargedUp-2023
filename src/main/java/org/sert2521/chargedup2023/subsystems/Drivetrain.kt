@@ -10,10 +10,11 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.kinematics.*
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.MotorSafety
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.photonvision.PhotonCamera
-import org.photonvision.targeting.PhotonPipelineResult
+import org.photonvision.PhotonPoseEstimator
 import org.sert2521.chargedup2023.*
 import kotlin.math.*
 
@@ -128,8 +129,8 @@ class SwerveModule(private val powerMotor: CANSparkMax,
 object Drivetrain : SubsystemBase() {
     private val imu = AHRS()
 
-    private val cam = PhotonCamera(ElectronicIDs.camName)
-    private var prevRes: PhotonPipelineResult? = null
+    private val cams: Array<PhotonCamera>
+    private val photonPoseEstimators: Array<PhotonPoseEstimator>
 
     private val kinematics: SwerveDriveKinematics
     private var modules: Array<SwerveModule>
@@ -172,6 +173,18 @@ object Drivetrain : SubsystemBase() {
         kinematics = SwerveDriveKinematics(*modulePositions.toTypedArray())
         odometry = SwerveDriveOdometry(kinematics, -imu.rotation2d, positionsArray, Pose2d())
         poseEstimator = SwerveDrivePoseEstimator(kinematics, -imu.rotation2d, positionsArray, Pose2d(), TunedConstants.encoderDeviations, TunedConstants.defaultVisionDeviations)
+
+        val camsList = mutableListOf<PhotonCamera>()
+        val photonPoseEstimatorsList = mutableListOf<PhotonPoseEstimator>()
+        for (camData in ElectronicIDs.camData) {
+            val cam = PhotonCamera(camData.first)
+            camsList.add(cam)
+            // Field gets updated before run so it can be null
+            photonPoseEstimatorsList.add(PhotonPoseEstimator(null, PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS, cam, camData.second))
+        }
+
+        cams = camsList.toTypedArray()
+        photonPoseEstimators = photonPoseEstimatorsList.toTypedArray()
     }
 
     // Fix this nonsense
@@ -201,15 +214,16 @@ object Drivetrain : SubsystemBase() {
     }
 
     override fun periodic() {
-        val res = cam.latestResult
-        if (res != prevRes) {
-            if (res.hasTargets()) {
-                val camToTargetTrans = res.bestTarget.bestCameraToTarget
-                val camPose = PhysicalConstants.tagPose.transformBy(camToTargetTrans.inverse())
-                poseEstimator.addVisionMeasurement(camPose.transformBy(PhysicalConstants.cameraTrans).toPose2d(), res.timestampSeconds)
+        val color = Input.getColor()
+        if (color == DriverStation.Alliance.Invalid)
+        for (photonPoseEstimator in photonPoseEstimators) {
+            val field = PhysicalConstants.colorToField[Input.getColor()]
+            if (field != null) {
+                // Photonvision automatically invalidates pose cache when this is changed
+                photonPoseEstimator.fieldTags = field
+                val poseOutput = photonPoseEstimator.update().get()
+                poseEstimator.addVisionMeasurement(poseOutput.estimatedPose.toPose2d(), poseOutput.timestampSeconds)
             }
-
-            prevRes = res
         }
 
         val positions = mutableListOf<SwerveModulePosition>()

@@ -1,6 +1,8 @@
 package org.sert2521.chargedup2023
 
 import com.pathplanner.lib.PathConstraints
+import edu.wpi.first.apriltag.AprilTagFieldLayout
+import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.MatBuilder
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.Nat
@@ -58,11 +60,25 @@ object PhysicalConstants {
 
     const val angleEncoderMultiplier = 0.01745329251
 
-    val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
-    val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
+    val camPose = Transform3d()
+
+    private val fieldBlue: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
+    private val fieldRed: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
+    val colorToField = mapOf(Alliance.Blue to fieldBlue, Alliance.Red to fieldRed)
+
+    init {
+        fieldBlue.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide)
+        fieldRed.setOrigin(AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide)
+    }
 
     val colorToConeAngle = mapOf(Alliance.Blue to 0.0, Alliance.Red to PI)
-    val conePoints = mutableListOf(0.0, 1.0, 2.0)
+    val conePoints = listOf(0.0, 1.0, 2.0)
+
+    const val ledLength = 72
+
+    val ledPurpleHSV = arrayOf(145, 255, 255)
+
+    val ledYellowHSV = arrayOf(10, 255, 255)
 
     // This should be moved
     // Polar is annoying
@@ -136,12 +152,6 @@ object PhysicalConstants {
 
         return max - extensionExtra
     }
-
-    const val ledLength = 72
-
-    val ledPurpleHSV = arrayOf(145, 255, 255)
-
-    val ledYellowHSV = arrayOf(10, 255, 255)
 }
 
 // Move some of these to config constants
@@ -272,7 +282,7 @@ object ElectronicIDs {
     const val elevatorUpperExtension = 2
     const val elevatorLowerExtension = 1
 
-    val swerveModuleData = mutableListOf(
+    val swerveModuleData = listOf(
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 5, 14, -2.27 + PI / 2 + 4.62 + 1.54 - PI / 2, true),
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI / 2, true),
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI / 2, true),
@@ -280,5 +290,5 @@ object ElectronicIDs {
 
     const val ledId = 0
 
-    const val camName = ""
+    val camData = listOf(Pair("Cam", PhysicalConstants.camPose))
 }
