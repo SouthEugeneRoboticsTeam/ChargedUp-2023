@@ -7,7 +7,6 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
@@ -19,6 +18,7 @@ class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val a
 object PhysicalConstants {
     const val elevatorExtensionConversion = ((8.375) - (40.5625)) / (-1.071426391601562 - 70.07333374023438) / 100.0
     const val elevatorAngleConversion = -2 * PI
+    const val elevatorAngleMotorConversion = 1.0
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
 
@@ -29,6 +29,7 @@ object PhysicalConstants {
     const val elevatorAngleTop = 1.19
     const val elevatorExtensionMaxAngle = 1.05
     const val elevatorAngleBottom = 0.005
+    const val elevatorAngleMotorBottom = -0.2
     const val elevatorExtensionMinAngle = 0.05
 
     const val elevatorExtensionDrive = 0.0

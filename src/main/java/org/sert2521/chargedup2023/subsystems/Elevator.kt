@@ -10,7 +10,6 @@ import org.sert2521.chargedup2023.*
 import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
 
-// Bug with angle stopping?
 object Elevator : SubsystemBase() {
     private val extendMotorOne = CANSparkMax(ElectronicIDs.elevatorMotorOne, CANSparkMaxLowLevel.MotorType.kBrushless)
     private val extendMotorTwo = CANSparkMax(ElectronicIDs.elevatorMotorTwo, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -26,6 +25,8 @@ object Elevator : SubsystemBase() {
         private set
 
     val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
+
+    private val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     init {
@@ -37,6 +38,7 @@ object Elevator : SubsystemBase() {
 
         extendEncoder.positionConversionFactor = PhysicalConstants.elevatorExtensionConversion
 
+        angleMotorEncoder.positionConversionFactor = PhysicalConstants.elevatorAngleMotorConversion
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
 
         // Check
@@ -66,6 +68,7 @@ object Elevator : SubsystemBase() {
 
         if (!angleInited) {
             if (angleMeasure() >= ConfigConstants.angleInitAngle && Robot.isEnabled) {
+                angleMotorEncoder.position = angleMeasure()
                 angleInited = true
             }
         }
@@ -131,7 +134,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun angleAtBottom(): Boolean {
-        return angleMeasure() < PhysicalConstants.elevatorAngleBottom
+        return angleMeasure() < PhysicalConstants.elevatorAngleBottom || angleMotorEncoder.position < PhysicalConstants.elevatorAngleMotorBottom
     }
 
     fun stop() {
