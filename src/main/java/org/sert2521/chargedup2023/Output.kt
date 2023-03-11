@@ -14,6 +14,8 @@ object Output {
     private val bools = mutableListOf<Pair<String, () -> Boolean>>()
     private val field = Field2d()
 
+    var visionHappy = false
+
     init {
         LiveWindow.disableAllTelemetry()
 
@@ -42,6 +44,8 @@ object Output {
         bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
 
         bools.add(Pair("Slow Mode") { Input.slowMode })
+
+        bools.add(Pair("Vision Happy") { visionHappy })
 
         SmartDashboard.putData("Output/Field", field)
 

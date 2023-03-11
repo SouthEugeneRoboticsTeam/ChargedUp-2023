@@ -74,6 +74,10 @@ object PhysicalConstants {
     val colorToConeAngle = mapOf(Alliance.Blue to 0.0, Alliance.Red to PI)
     val conePoints = listOf(0.0, 1.0, 2.0)
 
+    val colorToSubstation = mapOf(Alliance.Blue to 0.0, Alliance.Red to 0.0)
+    val colorToSubstationFarAngleAtDistance = mapOf(Alliance.Blue to Pair(PI / 3, 1.9), Alliance.Red to Pair(-PI / 3, 1.9))
+    val colorToSubstationCloseAngleAtDistance = mapOf(Alliance.Blue to Pair(0.0, 0.4), Alliance.Red to Pair(0.0, 0.4))
+
     const val ledLength = 72
 
     val ledPurpleHSV = arrayOf(145, 255, 255)
@@ -220,6 +224,9 @@ object TunedConstants {
 
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
+
+    const val visionPositionTolerance = 0.03
+    const val visionAngleTolerance = 0.02
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
     val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 0.5)
