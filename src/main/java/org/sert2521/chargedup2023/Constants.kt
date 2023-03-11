@@ -68,7 +68,7 @@ object PhysicalConstants {
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
-    private val safePoints = arrayOf(Pair(1.9685, 0.0), Pair(1.97104, 4.572), Pair(3.048, 4.826))
+    private val safePoints = arrayOf(Pair(0.80,0.0),Pair(0.81,0.4),Pair(1.3,0.7))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -143,7 +143,7 @@ object PhysicalConstants {
 
 // Move some of these to config constants
 object TunedConstants {
-    const val elevatorExtensionP = 254.0
+    const val elevatorExtensionP = 39.3701
     const val elevatorExtensionI = 0.0
     const val elevatorExtensionD = 0.0
 
