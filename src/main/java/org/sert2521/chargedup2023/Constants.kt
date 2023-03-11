@@ -16,15 +16,14 @@ import kotlin.math.*
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
 object PhysicalConstants {
-    const val elevatorExtensionConversion = ((8.375) - (40.5625)) / (-1.071426391601562 - 70.07333374023438) / 100.0
+    const val elevatorExtensionConversion = ((8.375) - (40.5625)) / (-1.071426391601562 - 70.07333374023438) / 100.0 * 2.54
     const val elevatorAngleConversion = -2 * PI
     const val elevatorAngleMotorConversion = 1.0
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
 
-    const val elevatorExtensionTop = 0.198848411440849
-    // Double check this
-    const val elevatorExtensionBottom = 0.226211532950401 / 100.0
+    const val elevatorExtensionTop = 0.5050749650597565
+    const val elevatorExtensionBottom = 0.005745772912799999
 
     const val elevatorAngleTop = 1.19
     const val elevatorExtensionMaxAngle = 1.05
@@ -33,9 +32,9 @@ object PhysicalConstants {
     const val elevatorExtensionMinAngle = 0.05
 
     const val elevatorExtensionDrive = 0.0
-    const val elevatorExtensionConeHigh = 0.2
-    const val elevatorExtensionCubeHigh = 0.195
-    const val elevatorExtensionMid = 0.065
+    const val elevatorExtensionConeHigh = 0.508
+    const val elevatorExtensionCubeHigh = 0.4953
+    const val elevatorExtensionMid = 0.1651
     const val elevatorExtensionLow = 0.0
     const val elevatorExtensionConeTippedIntake = 0.0
     const val elevatorExtensionCubeIntake = 0.0
@@ -69,7 +68,7 @@ object PhysicalConstants {
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
-    private val safePoints = arrayOf(Pair(0.775, 0.0), Pair(0.776, 1.8), Pair(1.2, 1.9))
+    private val safePoints = arrayOf(Pair(1.9685, 0.0), Pair(1.97104, 4.572), Pair(3.048, 4.826))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -144,18 +143,19 @@ object PhysicalConstants {
 
 // Move some of these to config constants
 object TunedConstants {
-    const val elevatorExtensionP = 100.0
+    const val elevatorExtensionP = 254.0
     const val elevatorExtensionI = 0.0
     const val elevatorExtensionD = 0.0
 
     const val elevatorExtensionG = 1.2
 
-    const val elevatorExtensionMaxV = 0.8
-    const val elevatorExtensionMaxA = 1.4
+    const val elevatorExtensionMaxV = 2.032
+    const val elevatorExtensionMaxA = 3.556
+
+    const val elevatorExtensionTolerance = 0.0254
 
     const val elevatorExtensionMaxAngleTarget = 1.0
     const val elevatorExtensionMinAngleTarget = 0.1
-    const val elevatorExtensionTolerance = 0.01
 
     const val elevatorAngleP = 80.0
     const val elevatorAngleI = 0.0
