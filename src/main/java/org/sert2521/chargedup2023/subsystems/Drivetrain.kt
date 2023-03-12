@@ -10,14 +10,11 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.kinematics.*
 import edu.wpi.first.math.util.Units
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.MotorSafety
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
-import org.photonvision.PhotonUtils
-import org.photonvision.PhotonVersion
 import org.sert2521.chargedup2023.*
 import kotlin.math.*
 
@@ -143,6 +140,12 @@ object Drivetrain : SubsystemBase() {
     private var pose = Pose2d()
     private var visionPose = Pose2d()
 
+    private var prevPose = Pose2d()
+    private var prevTime = Timer.getFPGATimestamp()
+
+    var deltaPose = Pose2d()
+        private set
+
     // False is broken
     var doesOptimize = ConfigConstants.drivetrainOptimized
         private set
@@ -242,6 +245,14 @@ object Drivetrain : SubsystemBase() {
                 }
             }
         }
+
+        val currTime = Timer.getFPGATimestamp()
+        val deltaTime = currTime - prevTime
+
+        deltaPose = Pose2d((pose.y - prevPose.y) / deltaTime, (pose.x - prevPose.x) / deltaTime, -(pose.rotation - prevPose.rotation) / deltaTime)
+
+        prevPose = pose
+        prevTime = currTime
     }
 
     fun setOptimize(value: Boolean) {

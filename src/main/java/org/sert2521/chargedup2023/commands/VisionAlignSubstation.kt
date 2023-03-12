@@ -2,7 +2,9 @@ package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import org.sert2521.chargedup2023.Input
 import org.sert2521.chargedup2023.Output
 import org.sert2521.chargedup2023.PhysicalConstants
@@ -11,7 +13,7 @@ import org.sert2521.chargedup2023.subsystems.Drivetrain
 import java.lang.Math.PI
 
 class VisionAlignSubstation : JoystickCommand() {
-    private val positionPID = PIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD)
+    private val positionPID = ProfiledPIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD, TrapezoidProfile.Constraints(TunedConstants.swerveAlignV, TunedConstants.swerveAlignA))
     private val anglePID = PIDController(TunedConstants.swerveAlignAngleP, TunedConstants.swerveAlignAngleI, TunedConstants.swerveAlignAngleD)
 
     init {
@@ -27,7 +29,7 @@ class VisionAlignSubstation : JoystickCommand() {
         super.initialize()
 
         Drivetrain.setVisionStandardDeviations()
-        positionPID.reset()
+        positionPID.reset(Drivetrain.getPose().y, Drivetrain.deltaPose.y)
         anglePID.reset()
     }
 
@@ -45,7 +47,7 @@ class VisionAlignSubstation : JoystickCommand() {
             // Moving the x on the stick will affect the rate of change of the y
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, xTarget), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
         } else {
-            positionPID.reset()
+            positionPID.reset(pose.y, Drivetrain.deltaPose.y)
             anglePID.reset()
 
             Drivetrain.stop()

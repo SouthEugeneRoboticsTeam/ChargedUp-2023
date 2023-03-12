@@ -211,6 +211,9 @@ object TunedConstants {
     const val swerveAlignDistanceI = 0.0
     const val swerveAlignDistanceD = 0.0
 
+    const val swerveAlignV = 0.0
+    const val swerveAlignA = 0.0
+
     const val swerveAlignAngleP = 1.8
     const val swerveAlignAngleI = 0.0
     const val swerveAlignAngleD = 0.0
