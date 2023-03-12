@@ -60,7 +60,7 @@ object PhysicalConstants {
 
     const val angleEncoderMultiplier = 0.01745329251
 
-    val camPose = Transform3d()
+    val rightPose = Transform3d(Translation3d(0.299, -0.498, 0.0709), Rotation3d(0.0, -0.0873, -0.349))
 
     private val fieldBlue: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
     private val fieldRed: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
@@ -72,7 +72,7 @@ object PhysicalConstants {
     }
 
     val colorToConeAngle = mapOf(Alliance.Blue to 0.0, Alliance.Red to PI)
-    val conePoints = listOf(0.0, 1.0, 2.0)
+    val conePoints = listOf(0.56, 1.80, 2.16, 3.28, 3.85, 4.98)
 
     val colorToSubstation = mapOf(Alliance.Blue to 0.0, Alliance.Red to 0.0)
     val colorToSubstationFarAngleAtDistance = mapOf(Alliance.Blue to Pair(PI / 3, 1.9), Alliance.Red to Pair(-PI / 3, 1.9))
@@ -207,11 +207,11 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val swerveAlignDistanceP = 0.0
+    const val swerveAlignDistanceP = 1.8
     const val swerveAlignDistanceI = 0.0
     const val swerveAlignDistanceD = 0.0
 
-    const val swerveAlignAngleP = 0.0
+    const val swerveAlignAngleP = 1.8
     const val swerveAlignAngleI = 0.0
     const val swerveAlignAngleD = 0.0
 
@@ -225,12 +225,12 @@ object TunedConstants {
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
 
-    const val visionPositionTolerance = 0.03
-    const val visionAngleTolerance = 0.02
+    const val visionPositionTolerance = 0.01
+    const val visionAngleTolerance = 0.01
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
     val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 0.5)
-    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.5)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.002, 0.002, 0.5)
 }
 
 object ConfigConstants {
@@ -244,9 +244,9 @@ object ConfigConstants {
     const val powerDeadband = 0.1
     const val rotDeadband = 0.1
 
-    const val driveSpeed = 3.5
+    const val driveSpeed = 0.5//3.5
     const val driveSpeedup = 2.0
-    const val rotSpeed = 3.5
+    const val rotSpeed = 0.5//3.5
     const val rotSpeedup = 2.0
 
     const val joystickChangeSpeed = 0.2
@@ -297,5 +297,5 @@ object ElectronicIDs {
 
     const val ledId = 0
 
-    val camData = listOf(Pair("Cam", PhysicalConstants.camPose))
+    val camData = listOf(Pair("Right", PhysicalConstants.rightPose))
 }

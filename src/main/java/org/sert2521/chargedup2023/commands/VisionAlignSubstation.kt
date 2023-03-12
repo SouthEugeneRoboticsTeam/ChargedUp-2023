@@ -35,18 +35,20 @@ class VisionAlignSubstation : JoystickCommand() {
         val pose = Drivetrain.getVisionPose()
 
         val color = Input.getColor()
-        val yTarget = PhysicalConstants.colorToSubstation[color]
+        val xTarget = PhysicalConstants.colorToSubstation[color]
         val farAngleAtDistance = PhysicalConstants.colorToSubstationFarAngleAtDistance[color]
         val closeAngleAtDistance = PhysicalConstants.colorToSubstationCloseAngleAtDistance[color]
-        if (yTarget != null && farAngleAtDistance != null && closeAngleAtDistance != null) {
+        if (xTarget != null && farAngleAtDistance != null && closeAngleAtDistance != null) {
             val t = clamp((pose.x - closeAngleAtDistance.second) / (farAngleAtDistance.second - closeAngleAtDistance.second), 0.0, 1.0)
             val angleTarget = t * (farAngleAtDistance.first - closeAngleAtDistance.first) + closeAngleAtDistance.first
 
             // Moving the x on the stick will affect the rate of change of the y
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.x, yTarget), anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
+            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, xTarget), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
         } else {
             positionPID.reset()
             anglePID.reset()
+
+            Drivetrain.stop()
         }
 
         Output.visionHappy = positionPID.atSetpoint() && anglePID.atSetpoint()

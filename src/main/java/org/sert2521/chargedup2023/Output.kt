@@ -1,5 +1,7 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
@@ -13,6 +15,7 @@ object Output {
     private val values = mutableListOf<Pair<String, () -> Double>>()
     private val bools = mutableListOf<Pair<String, () -> Boolean>>()
     private val field = Field2d()
+    private val visionField = Field2d()
 
     var visionHappy = false
 
@@ -48,12 +51,14 @@ object Output {
         bools.add(Pair("Vision Happy") { visionHappy })
 
         SmartDashboard.putData("Output/Field", field)
+        SmartDashboard.putData("Output/VisionField", visionField)
 
         update()
     }
 
     fun update() {
         field.robotPose = Drivetrain.getPose()
+        visionField.robotPose = Drivetrain.getVisionPose()
 
         for (value in values) {
             SmartDashboard.putNumber("Output/${value.first}", value.second())

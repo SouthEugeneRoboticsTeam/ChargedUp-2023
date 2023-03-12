@@ -34,17 +34,25 @@ class VisionAlignCone : JoystickCommand() {
     override fun execute() {
         val pose = Drivetrain.getVisionPose()
 
-        val xTarget = PhysicalConstants.conePoints.maxBy { abs(it - pose.x) }
+        val yTarget = PhysicalConstants.conePoints.minBy { abs(it - pose.y) }
         val angleTarget = PhysicalConstants.colorToConeAngle[Input.getColor()]
         if (angleTarget != null) {
             // Moving the x on the stick will affect the rate of change of the y
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, xTarget), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
+
+            if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
+                Output.visionHappy = true
+            } else {
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
+                Output.visionHappy = true
+            }
         } else {
             positionPID.reset()
             anglePID.reset()
-        }
 
-        Output.visionHappy = positionPID.atSetpoint() && anglePID.atSetpoint()
+            Drivetrain.stop()
+            Output.visionHappy = false
+        }
     }
 
     override fun end(interrupted: Boolean) {

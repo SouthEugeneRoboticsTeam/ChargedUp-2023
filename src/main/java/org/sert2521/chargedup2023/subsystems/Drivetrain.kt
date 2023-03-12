@@ -12,9 +12,12 @@ import edu.wpi.first.math.kinematics.*
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.MotorSafety
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
+import org.photonvision.PhotonUtils
+import org.photonvision.PhotonVersion
 import org.sert2521.chargedup2023.*
 import kotlin.math.*
 
@@ -214,18 +217,6 @@ object Drivetrain : SubsystemBase() {
     }
 
     override fun periodic() {
-        val color = Input.getColor()
-        if (color == DriverStation.Alliance.Invalid)
-        for (photonPoseEstimator in photonPoseEstimators) {
-            val field = PhysicalConstants.colorToField[Input.getColor()]
-            if (field != null) {
-                // Photonvision automatically invalidates pose cache when this is changed
-                photonPoseEstimator.fieldTags = field
-                val poseOutput = photonPoseEstimator.update().get()
-                poseEstimator.addVisionMeasurement(poseOutput.estimatedPose.toPose2d(), poseOutput.timestampSeconds)
-            }
-        }
-
         val positions = mutableListOf<SwerveModulePosition>()
 
         for (module in modules) {
@@ -237,6 +228,20 @@ object Drivetrain : SubsystemBase() {
 
         pose = odometry.update(-imu.rotation2d, positionsArray)
         visionPose = poseEstimator.update(-imu.rotation2d, positionsArray)
+
+        for (photonPoseEstimator in photonPoseEstimators) {
+            val field = PhysicalConstants.colorToField[Input.getColor()]
+            if (field != null) {
+                // Photonvision automatically invalidates pose cache when this is changed
+                photonPoseEstimator.fieldTags = field
+                val poseOutput = photonPoseEstimator.update()
+                if (poseOutput.isPresent) {
+                    val currVisionPoseData = poseOutput.get()
+                    val currVisionPose = currVisionPoseData.estimatedPose.toPose2d()
+                    poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, currVisionPose.x, -currVisionPose.rotation), currVisionPoseData.timestampSeconds)
+                }
+            }
+        }
     }
 
     fun setOptimize(value: Boolean) {
@@ -283,6 +288,16 @@ object Drivetrain : SubsystemBase() {
 
     fun setVisionAlignDeviations() {
         poseEstimator.setVisionMeasurementStdDevs(TunedConstants.alignVisionDeviations)
+    }
+
+    fun camerasConnected(): Boolean {
+        for (cam in cams) {
+            if (!cam.isConnected) {
+                return false
+            }
+        }
+
+        return true
     }
 
     fun getAccelSqr(): Double {
