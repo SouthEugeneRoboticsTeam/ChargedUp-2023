@@ -9,7 +9,6 @@ import edu.wpi.first.math.Nat
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
-import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
@@ -60,23 +59,23 @@ object PhysicalConstants {
 
     const val angleEncoderMultiplier = 0.01745329251
 
-    val rightPose = Transform3d(Translation3d(0.299, -0.498, 0.0709), Rotation3d(0.0, -0.0873, -0.349))
+    val rightPose = Transform3d(Translation3d(0.02872994, -0.3009138, 0.65), Rotation3d(0.0, -0.0873, -0.436))
+    val leftPose = Transform3d(Translation3d(0.02872994, 0.3009138, 0.65), Rotation3d(0.0, -0.0873, 0.436))
 
-    private val fieldBlue: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
-    private val fieldRed: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
-    val colorToField = mapOf(Alliance.Blue to fieldBlue, Alliance.Red to fieldRed)
+    val field: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
+    const val fieldLength = 16.54
+    const val fieldWidth = 8.02
 
     init {
-        fieldBlue.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide)
-        fieldRed.setOrigin(AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide)
+        field.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide)
     }
 
-    val colorToConeAngle = mapOf(Alliance.Blue to 0.0, Alliance.Red to PI)
-    val conePoints = listOf(0.56, 1.80, 2.16, 3.28, 3.85, 4.98)
+    const val coneAngle = -PI
+    val conePoints = listOf(0.51, 1.63)//, 2.16, 3.28, 3.85, 4.98)
 
-    val colorToSubstation = mapOf(Alliance.Blue to 0.0, Alliance.Red to 0.0)
-    val colorToSubstationFarAngleAtDistance = mapOf(Alliance.Blue to Pair(PI / 3, 1.9), Alliance.Red to Pair(-PI / 3, 1.9))
-    val colorToSubstationCloseAngleAtDistance = mapOf(Alliance.Blue to Pair(0.0, 0.4), Alliance.Red to Pair(0.0, 0.4))
+    const val substationX = fieldLength - 2.39
+    val substationFarAngleAtDistance = Pair(-PI / 3 + PI / 2, fieldWidth - 1.3)
+    val substationCloseAngleAtDistance = Pair(PI / 2, fieldWidth - 0.85)
 
     const val ledLength = 72
 
@@ -207,14 +206,14 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val swerveAlignDistanceP = 1.8
+    const val swerveAlignDistanceP = 2.0
     const val swerveAlignDistanceI = 0.0
     const val swerveAlignDistanceD = 0.0
 
-    const val swerveAlignV = 0.0
-    const val swerveAlignA = 0.0
+    const val swerveAlignV = 0.1
+    const val swerveAlignA = 0.1
 
-    const val swerveAlignAngleP = 1.8
+    const val swerveAlignAngleP = 2.0
     const val swerveAlignAngleI = 0.0
     const val swerveAlignAngleD = 0.0
 
@@ -232,8 +231,8 @@ object TunedConstants {
     const val visionAngleTolerance = 0.01
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
-    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 0.5)
-    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.002, 0.002, 0.5)
+    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 1.5)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 1.5)
 }
 
 object ConfigConstants {
@@ -300,5 +299,5 @@ object ElectronicIDs {
 
     const val ledId = 0
 
-    val camData = listOf(Pair("Right", PhysicalConstants.rightPose))
+    val camData = listOf(Pair("Right", PhysicalConstants.rightPose), Pair("Left", PhysicalConstants.leftPose))
 }

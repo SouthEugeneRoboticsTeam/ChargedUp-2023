@@ -35,6 +35,9 @@ object Output {
         values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
 
         values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
+        values.add(Pair("Drivetrain Delta Pose X") { Drivetrain.deltaPose.x })
+        values.add(Pair("Drivetrain Delta Pose Y") { Drivetrain.deltaPose.y })
+        values.add(Pair("Drivetrain Delta Pose Rot") { Drivetrain.deltaPose.rotation.radians })
 
         bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
         bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })

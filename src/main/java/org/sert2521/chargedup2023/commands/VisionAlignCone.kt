@@ -13,7 +13,7 @@ import java.lang.Math.PI
 import kotlin.math.abs
 
 class VisionAlignCone : JoystickCommand() {
-    private val positionPID = ProfiledPIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD, TrapezoidProfile.Constraints(TunedConstants.swerveAlignV, TunedConstants.swerveAlignA))
+    private val positionPID = PIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD)
     private val anglePID = PIDController(TunedConstants.swerveAlignAngleP, TunedConstants.swerveAlignAngleI, TunedConstants.swerveAlignAngleD)
 
     init {
@@ -29,31 +29,22 @@ class VisionAlignCone : JoystickCommand() {
         super.initialize()
 
         Drivetrain.setVisionStandardDeviations()
-        positionPID.reset(Drivetrain.getPose().y, Drivetrain.deltaPose.y)
-        anglePID.reset()
+        positionPID.reset()
     }
 
     override fun execute() {
         val pose = Drivetrain.getVisionPose()
 
-        val yTarget = PhysicalConstants.conePoints.minBy { abs(it - pose.y) }
-        val angleTarget = PhysicalConstants.colorToConeAngle[Input.getColor()]
-        if (angleTarget != null) {
-            // Moving the x on the stick will affect the rate of change of the y
+        // Move to constants
+        val yTarget = PhysicalConstants.conePoints.minBy { abs(it - pose.y) } + 0.19 * Input.getSlider()
+        // Moving the x on the stick will affect the rate of change of the y
 
-            if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
-                Output.visionHappy = true
-            } else {
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
-                Output.visionHappy = true
-            }
+        if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
+            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
+            Output.visionHappy = true
         } else {
-            positionPID.reset(pose.y, Drivetrain.deltaPose.y)
-            anglePID.reset()
-
-            Drivetrain.stop()
-            Output.visionHappy = false
+            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
+            Output.visionHappy = true
         }
     }
 

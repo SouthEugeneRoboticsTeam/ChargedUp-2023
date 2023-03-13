@@ -10,6 +10,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.math.kinematics.*
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.MotorSafety
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -186,7 +187,7 @@ object Drivetrain : SubsystemBase() {
             val cam = PhotonCamera(camData.first)
             camsList.add(cam)
             // Field gets updated before run so it can be null
-            photonPoseEstimatorsList.add(PhotonPoseEstimator(null, PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS, cam, camData.second))
+            photonPoseEstimatorsList.add(PhotonPoseEstimator(PhysicalConstants.field, PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS, cam, camData.second))
         }
 
         cams = camsList.toTypedArray()
@@ -233,15 +234,16 @@ object Drivetrain : SubsystemBase() {
         visionPose = poseEstimator.update(-imu.rotation2d, positionsArray)
 
         for (photonPoseEstimator in photonPoseEstimators) {
-            val field = PhysicalConstants.colorToField[Input.getColor()]
-            if (field != null) {
-                // Photonvision automatically invalidates pose cache when this is changed
-                photonPoseEstimator.fieldTags = field
-                val poseOutput = photonPoseEstimator.update()
-                if (poseOutput.isPresent) {
-                    val currVisionPoseData = poseOutput.get()
-                    val currVisionPose = currVisionPoseData.estimatedPose.toPose2d()
+            val poseOutput = photonPoseEstimator.update()
+            if (poseOutput.isPresent) {
+                val currVisionPoseData = poseOutput.get()
+                val currVisionPose = currVisionPoseData.estimatedPose.toPose2d()
+
+                val color = Input.getColor()
+                if (color == DriverStation.Alliance.Blue) {
                     poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, currVisionPose.x, -currVisionPose.rotation), currVisionPoseData.timestampSeconds)
+                } else if (color == DriverStation.Alliance.Red) {
+                    poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, PhysicalConstants.fieldLength - currVisionPose.x, Rotation2d(PI) - currVisionPose.rotation), currVisionPoseData.timestampSeconds)
                 }
             }
         }

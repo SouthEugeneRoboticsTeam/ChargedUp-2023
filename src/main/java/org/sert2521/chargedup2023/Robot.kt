@@ -1,5 +1,7 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.apriltag.AprilTagFields
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
@@ -57,9 +59,9 @@ object Robot : TimedRobot() {
 
     override fun disabledPeriodic() {
         if (Drivetrain.camerasConnected()) {
-            LEDs.setAllLEDHSV(0, 50, 50)
+            LEDs.setAllLEDRGB(0, 50, 0)
         } else {
-            LEDs.setAllLEDHSV(90, 50, 50)
+            LEDs.setAllLEDRGB(50, 0, 0)
         }
     }
 

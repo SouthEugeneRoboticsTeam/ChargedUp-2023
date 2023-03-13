@@ -167,6 +167,10 @@ object Input {
         return driverController.aButton
     }
 
+    fun getSlider(): Double {
+        return gunnerController.getRawAxis(3)
+    }
+
     fun getColor(): Alliance {
         return DriverStation.getAlliance()
     }
