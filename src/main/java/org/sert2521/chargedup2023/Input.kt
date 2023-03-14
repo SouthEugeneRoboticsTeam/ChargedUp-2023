@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.GamePieces
@@ -87,6 +88,7 @@ object Input {
             Drivetrain.setNewVisionPose(pose)
         }))
         coneAlignButton.whileTrue(VisionAlignCone())
+        Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
 
         //Intaking a cone is the same as outtaking a cube
         //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
@@ -150,7 +152,7 @@ object Input {
     // Rename fast stuff because it actually slows it
     fun getFast(): Double {
         return if (!slowMode) {
-            driverController.rightTriggerAxis
+            driverController.leftTriggerAxis
         } else {
             1.0
         }

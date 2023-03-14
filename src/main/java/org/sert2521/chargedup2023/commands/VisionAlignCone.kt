@@ -13,15 +13,15 @@ import kotlin.math.abs
 
 class VisionAlignCone : JoystickCommand() {
     private val positionPID = PIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD)
-    private val anglePID = PIDController(TunedConstants.swerveAlignAngleP, TunedConstants.swerveAlignAngleI, TunedConstants.swerveAlignAngleD)
+    private val anglePID = PIDController(TunedConstants.swerveConeAlignAngleP, TunedConstants.swerveConeAlignAngleI, TunedConstants.swerveConeAlignAngleD)
 
     init {
         addRequirements(Drivetrain)
 
         anglePID.enableContinuousInput(0.0, 2 * PI)
 
-        positionPID.setTolerance(TunedConstants.visionPositionTolerance)
-        anglePID.setTolerance(TunedConstants.visionAngleTolerance)
+        positionPID.setTolerance(TunedConstants.visionConePositionTolerance)
+        anglePID.setTolerance(TunedConstants.visionConeAngleTolerance)
     }
 
     override fun initialize() {
@@ -42,7 +42,7 @@ class VisionAlignCone : JoystickCommand() {
         // Move to constants
         val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider())
 
-        // Moving the x on the stick will affect the rate of change of the y
+        // Moving the y on the stick will affect the rate of change of the x
         if (yTarget != null && (!positionPID.atSetpoint() || !anglePID.atSetpoint())) {
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
             Output.visionHappy = false

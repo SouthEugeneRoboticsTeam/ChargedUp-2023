@@ -83,8 +83,8 @@ object PhysicalConstants {
     }
 
     const val substationX = fieldLength - 2.39
-    val substationFarAngleAtDistance = Pair(-PI / 3 + PI / 2, fieldWidth - 1.3)
-    val substationCloseAngleAtDistance = Pair(PI / 2, fieldWidth - 0.85)
+    val substationFarAngleAtDistance = Pair(0.0, 0.3)
+    val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
 
     const val ledLength = 72
 
@@ -222,9 +222,13 @@ object TunedConstants {
     const val swerveAlignV = 0.1
     const val swerveAlignA = 0.1
 
-    const val swerveAlignAngleP = 2.0
-    const val swerveAlignAngleI = 0.0
-    const val swerveAlignAngleD = 0.0
+    const val swerveConeAlignAngleP = 2.0
+    const val swerveConeAlignAngleI = 0.0
+    const val swerveConeAlignAngleD = 0.0
+
+    const val swerveSubstationAlignAngleP = 5.0
+    const val swerveSubstationAlignAngleI = 0.0
+    const val swerveSubstationAlignAngleD = 0.0
 
     // This should be split up
     const val filterTaps = 20
@@ -236,8 +240,11 @@ object TunedConstants {
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
 
-    const val visionPositionTolerance = 0.01
-    const val visionAngleTolerance = 0.01
+    const val visionConePositionTolerance = 0.01
+    const val visionConeAngleTolerance = 0.01
+
+    const val visionSubstationPositionTolerance = 0.02
+    const val visionSubstationAngleTolerance = 0.02
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
     val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
