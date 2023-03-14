@@ -1,9 +1,8 @@
 package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.wpilibj.DriverStation
 import org.sert2521.chargedup2023.Input
 import org.sert2521.chargedup2023.Output
 import org.sert2521.chargedup2023.PhysicalConstants
@@ -35,14 +34,27 @@ class VisionAlignCone : JoystickCommand() {
     override fun execute() {
         val pose = Drivetrain.getVisionPose()
 
+        val conePoints = when (Input.getColor()) {
+            DriverStation.Alliance.Blue -> PhysicalConstants.conePointsBlue
+            DriverStation.Alliance.Red -> PhysicalConstants.conePointsRed
+            DriverStation.Alliance.Invalid -> null
+        }
         // Move to constants
-        val yTarget = PhysicalConstants.conePoints.minBy { abs(it - pose.y) } + 0.19 * Input.getSlider()
-        // Moving the x on the stick will affect the rate of change of the y
+        val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider())
 
-        if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
+        // Moving the x on the stick will affect the rate of change of the y
+        if (yTarget != null && (!positionPID.atSetpoint() || !anglePID.atSetpoint())) {
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
-            Output.visionHappy = true
+            Output.visionHappy = false
         } else {
+            // To update stuff
+            if (yTarget != null) {
+                positionPID.calculate(pose.y, yTarget)
+            } else {
+                positionPID.reset()
+            }
+            anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
+
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
             Output.visionHappy = true
         }

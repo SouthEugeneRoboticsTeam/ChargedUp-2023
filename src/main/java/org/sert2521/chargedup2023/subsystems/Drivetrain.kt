@@ -243,7 +243,7 @@ object Drivetrain : SubsystemBase() {
                 if (color == DriverStation.Alliance.Blue) {
                     poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, currVisionPose.x, -currVisionPose.rotation), currVisionPoseData.timestampSeconds)
                 } else if (color == DriverStation.Alliance.Red) {
-                    poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, PhysicalConstants.fieldLength - currVisionPose.x, Rotation2d(PI) - currVisionPose.rotation), currVisionPoseData.timestampSeconds)
+                    poseEstimator.addVisionMeasurement(Pose2d(PhysicalConstants.fieldWidth - currVisionPose.y, currVisionPose.x, -currVisionPose.rotation.unaryMinus()), currVisionPoseData.timestampSeconds)
                 }
             }
         }

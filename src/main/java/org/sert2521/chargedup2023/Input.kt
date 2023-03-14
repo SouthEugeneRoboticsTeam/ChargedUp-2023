@@ -80,7 +80,12 @@ object Input {
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
         // Replace numbers with constants
-        resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
+        resetAngle.onTrue(InstantCommand({
+            var pose = Drivetrain.getVisionPose()
+            pose = Pose2d(pose.x, pose.y, Rotation2d())
+            Drivetrain.setNewPose(pose)
+            Drivetrain.setNewVisionPose(pose)
+        }))
         coneAlignButton.whileTrue(VisionAlignCone())
 
         //Intaking a cone is the same as outtaking a cube
@@ -161,10 +166,6 @@ object Input {
 
     fun getRot(): Double {
         return -driverController.rightX
-    }
-
-    fun getAutoAlign(): Boolean {
-        return driverController.aButton
     }
 
     fun getSlider(): Double {

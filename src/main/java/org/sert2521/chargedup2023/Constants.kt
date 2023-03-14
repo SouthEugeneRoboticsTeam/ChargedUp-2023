@@ -71,7 +71,16 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    val conePoints = listOf(0.51, 1.63)//, 2.16, 3.28, 3.85, 4.98)
+    val conePointsBlue = listOf(0.51, 1.63)//, 2.16, 3.28, 3.85, 4.98)
+    val conePointsRed: List<Double>
+    init {
+        val conePointsRedMut = mutableListOf<Double>()
+        for (conePointBlue in conePointsBlue) {
+            conePointsRedMut.add(fieldWidth - conePointBlue)
+        }
+
+        conePointsRed = conePointsRedMut
+    }
 
     const val substationX = fieldLength - 2.39
     val substationFarAngleAtDistance = Pair(-PI / 3 + PI / 2, fieldWidth - 1.3)
@@ -231,8 +240,8 @@ object TunedConstants {
     const val visionAngleTolerance = 0.01
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
-    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.001, 0.001, 1.5)
-    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 1.5)
+    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
 }
 
 object ConfigConstants {
@@ -251,7 +260,7 @@ object ConfigConstants {
     const val rotSpeed = 0.5//3.5
     const val rotSpeedup = 2.0
 
-    const val joystickChangeSpeed = 0.2
+    const val joystickChangeSpeed = 0.4
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh + 0.01, PhysicalConstants.elevatorAngleConeHigh, true),
@@ -263,7 +272,7 @@ object ConfigConstants {
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
-    val autoConstraints = PathConstraints(1.8, 1.7)
+    val autoConstraints = PathConstraints(0.1, 0.1)//1.8, 1.7)
 
     val pathNames = arrayOf("1 Piece Balance Left",
                             "1 Piece Balance Middle",

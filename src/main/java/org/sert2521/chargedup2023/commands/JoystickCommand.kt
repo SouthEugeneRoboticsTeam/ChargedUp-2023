@@ -60,9 +60,8 @@ abstract class JoystickCommand : CommandBase() {
             rot = 0.0
         }
 
-
         return if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2)) {
-            Translation3d(x, y, rot)
+            Translation3d(0.0, 0.0, rot)
         } else {
             Translation3d(x, y, rot)
         }
