@@ -71,7 +71,8 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    val conePointsBlue = listOf(0.51, 1.63)//, 2.16, 3.28, 3.85, 4.98)
+    // These may be wrong
+    val conePointsBlue = listOf(0.51, 1.63, 2.02, 3.28, 3.86, 5.00)
     val conePointsRed: List<Double>
     init {
         val conePointsRedMut = mutableListOf<Double>()
@@ -82,7 +83,8 @@ object PhysicalConstants {
         conePointsRed = conePointsRedMut
     }
 
-    const val substationX = fieldLength - 2.39
+    // This is wrong
+    const val substationX = fieldLength - 2.48
     val substationFarAngleAtDistance = Pair(0.0, 0.3)
     val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
 
@@ -215,18 +217,18 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val swerveAlignDistanceP = 2.0
+    const val swerveAlignDistanceP = 1.8
     const val swerveAlignDistanceI = 0.0
     const val swerveAlignDistanceD = 0.0
 
     const val swerveAlignV = 0.1
     const val swerveAlignA = 0.1
 
-    const val swerveConeAlignAngleP = 2.0
+    const val swerveConeAlignAngleP = 2.5
     const val swerveConeAlignAngleI = 0.0
     const val swerveConeAlignAngleD = 0.0
 
-    const val swerveSubstationAlignAngleP = 5.0
+    const val swerveSubstationAlignAngleP = 3.0
     const val swerveSubstationAlignAngleI = 0.0
     const val swerveSubstationAlignAngleD = 0.0
 
@@ -248,7 +250,7 @@ object TunedConstants {
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
     val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
-    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(3.0, 3.0, 100.0)
 }
 
 object ConfigConstants {
@@ -259,12 +261,13 @@ object ConfigConstants {
 
     const val drivetrainOptimized = true
 
-    const val powerDeadband = 0.1
-    const val rotDeadband = 0.1
+    // Add actual joystick deadband
+    const val powerDeadband = 0.2
+    const val rotDeadband = 0.2
 
-    const val driveSpeed = 0.5//3.5
+    const val driveSpeed = 3.5
     const val driveSpeedup = 2.0
-    const val rotSpeed = 0.5//3.5
+    const val rotSpeed = 3.5
     const val rotSpeedup = 2.0
 
     const val joystickChangeSpeed = 0.4
@@ -279,7 +282,7 @@ object ConfigConstants {
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
-    val autoConstraints = PathConstraints(0.1, 0.1)//1.8, 1.7)
+    val autoConstraints = PathConstraints(1.8, 1.7)
 
     val pathNames = arrayOf("1 Piece Balance Left",
                             "1 Piece Balance Middle",
