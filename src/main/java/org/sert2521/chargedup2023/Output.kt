@@ -1,11 +1,8 @@
 package org.sert2521.chargedup2023
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
@@ -20,8 +17,6 @@ object Output {
     var visionHappy = false
 
     init {
-        LiveWindow.disableAllTelemetry()
-
         val storageDevices = File("/media").listFiles()
         if (storageDevices != null) {
             if (storageDevices.isNotEmpty()) {
