@@ -193,8 +193,11 @@ object TunedConstants {
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleMaxV = 0.5
-    const val elevatorAngleMaxA = 1.5
+    const val elevatorAngleDownMaxV = 0.0
+    const val elevatorAngleDownMaxAByAngle = 0.0
+
+    const val elevatorAngleUpMaxV = 0.0
+    const val elevatorAngleUpMaxA = 0.0
 
     const val elevatorAngleTolerance = 0.015
 
@@ -225,9 +228,6 @@ object TunedConstants {
     const val swerveAlignDistanceP = 1.8
     const val swerveAlignDistanceI = 0.0
     const val swerveAlignDistanceD = 0.0
-
-    const val swerveAlignV = 0.1
-    const val swerveAlignA = 0.1
 
     const val swerveConeAlignAngleP = 2.5
     const val swerveConeAlignAngleI = 0.0

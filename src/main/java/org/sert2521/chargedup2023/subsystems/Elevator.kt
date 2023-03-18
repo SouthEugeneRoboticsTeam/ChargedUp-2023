@@ -2,6 +2,7 @@ package org.sert2521.chargedup2023.subsystems
 
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.Timer
@@ -31,9 +32,11 @@ object Elevator : SubsystemBase() {
     private val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
+    private var susness = 0.0
+    private val susnessFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+
     private var prevTime = Timer.getFPGATimestamp()
     private var prevAngle = 0.0
-    private var angleRate = 0.0
 
     init {
         extendMotorOne.idleMode = CANSparkMax.IdleMode.kBrake
@@ -76,7 +79,9 @@ object Elevator : SubsystemBase() {
 
         if (!angleInited) {
             if (angleMeasure() >= ConfigConstants.angleInitAngle && Robot.isEnabled) {
+                // This should be set more often probably
                 angleMotorEncoder.position = angleMeasure()
+                susnessFilter.reset()
                 angleInited = true
             }
         }
@@ -95,9 +100,11 @@ object Elevator : SubsystemBase() {
 
         val currTime = Timer.getFPGATimestamp()
         val currAngle = angleMeasure()
-        angleRate = (currAngle - prevAngle) / (currTime - prevTime)
+        susness = susnessFilter.calculate(abs((currAngle - prevAngle) / (currTime - prevTime) - angleMotorEncoder.velocity))
         prevTime = currTime
         prevAngle = currAngle
+
+
     }
 
     fun setExtend(speed: Double) {
@@ -152,7 +159,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun angleSusness(): Double {
-        return abs(angleRate - angleMotorEncoder.velocity)
+        return susness
     }
 
     fun stop() {
