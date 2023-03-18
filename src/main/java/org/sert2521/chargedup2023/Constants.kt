@@ -90,7 +90,7 @@ object PhysicalConstants {
     val substationFarAngleAtDistance = Pair(0.0, 0.3)
     val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
 
-    const val ledLength = 72
+    const val ledLength = 200
 
     val ledPurpleHSV = arrayOf(145, 255, 255)
 
@@ -194,7 +194,8 @@ object TunedConstants {
     const val elevatorAngleGPerMeter = 0.0
 
     const val elevatorAngleDownMaxV = 2.0
-    const val elevatorAngleDownMaxAByAngle = 0.65
+    const val elevatorAngleDownMaxA = 0.6
+    const val elevatorAngleDownMaxAByAngle = 1.4
 
     const val elevatorAngleUpMaxV = 3.0
     const val elevatorAngleUpMaxA = 6.0

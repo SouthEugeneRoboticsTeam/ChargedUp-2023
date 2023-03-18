@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel
 import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -93,7 +94,7 @@ object Elevator : SubsystemBase() {
             angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
-        brownedOut = false//RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
+        brownedOut = RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
 
         if (brownedOut || !safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
