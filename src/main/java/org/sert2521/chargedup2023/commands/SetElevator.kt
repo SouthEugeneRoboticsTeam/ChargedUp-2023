@@ -12,15 +12,14 @@ import kotlin.math.min
 import kotlin.math.cos
 import kotlin.math.sin
 
-// Slow PID under high acceleration
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
     private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
     // Could use continuous input instead of having negative rotations in the elevator code
-    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
+    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleUpMaxV, TunedConstants.elevatorAngleUpMaxA))
 
     private val angleTooLow = angle < TunedConstants.elevatorExtensionMinAngleTarget
     private val angleTooHigh = angle > TunedConstants.elevatorExtensionMaxAngleTarget
-    private val angleSafe = (!angleTooLow && !angleTooHigh)
+    private val angleSafe = !angleTooLow && !angleTooHigh
 
     init {
         addRequirements(Elevator)
@@ -49,8 +48,14 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val angleMeasure = Elevator.angleMeasure()
 
         var safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
-        if (Elevator.angleSusness() >= TunedConstants.elevatorSusLimit && safeAngleTarget > angleMeasure) {
-            safeAngleTarget = angle
+        if (safeAngleTarget < angleMeasure) {
+            if (Elevator.angleSusness() >= TunedConstants.elevatorSusLimit) {
+                safeAngleTarget = angleMeasure
+            }
+
+            anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxA + TunedConstants.elevatorAngleDownMaxAByAngle * cos(angleMeasure)))
+        } else {
+            anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleUpMaxV, TunedConstants.elevatorAngleUpMaxA))
         }
 
         val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)

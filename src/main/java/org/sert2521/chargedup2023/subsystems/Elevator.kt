@@ -2,8 +2,10 @@ package org.sert2521.chargedup2023.subsystems
 
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -31,9 +33,14 @@ object Elevator : SubsystemBase() {
     private val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
+    private var susness = 0.0
+    private val susnessFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+
     private var prevTime = Timer.getFPGATimestamp()
     private var prevAngle = 0.0
-    private var angleRate = 0.0
+
+    var brownedOut = false
+        private set
 
     init {
         extendMotorOne.idleMode = CANSparkMax.IdleMode.kBrake
@@ -76,7 +83,9 @@ object Elevator : SubsystemBase() {
 
         if (!angleInited) {
             if (angleMeasure() >= ConfigConstants.angleInitAngle && Robot.isEnabled) {
+                // This should be set more often probably
                 angleMotorEncoder.position = angleMeasure()
+                susnessFilter.reset()
                 angleInited = true
             }
         }
@@ -85,23 +94,25 @@ object Elevator : SubsystemBase() {
             angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
-        if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
+        brownedOut = RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
+
+        if (brownedOut || !safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
         }
 
-        if ((angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
+        if (brownedOut || (angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
             angleMotor.stopMotor()
         }
 
         val currTime = Timer.getFPGATimestamp()
         val currAngle = angleMeasure()
-        angleRate = (currAngle - prevAngle) / (currTime - prevTime)
+        susness = susnessFilter.calculate(abs((currAngle - prevAngle) / (currTime - prevTime) - angleMotorEncoder.velocity))
         prevTime = currTime
         prevAngle = currAngle
     }
 
     fun setExtend(speed: Double) {
-        if (extensionInited && extensionSafe()) {
+        if (!brownedOut && extensionInited && extensionSafe()) {
             if (!((speed > 0 && extensionAtTop()) || (speed < 0 && extensionAtBottom()))) {
                 extendMotorOne.setVoltage(speed)
             }
@@ -109,7 +120,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun setAngle(speed : Double){
-        if (angleInited) {
+        if (!brownedOut && angleInited) {
             if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
                 angleMotor.setVoltage(speed)
             }
@@ -152,7 +163,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun angleSusness(): Double {
-        return abs(angleRate - angleMotorEncoder.velocity)
+        return susness
     }
 
     fun stop() {
