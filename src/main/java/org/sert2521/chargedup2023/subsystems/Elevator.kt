@@ -38,6 +38,9 @@ object Elevator : SubsystemBase() {
     private var prevTime = Timer.getFPGATimestamp()
     private var prevAngle = 0.0
 
+    var brownedOut = false
+        private set
+
     init {
         extendMotorOne.idleMode = CANSparkMax.IdleMode.kBrake
         extendMotorTwo.idleMode = CANSparkMax.IdleMode.kBrake
@@ -90,11 +93,13 @@ object Elevator : SubsystemBase() {
             angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
-        if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
+        brownedOut = false//RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
+
+        if (brownedOut || !safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
         }
 
-        if ((angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
+        if (brownedOut || (angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
             angleMotor.stopMotor()
         }
 
@@ -103,12 +108,10 @@ object Elevator : SubsystemBase() {
         susness = susnessFilter.calculate(abs((currAngle - prevAngle) / (currTime - prevTime) - angleMotorEncoder.velocity))
         prevTime = currTime
         prevAngle = currAngle
-
-
     }
 
     fun setExtend(speed: Double) {
-        if (extensionInited && extensionSafe()) {
+        if (!brownedOut && extensionInited && extensionSafe()) {
             if (!((speed > 0 && extensionAtTop()) || (speed < 0 && extensionAtBottom()))) {
                 extendMotorOne.setVoltage(speed)
             }
@@ -116,7 +119,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun setAngle(speed : Double){
-        if (angleInited) {
+        if (!brownedOut && angleInited) {
             if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
                 angleMotor.setVoltage(speed)
             }

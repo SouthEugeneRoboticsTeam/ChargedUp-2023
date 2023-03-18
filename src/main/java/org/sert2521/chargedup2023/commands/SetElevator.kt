@@ -50,10 +50,10 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         var safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         if (safeAngleTarget < angleMeasure) {
             if (Elevator.angleSusness() >= TunedConstants.elevatorSusLimit) {
-                safeAngleTarget = angle
+                safeAngleTarget = angleMeasure
             }
 
-            anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxAByAngle * cos(angleMeasure)))
+            anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxAByAngle))// * cos(angleMeasure)))
         } else {
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleUpMaxV, TunedConstants.elevatorAngleUpMaxA))
         }

@@ -38,6 +38,7 @@ object Output {
 
         bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
         bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })
+        bools.add(Pair("Elevator Browned Out") { Elevator.brownedOut })
 
         bools.add(Pair("Elevator Angle At Top") { Elevator.angleAtTop() })
         bools.add(Pair("Elevator Angle At Bottom") { Elevator.angleAtBottom() })

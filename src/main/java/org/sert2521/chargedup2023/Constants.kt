@@ -45,7 +45,7 @@ object PhysicalConstants {
     const val elevatorExtensionSingleSubstation = 0.0
 
     const val elevatorAngleDrive = 1.19
-    const val elevatorAngleConeHigh = 0.68
+    const val elevatorAngleConeHigh = 0.66
     const val elevatorAngleCubeHigh = 0.58
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
@@ -193,15 +193,15 @@ object TunedConstants {
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleDownMaxV = 0.0
-    const val elevatorAngleDownMaxAByAngle = 0.0
+    const val elevatorAngleDownMaxV = 2.0
+    const val elevatorAngleDownMaxAByAngle = 0.65
 
-    const val elevatorAngleUpMaxV = 0.0
-    const val elevatorAngleUpMaxA = 0.0
+    const val elevatorAngleUpMaxV = 3.0
+    const val elevatorAngleUpMaxA = 6.0
 
     const val elevatorAngleTolerance = 0.015
 
-    const val elevatorSusLimit = 0.05
+    const val elevatorSusLimit = 0.4
 
     // Sysid these all
     const val swervePowerS = 0.3
@@ -276,6 +276,8 @@ object ConfigConstants {
     const val rotSpeedup = 2.0
 
     const val joystickChangeSpeed = 0.4
+
+    const val armBrownOutVoltage = 8.0
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),

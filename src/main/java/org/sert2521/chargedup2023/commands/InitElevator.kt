@@ -8,7 +8,8 @@ import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
 
 class InitElevator : CommandBase() {
-    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
+    // Fix trapezoidal control to be in line with SetElevator
+    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxAByAngle))
 
     init {
         addRequirements(Elevator)
