@@ -27,7 +27,9 @@ object Output {
 
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
+        // Maybe make this more encapsilationy
         values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
+        values.add(Pair("Elevator Angle Susness") { Elevator.angleSusness() })
 
         values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
 

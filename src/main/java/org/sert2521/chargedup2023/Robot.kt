@@ -24,6 +24,8 @@ object Robot : TimedRobot() {
     }
 
     override fun robotPeriodic() {
+        LEDs.setAllLEDRGB(255, 0, 0)
+
         commandScheduler.run()
         Output.update()
     }

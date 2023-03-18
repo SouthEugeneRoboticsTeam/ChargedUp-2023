@@ -48,7 +48,11 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val extensionMeasure = Elevator.extensionMeasure()
         val angleMeasure = Elevator.angleMeasure()
 
-        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
+        var safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
+        if (Elevator.angleSusness() >= TunedConstants.elevatorSusLimit && safeAngleTarget > angleMeasure) {
+            safeAngleTarget = angle
+        }
+
         val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
         val angleG = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
         Elevator.setAngle(anglePIDResult + angleG)

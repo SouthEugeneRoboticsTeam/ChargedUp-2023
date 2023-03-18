@@ -16,19 +16,20 @@ import kotlin.math.*
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
 object PhysicalConstants {
-    const val elevatorExtensionConversion = ((8.375) - (40.5625)) / (-1.071426391601562 - 70.07333374023438) / 100.0 * 2.54
+    const val elevatorExtensionConversion = (8.375 - 40.5625) / (-1.071426391601562 - 70.07333374023438) / 100.0 * 2.54
     const val elevatorAngleConversion = -2 * PI
-    const val elevatorAngleMotorConversion = 1.0
+    const val elevatorAngleMotorDistanceConversion = (0.000702229045117 - 1.15102295437296) / (-73.89722442626953 + 0.31786513328552246)
+    const val elevatorAngleMotorVelocityConversion = elevatorAngleMotorDistanceConversion / 60.0
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
 
-    const val elevatorExtensionTop = 0.5050749650597565
+    const val elevatorExtensionTop = 0.520943999290466
     const val elevatorExtensionBottom = 0.005745772912799999
 
     const val elevatorAngleTop = 1.19
     const val elevatorExtensionMaxAngle = 1.05
     const val elevatorAngleBottom = 0.005
-    const val elevatorAngleMotorBottom = -0.2
+    const val elevatorAngleMotorBottom = -0.3
     const val elevatorExtensionMinAngle = 0.05
 
     const val elevatorExtensionDrive = 0.0
@@ -54,7 +55,7 @@ object PhysicalConstants {
     const val halfSideLength = 0.286378246381
 
     const val powerEncoderMultiplierPosition = PI * 0.1016 / 8.14
-    const val powerEncoderMultiplierVelocity = PI * 0.1016 / (8.14 * 60)
+    const val powerEncoderMultiplierVelocity = powerEncoderMultiplierPosition / 60.0
 
     const val angleEncoderMultiplier = 0.01745329251
 
@@ -157,17 +158,19 @@ object TunedConstants {
     const val elevatorExtensionMaxAngleTarget = 1.0
     const val elevatorExtensionMinAngleTarget = 0.1
 
-    const val elevatorAngleP = 80.0
+    const val elevatorAngleP = 40.0
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleMaxV = 8.0
-    const val elevatorAngleMaxA = 14.0
+    const val elevatorAngleMaxV = 0.5
+    const val elevatorAngleMaxA = 1.5
 
     const val elevatorAngleTolerance = 0.015
+
+    const val elevatorSusLimit = 0.05
 
     // Sysid these all
     const val swervePowerS = 0.3
