@@ -1,7 +1,5 @@
 package org.sert2521.chargedup2023
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
@@ -32,7 +30,7 @@ object Output {
 
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
-        // Maybe make this more encapsilationy
+        // Maybe make this more encapsulationy
         values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
         values.add(Pair("Elevator Angle Susness") { Elevator.angleSusness() })
 

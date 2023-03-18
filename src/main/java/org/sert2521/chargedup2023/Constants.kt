@@ -45,7 +45,7 @@ object PhysicalConstants {
     const val elevatorExtensionSingleSubstation = 0.0
 
     const val elevatorAngleDrive = 1.19
-    const val elevatorAngleConeHigh = 0.68
+    const val elevatorAngleConeHigh = 0.66
     const val elevatorAngleCubeHigh = 0.58
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
@@ -193,8 +193,8 @@ object TunedConstants {
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleMaxV = 0.5
-    const val elevatorAngleMaxA = 1.5
+    const val elevatorAngleMaxV = 0.65
+    const val elevatorAngleMaxA = 0.65
 
     const val elevatorAngleTolerance = 0.015
 

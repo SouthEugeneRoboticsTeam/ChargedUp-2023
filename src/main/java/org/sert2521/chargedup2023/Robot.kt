@@ -1,15 +1,11 @@
 package org.sert2521.chargedup2023
 
-import edu.wpi.first.apriltag.AprilTagFields
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
-import edu.wpi.first.wpilibj2.command.WaitCommand
 import org.sert2521.chargedup2023.commands.InitElevator
 import org.sert2521.chargedup2023.commands.JoystickDrive
-import org.sert2521.chargedup2023.commands.VisionAlignCone
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
 import org.sert2521.chargedup2023.subsystems.LEDs
@@ -28,8 +24,6 @@ object Robot : TimedRobot() {
     }
 
     override fun robotPeriodic() {
-        LEDs.setAllLEDRGB(255, 0, 0)
-
         commandScheduler.run()
         Output.update()
     }

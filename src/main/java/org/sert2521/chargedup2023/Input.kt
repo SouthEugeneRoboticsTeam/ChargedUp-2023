@@ -81,6 +81,8 @@ object Input {
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
         // Replace numbers with constants
+
+        // Clamp to reasonable positions
         resetAngle.onTrue(InstantCommand({
             var pose = Drivetrain.getVisionPose()
             pose = Pose2d(pose.x, pose.y, Rotation2d())
