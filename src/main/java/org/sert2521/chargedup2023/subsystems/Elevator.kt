@@ -126,7 +126,7 @@ object Elevator : SubsystemBase() {
 
     fun angleMeasure(): Double {
         // This basically offsets the angle and allows for it to be negative,
-        // so it is guaranteed to be linear on the range it is used
+        // so it is guaranteed to be "linear" on the range it is used
         return (trueAngleEncoder.distance - PhysicalConstants.elevatorFlipOffset).mod(2 * PI) + PhysicalConstants.elevatorFlipOffset - PhysicalConstants.elevatorAngleOffset
     }
 

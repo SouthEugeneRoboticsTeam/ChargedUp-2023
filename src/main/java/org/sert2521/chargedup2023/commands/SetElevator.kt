@@ -14,9 +14,9 @@ import kotlin.math.sin
 
 // Slow PID under high acceleration
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
-    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
-
     private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
+    // Could use continuous input instead of having negative rotations in the elevator code
+    private val anglePID = ProfiledPIDController(TunedConstants.elevatorAngleP, TunedConstants.elevatorAngleI, TunedConstants.elevatorAngleD, TrapezoidProfile.Constraints(TunedConstants.elevatorAngleMaxV, TunedConstants.elevatorAngleMaxA))
 
     private val angleTooLow = angle < TunedConstants.elevatorExtensionMinAngleTarget
     private val angleTooHigh = angle > TunedConstants.elevatorExtensionMaxAngleTarget

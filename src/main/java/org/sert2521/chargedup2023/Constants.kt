@@ -1,6 +1,8 @@
 package org.sert2521.chargedup2023
 
 import com.pathplanner.lib.PathConstraints
+import edu.wpi.first.apriltag.AprilTagFieldLayout
+import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.MatBuilder
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.Nat
@@ -59,8 +61,40 @@ object PhysicalConstants {
 
     const val angleEncoderMultiplier = 0.01745329251
 
-    val tagPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
-    val cameraTrans = Transform3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, 0.0, 0.0))
+    val rightPose = Transform3d(Translation3d(0.02872994, -0.3009138, 0.65), Rotation3d(0.0, -0.0873, -0.436))
+    val leftPose = Transform3d(Translation3d(0.02872994, 0.3009138, 0.65), Rotation3d(0.0, -0.0873, 0.436))
+
+    val field: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
+    const val fieldLength = 16.54
+    const val fieldWidth = 8.02
+
+    init {
+        field.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide)
+    }
+
+    const val coneAngle = -PI
+    // These may be wrong
+    val conePointsBlue = listOf(0.51, 1.63, 2.02, 3.28, 3.86, 5.00)
+    val conePointsRed: List<Double>
+    init {
+        val conePointsRedMut = mutableListOf<Double>()
+        for (conePointBlue in conePointsBlue) {
+            conePointsRedMut.add(fieldWidth - conePointBlue)
+        }
+
+        conePointsRed = conePointsRedMut
+    }
+
+    // This is wrong
+    const val substationX = fieldLength - 2.48
+    val substationFarAngleAtDistance = Pair(0.0, 0.3)
+    val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
+
+    const val ledLength = 72
+
+    val ledPurpleHSV = arrayOf(145, 255, 255)
+
+    val ledYellowHSV = arrayOf(10, 255, 255)
 
     // This should be moved
     // Polar is annoying
@@ -134,12 +168,6 @@ object PhysicalConstants {
 
         return max - extensionExtra
     }
-
-    const val ledLength = 72
-
-    val ledPurpleHSV = arrayOf(145, 255, 255)
-
-    val ledYellowHSV = arrayOf(10, 255, 255)
 }
 
 // Move some of these to config constants
@@ -194,9 +222,20 @@ object TunedConstants {
     const val swerveAutoAngleI = 0.0
     const val swerveAutoAngleD = 0.0
 
-    const val swerveAutoAlignAngleP = 3.0
-    const val swerveAutoAlignAngleI = 0.0
-    const val swerveAutoAlignAngleD = 0.0
+    const val swerveAlignDistanceP = 1.8
+    const val swerveAlignDistanceI = 0.0
+    const val swerveAlignDistanceD = 0.0
+
+    const val swerveAlignV = 0.1
+    const val swerveAlignA = 0.1
+
+    const val swerveConeAlignAngleP = 2.5
+    const val swerveConeAlignAngleI = 0.0
+    const val swerveConeAlignAngleD = 0.0
+
+    const val swerveSubstationAlignAngleP = 3.0
+    const val swerveSubstationAlignAngleI = 0.0
+    const val swerveSubstationAlignAngleD = 0.0
 
     // This should be split up
     const val filterTaps = 20
@@ -208,8 +247,15 @@ object TunedConstants {
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
 
-    val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
-    val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
+    const val visionConePositionTolerance = 0.01
+    const val visionConeAngleTolerance = 0.01
+
+    const val visionSubstationPositionTolerance = 0.02
+    const val visionSubstationAngleTolerance = 0.02
+
+    val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
+    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(3.0, 3.0, 100.0)
 }
 
 object ConfigConstants {
@@ -220,16 +266,16 @@ object ConfigConstants {
 
     const val drivetrainOptimized = true
 
-    const val powerDeadband = 0.1
-    const val rotDeadband = 0.1
-    const val joystickDeadband = 0.1
+    // Add actual joystick deadband
+    const val powerDeadband = 0.2
+    const val rotDeadband = 0.2
 
     const val driveSpeed = 3.5
     const val driveSpeedup = 2.0
     const val rotSpeed = 3.5
     const val rotSpeedup = 2.0
 
-    const val joystickChangeSpeed = 0.2
+    const val joystickChangeSpeed = 0.4
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
@@ -258,8 +304,6 @@ object ConfigConstants {
                             "1 Piece Right",
                             "Test",
                             "2 Piece Pickup Left")
-
-    const val camName = ""
 }
 
 object ElectronicIDs {
@@ -273,11 +317,13 @@ object ElectronicIDs {
     const val elevatorUpperExtension = 2
     const val elevatorLowerExtension = 1
 
-    val swerveModuleData = mutableListOf(
+    val swerveModuleData = listOf(
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 5, 14, -2.27 + PI / 2 + 4.62 + 1.54 - PI / 2, true),
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI / 2, true),
         SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI / 2, true),
         SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI / 2, true))
 
     const val ledId = 0
+
+    val camData = listOf(Pair("Right", PhysicalConstants.rightPose), Pair("Left", PhysicalConstants.leftPose))
 }

@@ -1,11 +1,15 @@
 package org.sert2521.chargedup2023
 
+import edu.wpi.first.apriltag.AprilTagFields
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import org.sert2521.chargedup2023.commands.InitElevator
 import org.sert2521.chargedup2023.commands.JoystickDrive
+import org.sert2521.chargedup2023.commands.VisionAlignCone
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
 import org.sert2521.chargedup2023.subsystems.LEDs
@@ -31,7 +35,11 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopInit() {
-        JoystickDrive(true).schedule()
+        Drivetrain.defaultCommand = JoystickDrive(true)
+    }
+
+    override fun teleopExit() {
+        // Turn off joystick drive (maybe?)
     }
 
     override fun disabledExit() {
@@ -48,6 +56,14 @@ object Robot : TimedRobot() {
             if (isAutonomous) {
                 Input.getAuto()?.andThen(InstantCommand({ Drivetrain.stop() }))?.schedule()
             }
+        }
+    }
+
+    override fun disabledPeriodic() {
+        if (Drivetrain.camerasConnected()) {
+            LEDs.setAllLEDRGB(0, 50, 0)
+        } else {
+            LEDs.setAllLEDRGB(50, 0, 0)
         }
     }
 

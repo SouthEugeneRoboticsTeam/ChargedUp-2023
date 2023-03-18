@@ -11,10 +11,13 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.GamePieces
@@ -30,6 +33,7 @@ object Input {
 
     private val resetAngle = JoystickButton(driverController, 4)
     private val slowButton = JoystickButton(driverController, 5)
+    private val coneAlignButton = JoystickButton(driverController, 6)
 
     //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
@@ -50,7 +54,7 @@ object Input {
     private val autoChooser = SendableChooser<MutableList<PathPlannerTrajectory?>?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
-        Drivetrain::setNewPose,
+        { Drivetrain.setNewPose(it); Drivetrain.setNewVisionPose(it) },
         PIDConstants(TunedConstants.swerveAutoDistanceP, TunedConstants.swerveAutoDistanceI, TunedConstants.swerveAutoDistanceD),
         PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
         Drivetrain::drive,
@@ -77,7 +81,14 @@ object Input {
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
         // Replace numbers with constants
-        resetAngle.onTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
+        resetAngle.onTrue(InstantCommand({
+            var pose = Drivetrain.getVisionPose()
+            pose = Pose2d(pose.x, pose.y, Rotation2d())
+            Drivetrain.setNewPose(pose)
+            Drivetrain.setNewVisionPose(pose)
+        }))
+        coneAlignButton.whileTrue(VisionAlignCone())
+        Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
 
         //Intaking a cone is the same as outtaking a cube
         //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
@@ -121,7 +132,7 @@ object Input {
                     SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
                     SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
                     ClawIntake(GamePieces.CONE, true).withTimeout(0.37),
-                    InstantCommand({  }, Claw),
+                    InstantCommand({ }, Claw),
                     SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
                     OntoChargeStation(Translation2d(1.0, 0.0)),
                     DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
@@ -141,7 +152,7 @@ object Input {
     // Rename fast stuff because it actually slows it
     fun getFast(): Double {
         return if (!slowMode) {
-            driverController.rightTriggerAxis
+            driverController.leftTriggerAxis
         } else {
             1.0
         }
@@ -159,7 +170,11 @@ object Input {
         return -driverController.rightX
     }
 
-    fun getAutoAlign(): Boolean {
-        return driverController.aButton
+    fun getSlider(): Double {
+        return gunnerController.getRawAxis(3)
+    }
+
+    fun getColor(): Alliance {
+        return DriverStation.getAlliance()
     }
 }
