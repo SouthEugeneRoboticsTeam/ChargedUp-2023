@@ -74,7 +74,7 @@ object PhysicalConstants {
 
     const val coneAngle = -PI
     // These may be wrong
-    val conePointsBlue = listOf(0.51, 1.63, 2.02, 3.28, 3.86, 5.00)
+    val conePointsBlue = listOf(1.61, 2.20, 3.33, 3.89, 5.01)
     val conePointsRed: List<Double>
     init {
         val conePointsRedMut = mutableListOf<Double>()
@@ -87,7 +87,7 @@ object PhysicalConstants {
 
     // This is wrong
     const val substationX = fieldLength - 2.48
-    val substationFarAngleAtDistance = Pair(0.0, 0.3)
+    val substationFarAngleAtDistance = Pair(PI / 4, 0.3)
     val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
 
     const val ledLength = 200
@@ -328,5 +328,5 @@ object ElectronicIDs {
 
     const val ledId = 0
 
-    val camData = listOf(Pair("Right", PhysicalConstants.rightPose), Pair("Left", PhysicalConstants.leftPose))
+    val camData = listOf(Pair("Right2", PhysicalConstants.rightPose), Pair("Left2", PhysicalConstants.leftPose))
 }

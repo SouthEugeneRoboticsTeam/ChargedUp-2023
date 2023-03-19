@@ -84,10 +84,8 @@ object Input {
 
         // Clamp to reasonable positions
         resetAngle.onTrue(InstantCommand({
-            var pose = Drivetrain.getVisionPose()
-            pose = Pose2d(pose.x, pose.y, Rotation2d())
-            Drivetrain.setNewPose(pose)
-            Drivetrain.setNewVisionPose(pose)
+            Drivetrain.setNewPose(Pose2d())
+            Drivetrain.setNewVisionPose(Pose2d())
         }))
         coneAlignButton.whileTrue(VisionAlignCone())
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
