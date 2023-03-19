@@ -1,39 +1,48 @@
 package org.sert2521.chargedup2023.commands
 
-import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import kotlin.math.abs
 
 class Balance : CommandBase() {
-    private val anglePID = ProfiledPIDController(TunedConstants.balanceAngleP, TunedConstants.balanceAngleI, TunedConstants.balanceAngleD, TrapezoidProfile.Constraints(TunedConstants.balanceAngleMaxV, TunedConstants.balanceAngleMaxA))
-    private val tiltFilter = LinearFilter.movingAverage(25)
+    private var prevTilt = 0.0
+    private var prevTime = 0.0
+    private var tiltRateFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
 
     init {
         addRequirements(Drivetrain)
     }
 
     override fun initialize() {
-        val angle = Drivetrain.getTilt()
-        anglePID.reset(angle)
+        prevTime = Timer.getFPGATimestamp()
+        prevTilt = Drivetrain.getTilt()
 
-        tiltFilter.reset()
+        tiltRateFilter.reset()
     }
 
     override fun execute() {
-        val tilt = Drivetrain.getTilt()
+        val currentTime = Timer.getFPGATimestamp()
+        val diffTime = (currentTime - prevTime)
+        prevTime = currentTime
 
-        if (abs(tiltFilter.calculate(tilt)) <= TunedConstants.balanceAngleTolerance) {
-            anglePID.calculate(tilt, tilt)
+        val tilt = Drivetrain.getTilt()
+        val tiltRate = tiltRateFilter.calculate(abs((tilt - prevTilt) / diffTime))
+        prevTilt = tilt
+
+        val angleInBounds = abs(tilt) <= TunedConstants.balanceAngleTolerance
+        if (angleInBounds) {
             Drivetrain.enterBrakePos()
         } else {
-            val speed = anglePID.calculate(tilt)
-            val driveVector = Drivetrain.getTiltDirection() * speed
-            Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
+            if (tiltRate >= TunedConstants.balanceAngleSignificantRate) {
+                Drivetrain.enterBrakePos()
+            } else {
+                val driveVector = Drivetrain.getTiltDirection() * TunedConstants.balanceSpeed
+                Drivetrain.drive(ChassisSpeeds(driveVector.x, driveVector.y, 0.0))
+            }
         }
     }
 

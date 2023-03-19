@@ -1,0 +1,108 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.888483776967554,
+        "y": 3.2657585315170636
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.888483776967554,
+        "y": 3.2657585315170636
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Elevator Drive",
+          "Elevator Cube High",
+          "Claw Outtake"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.668301336602674,
+        "y": 3.382974765949532
+      },
+      "prevControl": {
+        "x": 5.668301336602674,
+        "y": 3.382974765949532
+      },
+      "nextControl": {
+        "x": 5.668301336602674,
+        "y": 3.382974765949532
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Claw Stop",
+          "Elevator Drive"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "before",
+        "waitTime": 0.5
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.365898731797464,
+        "y": 3.2918065836131674
+      },
+      "prevControl": {
+        "x": 5.808715617431235,
+        "y": 3.330878661757324
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Drive Front Onto Charge Station"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.5000000000000002,
+      "names": [
+        "Elevator Cube Intake"
+      ]
+    },
+    {
+      "position": 0.7454545454545444,
+      "names": [
+        "Claw Cube Intake"
+      ]
+    },
+    {
+      "position": 1.2545454545454535,
+      "names": [
+        "Elevator Drive"
+      ]
+    },
+    {
+      "position": 0.03636363636363636,
+      "names": [
+        "Elevator Drive"
+      ]
+    }
+  ]
+}

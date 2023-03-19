@@ -2,15 +2,17 @@ package org.sert2521.chargedup2023.subsystems
 
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
+import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.RobotController
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.sert2521.chargedup2023.ConfigConstants
-import org.sert2521.chargedup2023.ElectronicIDs
-import org.sert2521.chargedup2023.PhysicalConstants
+import org.sert2521.chargedup2023.*
 import org.sert2521.chargedup2023.commands.SetElevator
 import kotlin.math.PI
+import kotlin.math.abs
 
 object Elevator : SubsystemBase() {
     private val extendMotorOne = CANSparkMax(ElectronicIDs.elevatorMotorOne, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -23,9 +25,22 @@ object Elevator : SubsystemBase() {
     var extensionInited = false
         private set
 
-    private val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
-    // Maybe add filter?
+    var angleInited = false
+        private set
+
+    val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
+
+    private val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
+
+    private var susness = 0.0
+    private val susnessFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+
+    private var prevTime = Timer.getFPGATimestamp()
+    private var prevAngle = 0.0
+
+    var brownedOut = false
+        private set
 
     init {
         extendMotorOne.idleMode = CANSparkMax.IdleMode.kBrake
@@ -33,13 +48,16 @@ object Elevator : SubsystemBase() {
         angleMotor.idleMode = CANSparkMax.IdleMode.kBrake
 
         extendMotorTwo.follow(extendMotorOne, true)
-
         extendEncoder.positionConversionFactor = PhysicalConstants.elevatorExtensionConversion
 
+        angleMotorEncoder.positionConversionFactor = PhysicalConstants.elevatorAngleMotorDistanceConversion
+        angleMotorEncoder.velocityConversionFactor = PhysicalConstants.elevatorAngleMotorVelocityConversion
         trueAngleEncoder.distancePerRotation = PhysicalConstants.elevatorAngleConversion
 
-        // Check this
-        val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false) })
+        prevAngle = angleMeasure()
+
+        // Check
+        val holdCommand = InstantCommand({ SetElevator(extensionMeasure(), angleMeasure(), false).schedule() })
         holdCommand.addRequirements(this)
         defaultCommand = holdCommand
     }
@@ -63,17 +81,38 @@ object Elevator : SubsystemBase() {
             extendMotorOne.setVoltage(ConfigConstants.extensionResetVoltage)
         }
 
-        if (!safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
+        if (!angleInited) {
+            if (angleMeasure() >= ConfigConstants.angleInitAngle && Robot.isEnabled) {
+                // This should be set more often probably
+                angleMotorEncoder.position = angleMeasure()
+                susnessFilter.reset()
+                angleInited = true
+            }
+        }
+
+        if (!angleInited) {
+            angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
+        }
+
+        brownedOut = RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
+
+        if (brownedOut || !safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
         }
 
-        if ((angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
+        if (brownedOut || (angleMotor.appliedOutput > 0 && angleAtTop()) || (angleMotor.appliedOutput < 0 && angleAtBottom())) {
             angleMotor.stopMotor()
         }
+
+        val currTime = Timer.getFPGATimestamp()
+        val currAngle = angleMeasure()
+        susness = susnessFilter.calculate(abs((currAngle - prevAngle) / (currTime - prevTime) - angleMotorEncoder.velocity))
+        prevTime = currTime
+        prevAngle = currAngle
     }
 
     fun setExtend(speed: Double) {
-        if (extensionInited && extensionSafe()) {
+        if (!brownedOut && extensionInited && extensionSafe()) {
             if (!((speed > 0 && extensionAtTop()) || (speed < 0 && extensionAtBottom()))) {
                 extendMotorOne.setVoltage(speed)
             }
@@ -81,8 +120,10 @@ object Elevator : SubsystemBase() {
     }
 
     fun setAngle(speed : Double){
-        if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
-            angleMotor.setVoltage(speed)
+        if (!brownedOut && angleInited) {
+            if (!((speed > 0 && angleAtTop()) || (speed < 0 && angleAtBottom()))) {
+                angleMotor.setVoltage(speed)
+            }
         }
     }
 
@@ -96,7 +137,7 @@ object Elevator : SubsystemBase() {
 
     fun angleMeasure(): Double {
         // This basically offsets the angle and allows for it to be negative,
-        // so it is guaranteed to be linear on the range it is used
+        // so it is guaranteed to be "linear" on the range it is used
         return (trueAngleEncoder.distance - PhysicalConstants.elevatorFlipOffset).mod(2 * PI) + PhysicalConstants.elevatorFlipOffset - PhysicalConstants.elevatorAngleOffset
     }
 
@@ -109,7 +150,8 @@ object Elevator : SubsystemBase() {
     }
 
     fun extensionSafe(): Boolean {
-        return angleMeasure() >= PhysicalConstants.elevatorExtensionMinAngle
+        val angleMeasure = angleMeasure()
+        return angleMeasure >= PhysicalConstants.elevatorExtensionMinAngle && angleMeasure <= PhysicalConstants.elevatorExtensionMaxAngle
     }
 
     fun angleAtTop(): Boolean {
@@ -117,7 +159,12 @@ object Elevator : SubsystemBase() {
     }
 
     fun angleAtBottom(): Boolean {
-        return angleMeasure() < PhysicalConstants.elevatorAngleBottom
+        return angleMeasure() < PhysicalConstants.elevatorAngleBottom || (angleMotorEncoder.position < PhysicalConstants.elevatorAngleMotorBottom && angleInited)
+    }
+
+    // Make normal variable with private setter
+    fun angleSusness(): Double {
+        return susness
     }
 
     fun stop() {
