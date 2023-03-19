@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.commands.ClawIntake
-import org.sert2521.chargedup2023.commands.GamePieces
 import org.sert2521.chargedup2023.commands.SetElevator
 import org.sert2521.chargedup2023.subsystems.Claw
 import org.sert2521.chargedup2023.subsystems.Drivetrain
@@ -33,7 +32,7 @@ object Input {
     private val slowButton = JoystickButton(driverController, 5)
     private val coneAlignButton = JoystickButton(driverController, 6)
 
-    //private val intakeSetOne = JoystickButton(gunnerController, 15)
+    private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 14)
     private val outtake = JoystickButton(gunnerController, 13)
 
@@ -46,8 +45,6 @@ object Input {
     private val liftIntakeCube = JoystickButton(gunnerController, 16)
     private val liftIntakeCone = JoystickButton(gunnerController, 15)
     private val liftSingleSubstation = JoystickButton(gunnerController, 11)
-
-    private var lastPiece = GamePieces.CUBE
 
     // Has to do this function thing so the robot can do andThen(auto) more than once
     private val autoChooser = SendableChooser<() -> Command?>()
@@ -80,7 +77,7 @@ object Input {
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-            ClawIntake(GamePieces.CONE, true).withTimeout(0.37),
+            ClawIntake(-0.7).withTimeout(0.4),
             InstantCommand({ }, Claw),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             OntoChargeStation(Translation2d(1.0, 0.0)),
@@ -102,16 +99,12 @@ object Input {
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
 
         //Intaking a cone is the same as outtaking a cube
-        //intakeSetOne.whileTrue(ClawIntake(GamePieces.CONE, false))
-        //intakeSetOne.onTrue(InstantCommand({ lastPiece = GamePieces.CUBE }))
+        intakeSetOne.whileTrue(ClawIntake(1.0))
 
-        intakeSetTwo.whileTrue(ClawIntake(GamePieces.CUBE, false))
-        intakeSetTwo.onTrue(InstantCommand({ lastPiece = GamePieces.CONE }))
+        intakeSetTwo.whileTrue(ClawIntake(0.7))
 
-        var clawCommandDirection: ClawIntake? = null
 
-        outtake.onTrue(InstantCommand({ clawCommandDirection = ClawIntake(lastPiece, true); clawCommandDirection?.schedule() }))
-        outtake.onFalse(InstantCommand({ clawCommandDirection?.cancel(); clawCommandDirection = null }))
+        outtake.whileTrue(ClawIntake(-0.7))
 
         liftDrive.onTrue(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))
         liftConeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false))

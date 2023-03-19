@@ -284,13 +284,13 @@ object ConfigConstants {
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
-        "Claw Outtake" to ClawIntake(GamePieces.CONE, true).withTimeout(0.4),
+        "Claw Outtake" to ClawIntake(1.0).withTimeout(0.4),
         "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Elevator Cone Intake" to SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, true),
-        "Claw Cube Intake" to ClawIntake(GamePieces.CUBE, false),
+        "Claw Cube Intake" to ClawIntake(-0.7),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
-        "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
+        "Claw Cube Outtake" to ClawIntake(0.75),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()))
 

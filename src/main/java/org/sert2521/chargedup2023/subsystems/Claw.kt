@@ -12,6 +12,7 @@ object Claw : SubsystemBase() {
 
     init {
         motor.idleMode = CANSparkMax.IdleMode.kBrake
+        motor.setSmartCurrentLimit(10, 45)
     }
 
     override fun periodic() {
