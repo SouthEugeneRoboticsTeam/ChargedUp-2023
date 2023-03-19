@@ -159,18 +159,18 @@
     },
     {
       "anchorPoint": {
-        "x": 5.730571461142922,
-        "y": 4.698401396802794
+        "x": 4.323976647953296,
+        "y": 4.828641657283315
       },
       "prevControl": {
-        "x": 5.235658471316942,
-        "y": 4.841665683331367
+        "x": 3.829063658127316,
+        "y": 4.971905943811889
       },
       "nextControl": {
-        "x": 6.225484450968903,
-        "y": 4.55513711027422
+        "x": 4.818889637779277,
+        "y": 4.6853773707547415
       },
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 106.58733855692743,
       "isReversal": false,
       "velOverride": 1.0,
       "isLocked": false,
@@ -186,22 +186,50 @@
     },
     {
       "anchorPoint": {
-        "x": 5.352874705749412,
-        "y": 3.3439026878053757
+        "x": 6.9939019878039765,
+        "y": 3.982079964159929
       },
       "prevControl": {
-        "x": 6.342700685401371,
-        "y": 3.3959987919975845
+        "x": 6.316652633305266,
+        "y": 4.5811851623703275
+      },
+      "nextControl": {
+        "x": 6.316652633305266,
+        "y": 4.5811851623703275
+      },
+      "holonomicAngle": -33.69006752597977,
+      "isReversal": true,
+      "velOverride": 1.0,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "Elevator Drive"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.574283148566298,
+        "y": 4.7244494488988975
+      },
+      "prevControl": {
+        "x": 5.9389558779117575,
+        "y": 4.776545553091106
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 177.87890360333853,
       "isReversal": false,
-      "velOverride": 1.0,
+      "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Drive Back Onto Charge Station"
+          "Elevator Drive",
+          "Claw Stop"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -248,7 +276,20 @@
       "position": 5.1818181818181825,
       "names": [
         "Elevator Drive",
-        "Claw Stop"
+        "Claw Stop",
+        "Elevator Drive"
+      ]
+    },
+    {
+      "position": 5.672727272727271,
+      "names": [
+        "Elevator Cube Intake"
+      ]
+    },
+    {
+      "position": 6.490909090909076,
+      "names": [
+        "Claw Cube Intake"
       ]
     }
   ]
