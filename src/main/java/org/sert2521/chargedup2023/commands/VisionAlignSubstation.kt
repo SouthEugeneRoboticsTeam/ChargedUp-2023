@@ -43,8 +43,11 @@ class VisionAlignSubstation : JoystickCommand() {
             Output.visionHappy = false
         } else {
             // To update stuff
+            val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
+            val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
+
             positionPID.calculate(pose.y, PhysicalConstants.substationX)
-            anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
+            anglePID.calculate(pose.rotation.radians, angleTarget)
 
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, readJoystick().y, 0.0, pose.rotation))
             Output.visionHappy = true
