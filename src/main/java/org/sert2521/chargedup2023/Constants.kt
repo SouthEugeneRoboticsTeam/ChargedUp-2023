@@ -98,6 +98,12 @@ object TunedConstants {
 
     val stateDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
     val globalDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(0.0, 0.0, 0.0)
+
+    const val ledsRainbowA = 2.0
+    const val ledsRainbowB = 1.1
+    const val ledsRainbowC = 0.7
+    const val ledsRainbowD = 3.8
+    const val ledsRainbowE = 1.5
 }
 
 object ConfigConstants {

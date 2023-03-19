@@ -5,6 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
+import org.sert2521.chargedup2023.TunedConstants.ledsRainbowA
+import org.sert2521.chargedup2023.TunedConstants.ledsRainbowB
+import org.sert2521.chargedup2023.TunedConstants.ledsRainbowC
+import org.sert2521.chargedup2023.TunedConstants.ledsRainbowD
+import org.sert2521.chargedup2023.TunedConstants.ledsRainbowE
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.LEDs
 import kotlin.math.min
@@ -29,10 +34,11 @@ class LedIdle : CommandBase() {
 
     override fun execute() {
 
-        driveSpeed = 20*kotlin.math.sqrt((lastPose.x - Drivetrain.pose.x).pow(2) + (lastPose.y - Drivetrain.pose.y).pow(2))
+        driveSpeed =50 * kotlin.math.sqrt((lastPose.x - Drivetrain.pose.x).pow(2) + (lastPose.y - Drivetrain.pose.y).pow(2))
         lastPose = Drivetrain.pose
 
-        hueTimer += driveSpeed
+        hueTimer += (-ledsRainbowA.pow(ledsRainbowB/(driveSpeed/ConfigConstants.driveSpeed + ledsRainbowC))+ledsRainbowD)*ledsRainbowE
+
 
 
         for (i in 0 until PhysicalConstants.ledLength){
