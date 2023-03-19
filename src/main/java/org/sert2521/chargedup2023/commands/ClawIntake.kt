@@ -15,9 +15,15 @@ class ClawIntake(private val outtakeSpeed:Double) : CommandBase() {
     override fun initialize() {
         // Fix this
         Claw.setMotor(outtakeSpeed)
+        if (outtakeSpeed>0.0){
+            LedSolid(0, 255, 255)
+        }else{
+            LedSolid(60, 255, 255)
+        }
     }
 
     override fun end(interrupted: Boolean) {
         Claw.stop()
+        LedIdle()
     }
 }

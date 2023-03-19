@@ -29,6 +29,7 @@ class VisionAlignSubstation : JoystickCommand() {
         Drivetrain.setVisionStandardDeviations()
         positionPID.reset()
         anglePID.reset()
+        LedIdle()
     }
 
     override fun execute() {
@@ -52,11 +53,17 @@ class VisionAlignSubstation : JoystickCommand() {
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, readJoystick().y, 0.0, pose.rotation))
             Output.visionHappy = true
         }
+        if (Output.visionHappy){
+            LedSolid(60, 255,255)
+        }else{
+            LedSolid(10, 255,255)
+        }
     }
 
     override fun end(interrupted: Boolean) {
         Drivetrain.setVisionAlignDeviations()
         Output.visionHappy = false
         Drivetrain.stop()
+        LedIdle()
     }
 }

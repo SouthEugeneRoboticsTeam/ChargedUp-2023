@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
+import org.sert2521.chargedup2023.subsystems.LEDs
 import kotlin.math.abs
 
 class Balance : CommandBase() {
@@ -22,6 +23,8 @@ class Balance : CommandBase() {
         prevTilt = Drivetrain.getTilt()
 
         tiltRateFilter.reset()
+
+        LedSolid(10, 255, 255)
     }
 
     override fun execute() {
@@ -48,5 +51,7 @@ class Balance : CommandBase() {
 
     override fun end(interrupted: Boolean) {
         Drivetrain.stop()
+
+        LedFlash(60, 255, 255, 1.6)
     }
 }

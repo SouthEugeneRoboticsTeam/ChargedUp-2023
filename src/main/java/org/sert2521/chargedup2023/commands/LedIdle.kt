@@ -17,7 +17,7 @@ import kotlin.math.pow
 
 class LedIdle : CommandBase() {
 
-    private var lastPose = Drivetrain.pose
+    private var lastPose = Drivetrain.getPose()
 
     private var driveSpeed = 0.0
     private var hueTimer = 0.0
@@ -34,8 +34,8 @@ class LedIdle : CommandBase() {
 
     override fun execute() {
 
-        driveSpeed =50 * kotlin.math.sqrt((lastPose.x - Drivetrain.pose.x).pow(2) + (lastPose.y - Drivetrain.pose.y).pow(2))
-        lastPose = Drivetrain.pose
+        driveSpeed = 50 * kotlin.math.sqrt((lastPose.x - Drivetrain.getPose().x).pow(2) + (lastPose.y - Drivetrain.getPose().y).pow(2))
+        lastPose = Drivetrain.getPose()
 
         hueTimer += (-ledsRainbowA.pow(ledsRainbowB/(driveSpeed/ConfigConstants.driveSpeed + ledsRainbowC))+ledsRainbowD)*ledsRainbowE
 

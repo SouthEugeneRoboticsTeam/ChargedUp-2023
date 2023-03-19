@@ -8,6 +8,7 @@ import org.sert2521.chargedup2023.Output
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
+import org.sert2521.chargedup2023.subsystems.LEDs
 import java.lang.Math.PI
 import kotlin.math.abs
 
@@ -29,6 +30,7 @@ class VisionAlignCone : JoystickCommand() {
 
         Drivetrain.setVisionStandardDeviations()
         positionPID.reset()
+        LedSolid(10, 255, 255)
     }
 
     override fun execute() {
@@ -58,11 +60,18 @@ class VisionAlignCone : JoystickCommand() {
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
             Output.visionHappy = true
         }
+
+        if (Output.visionHappy){
+            LedSolid(60, 255, 255)
+        }else{
+            LedSolid(10, 255,255)
+        }
     }
 
     override fun end(interrupted: Boolean) {
         Drivetrain.setVisionAlignDeviations()
         Output.visionHappy = false
         Drivetrain.stop()
+        LedIdle()
     }
 }
