@@ -1,6 +1,8 @@
 package org.sert2521.chargedup2023
 
 import com.pathplanner.lib.PathConstraints
+import com.pathplanner.lib.PathPlanner
+import com.pathplanner.lib.PathPlannerTrajectory
 import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.MatBuilder
@@ -291,22 +293,33 @@ object ConfigConstants {
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
-    val autoConstraints = PathConstraints(1.8, 1.7)
 
-    val pathNames = arrayOf("1 Piece Balance Left",
-                            "1 Piece Balance Middle",
-                            "1 Piece Balance Right",
-                            "1 Piece Pickup Balance Left",
-                            "1 Piece Pickup Balance Right",
-                            "2 Piece Balance Left",
-                            "2 Piece Left",
-                            "Balance Left",
-                            "Balance Right",
-                            "Forward",
-                            "1 Piece Left",
-                            "1 Piece Right",
-                            "Test",
-                            "2 Piece Pickup Left")
+    private val autoConstraints = PathConstraints(1.8, 1.7)
+    private val fastAutoConstraints = PathConstraints(1.8, 1.7)
+
+    val pathsData = arrayOf(Pair("1 Piece Balance Left", autoConstraints),
+        Pair("1 Piece Balance Middle", autoConstraints),
+        Pair("1 Piece Balance Right", autoConstraints),
+        Pair("1 Piece Pickup Balance Left", autoConstraints),
+        Pair("1 Piece Pickup Balance Right", autoConstraints),
+        Pair("2 Piece Balance Left", autoConstraints),
+        Pair("2 Piece Left", autoConstraints),
+        Pair("Balance Left", autoConstraints),
+        Pair("Balance Right", autoConstraints),
+        Pair("Forward", autoConstraints),
+        Pair("1 Piece Left", autoConstraints),
+        Pair("1 Piece Right", autoConstraints))
+
+    val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
+    init {
+        val pathsList = mutableListOf<Pair<String, List<PathPlannerTrajectory>>>()
+
+        for (data in pathsData) {
+            pathsList.add(Pair(data.first, PathPlanner.loadPathGroup(data.first, data.second)))
+        }
+
+        paths = pathsList.toTypedArray()
+    }
 }
 
 object ElectronicIDs {

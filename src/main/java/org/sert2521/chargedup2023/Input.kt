@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
-import com.pathplanner.lib.PathPlanner
-import com.pathplanner.lib.PathPlannerTrajectory
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
@@ -51,7 +49,8 @@ object Input {
 
     private var lastPiece = GamePieces.CUBE
 
-    private val autoChooser = SendableChooser<MutableList<PathPlannerTrajectory?>?>()
+    // Has to do this function thing so the robot can do andThen(auto) more than once
+    private val autoChooser = SendableChooser<() -> Command?>()
     private val autoBuilder = SwerveAutoBuilder(
         Drivetrain::getPose,
         { Drivetrain.setNewPose(it); Drivetrain.setNewVisionPose(it) },
@@ -71,12 +70,24 @@ object Input {
 
     init {
         // Put these strings in constants maybe
-        autoChooser.setDefaultOption("Nothing", null)
-        for (name in ConfigConstants.pathNames) {
-            autoChooser.addOption(name, PathPlanner.loadPathGroup(name, ConfigConstants.autoConstraints))
+        autoChooser.setDefaultOption("Nothing", { null })
+        for (path in ConfigConstants.paths) {
+            autoChooser.addOption(path.first) { autoBuilder.fullAuto(path.second) }
         }
 
-        autoChooser.addOption("1 Piece Balance Middle", mutableListOf(null))
+        // Fix this nonsense
+        autoChooser.addOption("1 Piece Balance Middle") { SequentialCommandGroup(
+            InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
+            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
+            ClawIntake(GamePieces.CONE, true).withTimeout(0.37),
+            InstantCommand({ }, Claw),
+            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+            OntoChargeStation(Translation2d(1.0, 0.0)),
+            DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
+            OntoChargeStation(Translation2d(-1.0, 0.0)),
+            DriveUpChargeStation().withTimeout(1.3),
+            Balance()) }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
@@ -128,22 +139,7 @@ object Input {
         return if (selected == null) {
             null
         } else {
-            if (selected[0] == null) {
-                SequentialCommandGroup(
-                    InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-                    SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-                    SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-                    ClawIntake(GamePieces.CONE, true).withTimeout(0.37),
-                    InstantCommand({ }, Claw),
-                    SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-                    OntoChargeStation(Translation2d(1.0, 0.0)),
-                    DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
-                    OntoChargeStation(Translation2d(-1.0, 0.0)),
-                    DriveUpChargeStation().withTimeout(1.3),
-                    Balance())
-            } else {
-                autoBuilder.fullAuto(selected)
-            }
+            selected()
         }
     }
 
