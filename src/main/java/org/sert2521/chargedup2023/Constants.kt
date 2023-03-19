@@ -290,7 +290,7 @@ object ConfigConstants {
         "Claw Cube Intake" to ClawIntake(-0.7),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
-        "Claw Cube Outtake" to ClawIntake(0.75),
+        "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()))
 
