@@ -183,7 +183,7 @@ object TunedConstants {
     const val elevatorExtensionMaxV = 2.032
     const val elevatorExtensionMaxA = 3.556
 
-    const val elevatorExtensionTolerance = 0.0254
+    const val elevatorExtensionTolerance = 0.035
 
     const val elevatorExtensionMaxAngleTarget = 1.0
     const val elevatorExtensionMinAngleTarget = 0.1
@@ -192,8 +192,8 @@ object TunedConstants {
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
-    const val elevatorAngleG = 0.5
-    const val elevatorAngleGPerMeter = 0.0
+    const val elevatorAngleG = 0.7
+    const val elevatorAngleGPerMeter = 0.7
 
     const val elevatorAngleDownMaxV = 2.0
     const val elevatorAngleDownMaxA = 0.6
@@ -202,7 +202,7 @@ object TunedConstants {
     const val elevatorAngleUpMaxV = 3.0
     const val elevatorAngleUpMaxA = 6.0
 
-    const val elevatorAngleTolerance = 0.015
+    const val elevatorAngleTolerance = 0.025
 
     const val elevatorSusLimit = 0.4
 
@@ -270,8 +270,8 @@ object ConfigConstants {
     const val drivetrainOptimized = true
 
     // Add actual joystick deadband
-    const val powerDeadband = 0.2
-    const val rotDeadband = 0.2
+    const val powerDeadband = 0.075
+    const val rotDeadband = 0.075
 
     const val driveSpeed = 3.5
     const val driveSpeedup = 2.0
@@ -291,18 +291,20 @@ object ConfigConstants {
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Claw Cube Outtake" to ClawIntake(GamePieces.CUBE, true),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
-    private val fastAutoConstraints = PathConstraints(1.8, 1.7)
+    private val fastAutoConstraints = PathConstraints(2.6, 2.3)
 
-    val pathsData = arrayOf(Pair("1 Piece Balance Left", autoConstraints),
+    private val pathsData = arrayOf(
+        Pair("1 Piece Balance Left", autoConstraints),
         Pair("1 Piece Balance Middle", autoConstraints),
         Pair("1 Piece Balance Right", autoConstraints),
         Pair("1 Piece Pickup Balance Left", autoConstraints),
         Pair("1 Piece Pickup Balance Right", autoConstraints),
-        Pair("2 Piece Balance Left", autoConstraints),
+        Pair("2 Piece Balance Left", fastAutoConstraints),
+        Pair("2 Piece Balance Far Left", fastAutoConstraints),
         Pair("2 Piece Left", autoConstraints),
         Pair("Balance Left", autoConstraints),
         Pair("Balance Right", autoConstraints),

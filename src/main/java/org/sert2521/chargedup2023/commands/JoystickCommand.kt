@@ -36,6 +36,9 @@ abstract class JoystickCommand : CommandBase() {
             val magnitude = sqrt(sqrMagnitude)
             currX /= magnitude
             currY /= magnitude
+        } else if (sqrMagnitude < ConfigConstants.powerDeadband.pow(2)) {
+            currX = 0.0
+            currY = 0.0
         }
 
         val trueSpeed = ConfigConstants.driveSpeed - (ConfigConstants.driveSpeedup * fast)
@@ -55,15 +58,11 @@ abstract class JoystickCommand : CommandBase() {
         }
 
         var rot = Input.getRot()
-        rot *= (ConfigConstants.rotSpeed - (ConfigConstants.rotSpeedup * fast))
-        if (abs(rot) <= ConfigConstants.rotDeadband) {
+        if (abs(rot) < ConfigConstants.rotDeadband) {
             rot = 0.0
         }
+        rot *= (ConfigConstants.rotSpeed - (ConfigConstants.rotSpeedup * fast))
 
-        return if (x.pow(2) + y.pow(2) <= ConfigConstants.powerDeadband.pow(2)) {
-            Translation3d(0.0, 0.0, rot)
-        } else {
-            Translation3d(x, y, rot)
-        }
+        return Translation3d(x, y, rot)
     }
 }

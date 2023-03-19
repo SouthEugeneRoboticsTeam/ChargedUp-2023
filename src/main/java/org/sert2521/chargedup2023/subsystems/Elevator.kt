@@ -162,6 +162,7 @@ object Elevator : SubsystemBase() {
         return angleMeasure() < PhysicalConstants.elevatorAngleBottom || (angleMotorEncoder.position < PhysicalConstants.elevatorAngleMotorBottom && angleInited)
     }
 
+    // Make normal variable with private setter
     fun angleSusness(): Double {
         return susness
     }

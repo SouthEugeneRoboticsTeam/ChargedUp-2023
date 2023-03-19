@@ -10,6 +10,10 @@ import org.sert2521.chargedup2023.ElectronicIDs
 object Claw : SubsystemBase() {
     private val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
 
+    init {
+        motor.idleMode = CANSparkMax.IdleMode.kBrake
+    }
+
     override fun periodic() {
         // Put in constants
         if (RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage) {
