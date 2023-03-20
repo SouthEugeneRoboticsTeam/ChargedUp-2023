@@ -32,7 +32,6 @@ object Robot : TimedRobot() {
 
     override fun teleopInit() {
         Drivetrain.defaultCommand = JoystickDrive(true)
-        ClawIntake(0.5).schedule()
     }
 
     override fun teleopExit() {
