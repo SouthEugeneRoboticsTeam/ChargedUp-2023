@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import org.sert2521.chargedup2023.commands.ClawIntake
 import org.sert2521.chargedup2023.commands.InitElevator
 import org.sert2521.chargedup2023.commands.JoystickDrive
 import org.sert2521.chargedup2023.subsystems.Drivetrain
@@ -31,6 +32,7 @@ object Robot : TimedRobot() {
 
     override fun teleopInit() {
         Drivetrain.defaultCommand = JoystickDrive(true)
+        ClawIntake(0.5).schedule()
     }
 
     override fun teleopExit() {

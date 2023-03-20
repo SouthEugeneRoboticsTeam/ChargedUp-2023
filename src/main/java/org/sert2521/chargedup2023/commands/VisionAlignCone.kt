@@ -30,7 +30,7 @@ class VisionAlignCone : JoystickCommand() {
 
         Drivetrain.setVisionStandardDeviations()
         positionPID.reset()
-        LedSolid(10, 255, 255)
+        LedSolid(10, 255, 255).schedule()
     }
 
     override fun execute() {
@@ -62,9 +62,9 @@ class VisionAlignCone : JoystickCommand() {
         }
 
         if (Output.visionHappy){
-            LedSolid(60, 255, 255)
+            LedSolid(60, 255, 255).schedule()
         }else{
-            LedSolid(10, 255,255)
+            LedSolid(10, 255,255).schedule()
         }
     }
 
@@ -72,6 +72,6 @@ class VisionAlignCone : JoystickCommand() {
         Drivetrain.setVisionAlignDeviations()
         Output.visionHappy = false
         Drivetrain.stop()
-        LedIdle()
+        LedIdle().schedule()
     }
 }

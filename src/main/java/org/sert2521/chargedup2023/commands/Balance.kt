@@ -24,7 +24,7 @@ class Balance : CommandBase() {
 
         tiltRateFilter.reset()
 
-        LedSolid(10, 255, 255)
+        LedSolid(10, 255, 255).schedule()
     }
 
     override fun execute() {
@@ -52,6 +52,6 @@ class Balance : CommandBase() {
     override fun end(interrupted: Boolean) {
         Drivetrain.stop()
 
-        LedFlash(60, 255, 255, 1.6)
+        LedFlash(60, 255, 255, 1.6).schedule()
     }
 }
