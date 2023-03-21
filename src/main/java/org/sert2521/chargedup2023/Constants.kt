@@ -302,6 +302,7 @@ object ConfigConstants {
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
+    private val fastishAutoConstraints = PathConstraints(2.6, 2.3)
 
     private val pathsData = arrayOf(
         Pair("Cable Balance", autoConstraints),
@@ -314,7 +315,8 @@ object ConfigConstants {
         Pair("No Cable Balance", autoConstraints),
         Pair("No Cable 1.5 Balance", autoConstraints),
         Pair("No Cable 1", autoConstraints),
-        Pair("No Cable 2.5", fastAutoConstraints),
+        Pair("No Cable 2.5 Cube", fastishAutoConstraints),
+        Pair("No Cable 2.5 Cone", fastishAutoConstraints),
         Pair("No Cable 2", autoConstraints),
         Pair("No Cable 2 Balance Far", fastAutoConstraints),
         Pair("No Cable 2 Balance Near", fastAutoConstraints))
