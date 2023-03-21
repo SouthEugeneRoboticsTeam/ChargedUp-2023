@@ -18,7 +18,7 @@ object Claw : SubsystemBase() {
     override fun periodic() {
         if (currentSpeed == 0.0){
             motor.setSmartCurrentLimit(20)
-            motor.set(0.1)
+            motor.set(-0.1)
         }
 
         // Put in constants

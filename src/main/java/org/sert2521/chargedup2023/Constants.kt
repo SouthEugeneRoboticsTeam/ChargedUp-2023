@@ -54,7 +54,7 @@ object PhysicalConstants {
     const val elevatorAngleConeTippedIntake = 0.0
     const val elevatorAngleCubeIntake = 0.02
     const val elevatorAngleConeUpIntake = 0.13
-    const val elevatorAngleSingleSubstation = 0.675
+    const val elevatorAngleSingleSubstation = 0.685
 
     const val halfSideLength = 0.286378246381
 

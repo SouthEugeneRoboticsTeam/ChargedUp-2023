@@ -33,8 +33,8 @@ object Input {
     private val coneAlignButton = JoystickButton(driverController, 6)
 
     private val intakeSetOne = JoystickButton(gunnerController, 15)
-    private val intakeSetTwo = JoystickButton(gunnerController, 14)
-    private val outtake = JoystickButton(gunnerController, 13)
+    private val intakeSetTwo = JoystickButton(gunnerController, 13)
+    private val outtake = JoystickButton(gunnerController, 14)
 
     private val liftDrive = JoystickButton(gunnerController, 5)
     private val liftConeHigh = JoystickButton(gunnerController, 6)
@@ -101,10 +101,9 @@ object Input {
         //Intaking a cone is the same as outtaking a cube
         intakeSetOne.whileTrue(ClawIntake(1.0))
 
-        intakeSetTwo.whileTrue(ClawIntake(0.7))
+        intakeSetTwo.whileTrue(ClawIntake(1.0))
 
-
-        outtake.whileTrue(ClawIntake(-0.7))
+        outtake.whileTrue(ClawIntake(-1.0))
 
         liftDrive.onTrue(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))
         liftConeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false))
