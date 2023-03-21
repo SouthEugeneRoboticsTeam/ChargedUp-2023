@@ -150,7 +150,6 @@
       "stopEvent": {
         "names": [
           "Elevator Cube High",
-          "Claw Stop",
           "Claw Cube Outtake"
         ],
         "executionBehavior": "sequential",
@@ -257,7 +256,8 @@
     {
       "position": 3.3818181818181796,
       "names": [
-        "Elevator Drive"
+        "Elevator Drive",
+        "Claw Stop"
       ]
     },
     {
@@ -290,6 +290,12 @@
       "position": 6.490909090909076,
       "names": [
         "Claw Cube Intake"
+      ]
+    },
+    {
+      "position": 7.272727272727256,
+      "names": [
+        "Claw Stop"
       ]
     }
   ]
