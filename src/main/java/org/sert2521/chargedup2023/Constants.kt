@@ -105,7 +105,7 @@ object PhysicalConstants {
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
-    private val safePoints = arrayOf(Pair(0.80,0.0),Pair(0.81,0.4),Pair(1.3,0.7))
+    private val safePoints = arrayOf(Pair(0.80,0.0), Pair(0.81,0.4), Pair(1.3,0.7))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -304,20 +304,20 @@ object ConfigConstants {
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
 
     private val pathsData = arrayOf(
-        Pair("1 Piece Balance Left", autoConstraints),
-        Pair("1 Piece Balance Middle", autoConstraints),
-        Pair("1 Piece Balance Right", autoConstraints),
-        Pair("1 Piece Pickup Balance Left", autoConstraints),
-        Pair("1 Piece Pickup Balance Right", autoConstraints),
-        Pair("2 Piece Balance Left", fastAutoConstraints),
-        Pair("2 Piece Balance Far Left", fastAutoConstraints),
-        Pair("2 Piece Pickup Left", fastAutoConstraints),
-        Pair("2 Piece Left", autoConstraints),
-        Pair("Balance Left", autoConstraints),
-        Pair("Balance Right", autoConstraints),
+        Pair("Cable Balance", autoConstraints),
+        Pair("Cable 1.5 Balance", autoConstraints),
+        Pair("Cable 1", autoConstraints),
+        Pair("Cable 1 Balance", autoConstraints),
+        Pair("Center 1.5 Balance", autoConstraints),
+        Pair("Center 1 Balance", autoConstraints),
         Pair("Forward", autoConstraints),
-        Pair("1 Piece Left", autoConstraints),
-        Pair("1 Piece Right", autoConstraints))
+        Pair("No Cable Balance", autoConstraints),
+        Pair("No Cable 1.5 Balance", autoConstraints),
+        Pair("No Cable 1", autoConstraints),
+        Pair("No Cable 2.5", fastAutoConstraints),
+        Pair("No Cable 2", autoConstraints),
+        Pair("No Cable 2 Balance Far", fastAutoConstraints),
+        Pair("No Cable 2 Balance Near", fastAutoConstraints))
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {
