@@ -67,13 +67,13 @@ object Input {
 
     init {
         // Put these strings in constants maybe
-        autoChooser.setDefaultOption("Nothing", { null })
+        autoChooser.setDefaultOption("Nothing") { null }
         for (path in ConfigConstants.paths) {
             autoChooser.addOption(path.first) { autoBuilder.fullAuto(path.second) }
         }
 
         // Fix this nonsense
-        autoChooser.addOption("1 Piece Balance Middle") { SequentialCommandGroup(
+        autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
