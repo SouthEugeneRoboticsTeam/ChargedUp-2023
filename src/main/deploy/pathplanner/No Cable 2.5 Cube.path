@@ -79,15 +79,15 @@
     {
       "anchorPoint": {
         "x": 6.668301336602674,
-        "y": 4.789569579139159
+        "y": 4.594209188418377
       },
       "prevControl": {
         "x": 5.899883799767601,
-        "y": 4.750497500995003
+        "y": 4.555137110274221
       },
       "nextControl": {
         "x": 5.899883799767601,
-        "y": 4.750497500995003
+        "y": 4.555137110274221
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -131,16 +131,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9536039072078144,
-        "y": 4.620257240514482
+        "x": 1.9796519593039186,
+        "y": 4.516065032130065
       },
       "prevControl": {
-        "x": 2.3703727407454847,
-        "y": 4.711425422850847
+        "x": 3.177862355724712,
+        "y": 4.476992953985908
       },
       "nextControl": {
-        "x": 2.3703727407454847,
-        "y": 4.711425422850847
+        "x": 3.177862355724712,
+        "y": 4.476992953985908
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -170,7 +170,7 @@
         "x": 4.818889637779277,
         "y": 4.6853773707547415
       },
-      "holonomicAngle": 106.58733855692743,
+      "holonomicAngle": 37.99873244250468,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -186,50 +186,22 @@
     },
     {
       "anchorPoint": {
-        "x": 6.9939019878039765,
-        "y": 3.982079964159929
+        "x": 6.785517571035142,
+        "y": 3.7346234692469387
       },
       "prevControl": {
-        "x": 6.316652633305266,
-        "y": 4.5811851623703275
-      },
-      "nextControl": {
-        "x": 6.316652633305266,
-        "y": 4.5811851623703275
-      },
-      "holonomicAngle": -33.69006752597977,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [
-          "Elevator Drive"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 5.574283148566298,
-        "y": 4.7244494488988975
-      },
-      "prevControl": {
-        "x": 5.9389558779117575,
-        "y": 4.776545553091106
+        "x": 5.899883799767601,
+        "y": 4.359776719553439
       },
       "nextControl": null,
-      "holonomicAngle": 177.87890360333853,
+      "holonomicAngle": -33.69006752597977,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Elevator Drive",
-          "Claw Stop"
+          "Elevator Drive"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -242,7 +214,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.7636363636363636,
+      "position": 0.44545454545454544,
       "names": [
         "Elevator Cube Intake"
       ]
@@ -256,8 +228,7 @@
     {
       "position": 3.3818181818181796,
       "names": [
-        "Elevator Drive",
-        "Claw Stop"
+        "Elevator Drive"
       ]
     },
     {
@@ -276,12 +247,11 @@
       "position": 5.1818181818181825,
       "names": [
         "Elevator Drive",
-        "Claw Stop",
-        "Elevator Drive"
+        "Claw Stop"
       ]
     },
     {
-      "position": 5.672727272727271,
+      "position": 5.3090909090909095,
       "names": [
         "Elevator Cube Intake"
       ]
@@ -290,12 +260,6 @@
       "position": 6.490909090909076,
       "names": [
         "Claw Cube Intake"
-      ]
-    },
-    {
-      "position": 7.272727272727256,
-      "names": [
-        "Claw Stop"
       ]
     }
   ]

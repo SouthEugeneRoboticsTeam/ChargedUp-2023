@@ -306,7 +306,7 @@ object ConfigConstants {
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
     // Slow this down more
-    private val fastishAutoConstraints = PathConstraints(2.6, 2.3)
+    private val fastishAutoConstraints = PathConstraints(2.2, 2.0)
 
     private val pathsData = arrayOf(
         Pair("Cable Balance", autoConstraints),
