@@ -87,7 +87,6 @@ object PhysicalConstants {
         conePointsRed = conePointsRedMut
     }
 
-    // This is wrong
     const val substationX = fieldLength - 2.48
     val substationFarAngleAtDistance = Pair(PI / 4, 0.3)
     val substationCloseAngleAtDistance = Pair(PI / 2, 0.15)
@@ -97,6 +96,8 @@ object PhysicalConstants {
     val ledPurpleHSV = arrayOf(145, 255, 255)
 
     val ledYellowHSV = arrayOf(10, 255, 255)
+
+    const val cableDriveDistance = 1.0
 
     // This should be moved
     // Polar is annoying
@@ -172,7 +173,7 @@ object PhysicalConstants {
     }
 }
 
-// Move some of these to config constants
+// Move some of these to config constants (maybe)
 object TunedConstants {
     const val elevatorExtensionP = 39.3701
     const val elevatorExtensionI = 0.0
@@ -240,8 +241,8 @@ object TunedConstants {
     const val swerveSubstationAlignAngleI = 0.0
     const val swerveSubstationAlignAngleD = 0.0
 
-    // This should be split up
-    const val filterTaps = 20
+    const val standardFilterTaps = 20
+    const val overCableFilterTaps = 4
 
     const val balanceSpeed = 0.2
     const val balanceAngleSignificantRate = 0.15
@@ -249,6 +250,8 @@ object TunedConstants {
 
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
+
+    const val cableTipLimit = 0.1
 
     const val visionConePositionTolerance = 0.01
     const val visionConeAngleTolerance = 0.01
@@ -302,6 +305,7 @@ object ConfigConstants {
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
+    // Slow this down more
     private val fastishAutoConstraints = PathConstraints(2.6, 2.3)
 
     private val pathsData = arrayOf(

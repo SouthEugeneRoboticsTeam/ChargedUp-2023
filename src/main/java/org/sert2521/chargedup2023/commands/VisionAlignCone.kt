@@ -8,7 +8,6 @@ import org.sert2521.chargedup2023.Output
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
-import org.sert2521.chargedup2023.subsystems.LEDs
 import java.lang.Math.PI
 import kotlin.math.abs
 
@@ -36,13 +35,20 @@ class VisionAlignCone : JoystickCommand() {
     override fun execute() {
         val pose = Drivetrain.getVisionPose()
 
-        val conePoints = when (Input.getColor()) {
+        val color = Input.getColor()
+        val conePoints = when (color) {
             DriverStation.Alliance.Blue -> PhysicalConstants.conePointsBlue
             DriverStation.Alliance.Red -> PhysicalConstants.conePointsRed
             DriverStation.Alliance.Invalid -> null
         }
-        // Move to constants
-        val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider())
+        val sliderDirection = when (color) {
+            DriverStation.Alliance.Blue -> 1
+            DriverStation.Alliance.Red -> -1
+            DriverStation.Alliance.Invalid -> 0
+        }
+
+        // Move 0.12 to constants (or get rid of it)
+        val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider() * sliderDirection)
 
         // Moving the y on the stick will affect the rate of change of the x
         if (yTarget != null && (!positionPID.atSetpoint() || !anglePID.atSetpoint())) {

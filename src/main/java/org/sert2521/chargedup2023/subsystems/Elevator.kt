@@ -34,7 +34,7 @@ object Elevator : SubsystemBase() {
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     private var susness = 0.0
-    private val susnessFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+    private val susnessFilter = LinearFilter.movingAverage(TunedConstants.standardFilterTaps)
 
     private var prevTime = Timer.getFPGATimestamp()
     private var prevAngle = 0.0
