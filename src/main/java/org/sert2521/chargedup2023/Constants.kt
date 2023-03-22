@@ -31,7 +31,7 @@ object PhysicalConstants {
     const val elevatorExtensionBottom = 0.005745772912799999
 
     const val elevatorAngleTop = 1.19
-    const val elevatorExtensionMaxAngle = 1.05
+    const val elevatorExtensionMaxAngle = 1.16
     const val elevatorAngleBottom = 0.005
     const val elevatorAngleMotorBottom = -0.3
     const val elevatorExtensionMinAngle = 0.05
@@ -186,22 +186,22 @@ object TunedConstants {
 
     const val elevatorExtensionTolerance = 0.035
 
-    const val elevatorExtensionMaxAngleTarget = 1.0
+    const val elevatorExtensionMaxAngleTarget = 1.1
     const val elevatorExtensionMinAngleTarget = 0.1
 
     const val elevatorAngleP = 40.0
     const val elevatorAngleI = 0.0
     const val elevatorAngleD = 0.0
 
-    const val elevatorAngleG = 0.7
-    const val elevatorAngleGPerMeter = 0.7
+    const val elevatorAngleG = 0.5
+    const val elevatorAngleGPerMeter = 0.0
 
     const val elevatorAngleDownMaxV = 2.0
-    const val elevatorAngleDownMaxA = 0.6
-    const val elevatorAngleDownMaxAByAngle = 1.4
+    const val elevatorAngleDownMaxA = 0.8
+    const val elevatorAngleDownMaxAByAngle = 0.8
 
     const val elevatorAngleUpMaxV = 3.0
-    const val elevatorAngleUpMaxA = 6.0
+    const val elevatorAngleUpMaxA = 4.5
 
     const val elevatorAngleTolerance = 0.025
 
@@ -289,7 +289,7 @@ object ConfigConstants {
 
     const val joystickChangeSpeed = 0.4
 
-    const val armBrownOutVoltage = 8.0
+    const val preBrownOutVoltage = 8.25
 
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
@@ -299,31 +299,31 @@ object ConfigConstants {
         "Claw Cube Intake" to ClawIntake(-0.7),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
+        "Elevator Half" to SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
         "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.1), Balance()))
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
-    // Slow this down more
+    // Slow this down more (maybe)
     private val fastishAutoConstraints = PathConstraints(2.2, 2.0)
 
     private val pathsData = arrayOf(
-        Pair("Cable Balance", autoConstraints),
-        Pair("Cable 1.5 Balance", autoConstraints),
-        Pair("Cable 1", autoConstraints),
-        Pair("Cable 1 Balance", autoConstraints),
-        Pair("Center 1.5 Balance", autoConstraints),
-        Pair("Center 1 Balance", autoConstraints),
-        Pair("Forward", autoConstraints),
-        Pair("No Cable Balance", autoConstraints),
-        Pair("No Cable 1.5 Balance", autoConstraints),
-        Pair("No Cable 1", autoConstraints),
-        Pair("No Cable 2.5 Cube", fastishAutoConstraints),
-        Pair("No Cable 2.5 Cone", fastishAutoConstraints),
-        Pair("No Cable 2", autoConstraints),
-        Pair("No Cable 2 Balance Far", fastAutoConstraints),
-        Pair("No Cable 2 Balance Near", fastAutoConstraints))
+        Pair("Cable Balance", autoConstraints), //Yes
+        Pair("Cable 1.5 Balance", autoConstraints), //Yes
+        //Pair("Cable 1.5", autoConstraints),
+        Pair("Cable 1", autoConstraints), //Yes
+        Pair("Cable 2", autoConstraints), //Needs Vision
+        Pair("Forward", autoConstraints), //Yes
+        Pair("No Cable Balance", autoConstraints), //Yes
+        Pair("No Cable 1.5 Balance", autoConstraints), //Yes
+        Pair("No Cable 1", autoConstraints), //Yes
+        Pair("No Cable 2.5 Cube", fastishAutoConstraints), //Parts Workish
+        Pair("No Cable 2.5 Cone", fastishAutoConstraints), //Parts Workish
+        Pair("No Cable 2", autoConstraints), //Yes
+        Pair("No Cable 2 Balance Far", fastAutoConstraints), //No
+        Pair("No Cable 2 Balance Near", fastAutoConstraints)) //Kinda
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {

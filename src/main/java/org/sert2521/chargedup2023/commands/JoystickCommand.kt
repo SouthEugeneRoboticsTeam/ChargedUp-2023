@@ -1,6 +1,7 @@
 package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
@@ -63,6 +64,10 @@ abstract class JoystickCommand : CommandBase() {
         }
         rot *= (ConfigConstants.rotSpeed - (ConfigConstants.rotSpeedup * fast))
 
-        return Translation3d(x, y, rot)
+        return if (RobotController.getBatteryVoltage() < ConfigConstants.preBrownOutVoltage) {
+            Translation3d(x / 4.0, y / 4.0, rot / 4.0)
+        } else {
+            Translation3d(x, y, rot)
+        }
     }
 }

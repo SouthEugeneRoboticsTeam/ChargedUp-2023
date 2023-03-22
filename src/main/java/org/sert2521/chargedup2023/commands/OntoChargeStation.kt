@@ -18,7 +18,7 @@ class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() 
     override fun initialize() {
         tiltFilter.reset()
 
-        LedSolid(10, 255, 255).schedule()
+        //LedSolid(10, 255, 255).schedule()
     }
 
     override fun execute() {

@@ -77,14 +77,14 @@ object Input {
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-            ClawIntake(-0.7).withTimeout(0.4),
+            ClawIntake(0.8).withTimeout(0.4),
             InstantCommand({ }, Claw),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             OntoChargeStation(Translation2d(1.0, 0.0)),
             DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
             OntoChargeStation(Translation2d(-1.0, 0.0)),
             DriveUpChargeStation().withTimeout(1.3),
-            Balance()) }
+            Balance()) } //Fix
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 

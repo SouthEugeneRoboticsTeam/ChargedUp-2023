@@ -4,7 +4,6 @@ package org.sert2521.chargedup2023.commands
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.PhysicalConstants
-import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.TunedConstants.ledsRainbowA
 import org.sert2521.chargedup2023.TunedConstants.ledsRainbowB
 import org.sert2521.chargedup2023.TunedConstants.ledsRainbowC
@@ -16,7 +15,6 @@ import kotlin.math.min
 import kotlin.math.pow
 
 class LedIdle : CommandBase() {
-
     private var lastPose = Drivetrain.getPose()
 
     private var driveSpeed = 0.0

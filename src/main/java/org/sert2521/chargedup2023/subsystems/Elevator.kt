@@ -94,7 +94,7 @@ object Elevator : SubsystemBase() {
             angleMotor.setVoltage(ConfigConstants.angleResetVoltage)
         }
 
-        brownedOut = RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage
+        brownedOut = RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage
 
         if (brownedOut || !safe || (extendMotorOne.appliedOutput > 0 && atTopExtension) || (extendMotorOne.appliedOutput < 0 && atBottomExtension)) {
             extendMotorOne.stopMotor()
