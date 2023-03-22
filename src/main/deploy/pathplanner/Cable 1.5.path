@@ -86,42 +86,14 @@
         "x": 6.152272749455381,
         "y": 1.2751652020616617
       },
-      "nextControl": {
-        "x": 6.152272749455381,
-        "y": 1.2751652020616617
-      },
+      "nextControl": null,
       "holonomicAngle": 0,
-      "isReversal": true,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 5.743595487190975,
-        "y": 2.471292942585885
-      },
-      "prevControl": {
-        "x": 6.5390312157106285,
-        "y": 2.2105438298861446
-      },
-      "nextControl": null,
-      "holonomicAngle": 180.0,
-      "isReversal": false,
-      "velOverride": 1.0,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "Drive Back Onto Charge Station",
-          "Elevator Drive"
-        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -142,13 +114,6 @@
       "position": 2.5090909090909084,
       "names": [
         "Claw Cube Intake"
-      ]
-    },
-    {
-      "position": 3.2462047230113646,
-      "names": [
-        "Elevator Drive",
-        "Claw Stop"
       ]
     },
     {

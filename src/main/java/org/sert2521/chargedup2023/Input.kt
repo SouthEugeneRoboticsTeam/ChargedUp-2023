@@ -84,7 +84,7 @@ object Input {
             DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
             OntoChargeStation(Translation2d(-1.0, 0.0)),
             DriveUpChargeStation().withTimeout(1.3),
-            Balance()) } //Fix
+            Balance()) } // Fix
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 

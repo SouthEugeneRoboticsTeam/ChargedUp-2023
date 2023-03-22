@@ -3,6 +3,8 @@ package org.sert2521.chargedup2023.commands
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj.DriverStation
+import org.sert2521.chargedup2023.Input
 import org.sert2521.chargedup2023.Output
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
@@ -35,12 +37,19 @@ class VisionAlignSubstation : JoystickCommand() {
     override fun execute() {
         val pose = Drivetrain.getVisionPose()
 
+        // Maybe move to constants
+        val angleOffset = when (Input.getColor()) {
+            DriverStation.Alliance.Blue -> 0.0
+            DriverStation.Alliance.Red -> PI
+            DriverStation.Alliance.Invalid -> 0.0
+        }
+
         // Moving the x on the stick will affect the rate of change of the y
         if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
             val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
             val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
 
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, PhysicalConstants.substationX), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget), pose.rotation))
+            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, PhysicalConstants.substationX), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset), pose.rotation))
             Output.visionHappy = false
         } else {
             // To update stuff
@@ -48,7 +57,7 @@ class VisionAlignSubstation : JoystickCommand() {
             val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
 
             positionPID.calculate(pose.y, PhysicalConstants.substationX)
-            anglePID.calculate(pose.rotation.radians, angleTarget)
+            anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset)
 
             Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, readJoystick().y, 0.0, pose.rotation))
             Output.visionHappy = true

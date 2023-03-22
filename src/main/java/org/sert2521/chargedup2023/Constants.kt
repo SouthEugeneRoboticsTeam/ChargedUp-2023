@@ -310,20 +310,20 @@ object ConfigConstants {
     private val fastishAutoConstraints = PathConstraints(2.2, 2.0)
 
     private val pathsData = arrayOf(
-        Pair("Cable Balance", autoConstraints), //Yes
-        Pair("Cable 1.5 Balance", autoConstraints), //Yes
-        //Pair("Cable 1.5", autoConstraints),
-        Pair("Cable 1", autoConstraints), //Yes
-        Pair("Cable 2", autoConstraints), //Needs Vision
-        Pair("Forward", autoConstraints), //Yes
-        Pair("No Cable Balance", autoConstraints), //Yes
-        Pair("No Cable 1.5 Balance", autoConstraints), //Yes
-        Pair("No Cable 1", autoConstraints), //Yes
-        Pair("No Cable 2.5 Cube", fastishAutoConstraints), //Parts Workish
-        Pair("No Cable 2.5 Cone", fastishAutoConstraints), //Parts Workish
-        Pair("No Cable 2", autoConstraints), //Yes
-        Pair("No Cable 2 Balance Far", fastAutoConstraints), //No
-        Pair("No Cable 2 Balance Near", fastAutoConstraints)) //Kinda
+        Pair("Cable Balance", autoConstraints), // Yes
+        Pair("Cable 1.5 Balance", autoConstraints), // Yes
+        Pair("Cable 1.5", autoConstraints), // Test
+        Pair("Cable 1", autoConstraints), // Yes
+        Pair("Cable 2", autoConstraints), // Test
+        Pair("Forward", autoConstraints), // Yes
+        Pair("No Cable Balance", autoConstraints), // Yes
+        Pair("No Cable 1.5 Balance", autoConstraints), // Yes
+        Pair("No Cable 1", autoConstraints), // Yes
+        Pair("No Cable 2.5 Cube", fastishAutoConstraints), // Parts Workish
+        Pair("No Cable 2.5 Cone", fastishAutoConstraints), // Fix And Parts Will Workish
+        Pair("No Cable 2", autoConstraints), // Yes
+        Pair("No Cable 2 Balance Far", fastAutoConstraints), // No
+        Pair("No Cable 2 Balance Near", fastAutoConstraints)) // Kinda
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {
