@@ -9,7 +9,7 @@ import org.sert2521.chargedup2023.subsystems.Drivetrain
 import kotlin.math.abs
 
 class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() {
-    private val tiltFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+    private val tiltFilter = LinearFilter.movingAverage(TunedConstants.standardFilterTaps)
 
     init {
         addRequirements(Drivetrain)
@@ -18,7 +18,7 @@ class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() 
     override fun initialize() {
         tiltFilter.reset()
 
-        LedSolid(10, 255, 255).schedule()
+        //LedSolid(10, 255, 255).schedule()
     }
 
     override fun execute() {

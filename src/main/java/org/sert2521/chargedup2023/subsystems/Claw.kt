@@ -22,7 +22,7 @@ object Claw : SubsystemBase() {
         }
 
         // Put in constants
-        if (RobotController.getBatteryVoltage() <= ConfigConstants.armBrownOutVoltage) {
+        if (RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage) {
             motor.setSmartCurrentLimit(20)
         } else {
             motor.setSmartCurrentLimit(45)

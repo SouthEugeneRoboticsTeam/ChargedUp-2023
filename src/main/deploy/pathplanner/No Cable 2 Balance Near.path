@@ -66,7 +66,7 @@
       },
       "holonomicAngle": 90.0,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 1.9,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -78,16 +78,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.668301336602674,
-        "y": 4.789569579139159
+        "x": 6.720397440794882,
+        "y": 4.8025936051872105
       },
       "prevControl": {
-        "x": 5.899883799767601,
-        "y": 4.750497500995003
+        "x": 5.951979903959808,
+        "y": 4.763521527043054
       },
       "nextControl": {
-        "x": 5.899883799767601,
-        "y": 4.750497500995003
+        "x": 5.951979903959808,
+        "y": 4.763521527043054
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -114,9 +114,9 @@
         "x": 2.943429886859774,
         "y": 5.024002048004097
       },
-      "holonomicAngle": 117.80145877993415,
+      "holonomicAngle": 130.6012946450045,
       "isReversal": false,
-      "velOverride": null,
+      "velOverride": 1.6,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -131,16 +131,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9536039072078144,
-        "y": 4.620257240514482
+        "x": 2.018724037448075,
+        "y": 4.437920875841752
       },
       "prevControl": {
-        "x": 2.3703727407454847,
-        "y": 4.711425422850847
+        "x": 2.6829493658987325,
+        "y": 4.24256048512097
       },
       "nextControl": {
-        "x": 2.3703727407454847,
-        "y": 4.711425422850847
+        "x": 2.6829493658987325,
+        "y": 4.24256048512097
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -159,17 +159,17 @@
     },
     {
       "anchorPoint": {
-        "x": 2.4615409230818464,
-        "y": 3.435070870141741
+        "x": 2.4745649491298987,
+        "y": 3.109470218940438
       },
       "prevControl": {
-        "x": 1.9666279332558665,
-        "y": 3.5783351566703137
+        "x": 1.9796519593039188,
+        "y": 3.252734505469011
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
       "isReversal": false,
-      "velOverride": 1.0,
+      "velOverride": 1.5,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -187,7 +187,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.7636363636363636,
+      "position": 0.10909090909090909,
       "names": [
         "Elevator Cube Intake"
       ]
@@ -199,10 +199,9 @@
       ]
     },
     {
-      "position": 3.3818181818181796,
+      "position": 3.05,
       "names": [
-        "Elevator Drive",
-        "Claw Stop"
+        "Elevator Half"
       ]
     },
     {
@@ -212,7 +211,7 @@
       ]
     },
     {
-      "position": 3.8727272727272704,
+      "position": 3.6545454545454548,
       "names": [
         "Elevator Cube High"
       ]
@@ -221,6 +220,12 @@
       "position": 5.1818181818181825,
       "names": [
         "Elevator Drive",
+        "Claw Stop"
+      ]
+    },
+    {
+      "position": 3.4363636363636374,
+      "names": [
         "Claw Stop"
       ]
     }

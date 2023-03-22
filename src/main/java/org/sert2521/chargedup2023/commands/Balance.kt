@@ -6,13 +6,12 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
-import org.sert2521.chargedup2023.subsystems.LEDs
 import kotlin.math.abs
 
 class Balance : CommandBase() {
     private var prevTilt = 0.0
     private var prevTime = 0.0
-    private var tiltRateFilter = LinearFilter.movingAverage(TunedConstants.filterTaps)
+    private var tiltRateFilter = LinearFilter.movingAverage(TunedConstants.standardFilterTaps)
 
     init {
         addRequirements(Drivetrain)
@@ -24,7 +23,7 @@ class Balance : CommandBase() {
 
         tiltRateFilter.reset()
 
-        LedSolid(10, 255, 255).schedule()
+        //LedSolid(10, 255, 255).schedule()
     }
 
     override fun execute() {
@@ -52,6 +51,6 @@ class Balance : CommandBase() {
     override fun end(interrupted: Boolean) {
         Drivetrain.stop()
 
-        LedFlash(60, 255, 255, 1.6).schedule()
+        //LedFlash(60, 255, 255, 1.6).schedule()
     }
 }
