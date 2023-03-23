@@ -2,7 +2,6 @@ package org.sert2521.chargedup2023
 
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
-import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import com.pathplanner.lib.auto.PIDConstants
 import com.pathplanner.lib.auto.SwerveAutoBuilder
@@ -13,8 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.commands.ClawIntake
@@ -32,7 +30,7 @@ object Input {
     private val slowButton = JoystickButton(driverController, 5)
     private val coneAlignButton = JoystickButton(driverController, 6)
 
-    private val intakeSetOne = JoystickButton(gunnerController, 15)
+    //private val intakeSetOne = JoystickButton(gunnerController, 15)
     private val intakeSetTwo = JoystickButton(gunnerController, 13)
     private val outtake = JoystickButton(gunnerController, 14)
 
@@ -75,16 +73,16 @@ object Input {
         // Fix this nonsense
         autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true),
-            ClawIntake(0.8).withTimeout(0.4),
+            ConfigConstants.eventMap["Elevator Drive"],
+            ConfigConstants.eventMap["Elevator Cone High"],
+            ClawIntake(0.7).withTimeout(0.4),
             InstantCommand({ }, Claw),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-            OntoChargeStation(Translation2d(1.0, 0.0)),
-            DriveInDirection(Translation2d(1.0, 0.0)).withTimeout(3.3),
-            OntoChargeStation(Translation2d(-1.0, 0.0)),
-            DriveUpChargeStation().withTimeout(1.3),
-            Balance()) } // Fix
+            OntoChargeStation(Translation2d(1.5, 0.0)),
+            DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7),
+            WaitCommand(0.8),
+            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.25),
+            Balance()) }
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
@@ -99,7 +97,7 @@ object Input {
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
 
         //Intaking a cone is the same as outtaking a cube
-        intakeSetOne.whileTrue(ClawIntake(1.0))
+        //intakeSetOne.whileTrue(ClawIntake(1.0))
 
         intakeSetTwo.whileTrue(ClawIntake(1.0))
 

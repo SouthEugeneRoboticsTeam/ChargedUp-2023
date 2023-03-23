@@ -76,7 +76,7 @@ object PhysicalConstants {
 
     const val coneAngle = -PI
     // These may be wrong
-    val conePointsBlue = listOf(1.61, 2.20, 3.33, 3.89, 5.01)
+    val conePointsBlue = listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
     val conePointsRed: List<Double>
     init {
         val conePointsRedMut = mutableListOf<Double>()
@@ -290,7 +290,9 @@ object ConfigConstants {
     const val joystickChangeSpeed = 0.4
 
     const val preBrownOutVoltage = 8.25
+    const val preLEDBrownOutVoltage = 11.0
 
+    // Drive needs to be lower for consistency
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
         "Claw Outtake" to ClawIntake(1.0).withTimeout(0.4),
@@ -303,6 +305,7 @@ object ConfigConstants {
         "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
         "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
+        //"Align Vision Cube" to VisionAlignAuto(4.46, 2.0).withTimeout(2.0))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)
@@ -312,18 +315,18 @@ object ConfigConstants {
     private val pathsData = arrayOf(
         Pair("Cable Balance", autoConstraints), // Yes
         Pair("Cable 1.5 Balance", autoConstraints), // Yes
-        Pair("Cable 1.5", autoConstraints), // Test
+        Pair("Cable 1.5", autoConstraints), // Yes
         Pair("Cable 1", autoConstraints), // Yes
-        Pair("Cable 2", autoConstraints), // Test
+        Pair("Cable 2", autoConstraints), // Mostly
         Pair("Forward", autoConstraints), // Yes
         Pair("No Cable Balance", autoConstraints), // Yes
         Pair("No Cable 1.5 Balance", autoConstraints), // Yes
         Pair("No Cable 1", autoConstraints), // Yes
-        Pair("No Cable 2.5 Cube", fastishAutoConstraints), // Parts Workish
-        Pair("No Cable 2.5 Cone", fastishAutoConstraints), // Fix And Parts Will Workish
+        Pair("No Cable 2.5 Cube", fastishAutoConstraints), // Mostly
+        Pair("No Cable 2.5 Cone", fastishAutoConstraints), // Mostly
         Pair("No Cable 2", autoConstraints), // Yes
-        Pair("No Cable 2 Balance Far", fastAutoConstraints), // No
-        Pair("No Cable 2 Balance Near", fastAutoConstraints)) // Kinda
+        //Pair("No Cable 2 Balance Far", fastAutoConstraints), // No
+        Pair("No Cable 2 Balance Near", fastAutoConstraints)) // Mostly
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {

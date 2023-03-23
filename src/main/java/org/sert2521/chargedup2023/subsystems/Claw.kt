@@ -10,6 +10,7 @@ import org.sert2521.chargedup2023.ElectronicIDs
 object Claw : SubsystemBase() {
     private val motor = CANSparkMax(ElectronicIDs.clawMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
     private var currentSpeed = 0.0
+    private var prev = 0
 
     init {
         motor.idleMode = CANSparkMax.IdleMode.kBrake
@@ -17,17 +18,24 @@ object Claw : SubsystemBase() {
 
     override fun periodic() {
         if (currentSpeed == 0.0){
-            motor.setSmartCurrentLimit(20)
+            if (prev != 20) {
+                motor.setSmartCurrentLimit(20)
+            }
             motor.set(-0.1)
-        }
-
-        // Put in constants
-        if (RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage) {
-            motor.setSmartCurrentLimit(20)
         } else {
-            motor.setSmartCurrentLimit(45)
-        }
 
+            // Put in constants
+            if (RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage) {
+                if (prev != 20) {
+                    motor.setSmartCurrentLimit(20)
+                }
+            } else {
+                if (prev != 45) {
+                    motor.setSmartCurrentLimit(45)
+                }
+            }
+
+        }
     }
 
     fun setMotor(speed:Double){

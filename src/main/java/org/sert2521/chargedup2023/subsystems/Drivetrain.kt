@@ -243,7 +243,7 @@ object Drivetrain : SubsystemBase() {
                 if (color == DriverStation.Alliance.Blue) {
                     poseEstimator.addVisionMeasurement(Pose2d(currVisionPose.y, currVisionPose.x, -currVisionPose.rotation), currVisionPoseData.timestampSeconds)
                 } else if (color == DriverStation.Alliance.Red) {
-                    poseEstimator.addVisionMeasurement(Pose2d(PhysicalConstants.fieldWidth - currVisionPose.y, currVisionPose.x, -currVisionPose.rotation.unaryMinus()), currVisionPoseData.timestampSeconds)
+                    poseEstimator.addVisionMeasurement(Pose2d(PhysicalConstants.fieldWidth - currVisionPose.y, PhysicalConstants.fieldLength - currVisionPose.x, Rotation2d(PI) - currVisionPose.rotation), currVisionPoseData.timestampSeconds)
                 }
             }
         }
@@ -280,7 +280,7 @@ object Drivetrain : SubsystemBase() {
         odometry.resetPosition(-imu.rotation2d, positionsArray, pose)
     }
 
-    fun setNewVisionPose(newPose: Pose2d) {
+    fun setNewVisionPose(newPose: Pose2d, useColor: Boolean = true) {
         visionPose = Pose2d(newPose.y, newPose.x, -newPose.rotation)
 
         val positions = mutableListOf<SwerveModulePosition>()

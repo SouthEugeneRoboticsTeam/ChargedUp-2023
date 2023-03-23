@@ -36,7 +36,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
     // Clamping the target is kind of just in case
     override fun execute() {
-        val angleTarget = if (angleSafe || extensionPID.atSetpoint()) {
+        val angleTarget = if (angleSafe || extensionPID.atGoal()) {
             angle
         } else if (angleTooLow) {
             TunedConstants.elevatorExtensionMinAngleTarget

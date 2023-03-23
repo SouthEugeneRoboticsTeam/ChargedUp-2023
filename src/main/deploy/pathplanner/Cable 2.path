@@ -19,8 +19,7 @@
         "names": [
           "Elevator Drive",
           "Elevator Cone High",
-          "Claw Outtake",
-          "Elevator Drive"
+          "Claw Outtake"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -79,16 +78,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.746445492890985,
-        "y": 1.19493838987678
+        "x": 6.723338793378548,
+        "y": 1.1201697153045294
       },
       "prevControl": {
-        "x": 6.152272749455381,
-        "y": 1.2621411760136096
+        "x": 6.129166049942944,
+        "y": 1.187372501441359
       },
       "nextControl": {
-        "x": 6.152272749455381,
-        "y": 1.2621411760136096
+        "x": 6.129166049942944,
+        "y": 1.187372501441359
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -104,20 +103,20 @@
     },
     {
       "anchorPoint": {
-        "x": 4.506313012626025,
-        "y": 1.1298182596365194
+        "x": 5.704523409046818,
+        "y": 1.1428422856845715
       },
       "prevControl": {
-        "x": 5.381395649726677,
-        "y": 1.1298182596365194
+        "x": 6.0431480862961715,
+        "y": 1.142842285684571
       },
       "nextControl": {
-        "x": 3.631230375525373,
-        "y": 1.1298182596365194
+        "x": 5.365898731797462,
+        "y": 1.142842285684571
       },
       "holonomicAngle": 90.0,
       "isReversal": false,
-      "velOverride": 1.0,
+      "velOverride": 0.5,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
@@ -131,16 +130,41 @@
     },
     {
       "anchorPoint": {
-        "x": 3.3584838395027155,
-        "y": 1.13
+        "x": 4.479063109151719,
+        "y": 0.96
       },
       "prevControl": {
-        "x": 4.221388458896402,
-        "y": 1.13
+        "x": 4.943063929624035,
+        "y": 0.96
       },
       "nextControl": {
-        "x": 2.59581123783746,
-        "y": 1.13
+        "x": 3.669894719772036,
+        "y": 0.96
+      },
+      "holonomicAngle": 90.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.358996869019238,
+        "y": 0.96
+      },
+      "prevControl": {
+        "x": 4.221901488412925,
+        "y": 0.96
+      },
+      "nextControl": {
+        "x": 2.5963242673539826,
+        "y": 0.96
       },
       "holonomicAngle": 90.0,
       "isReversal": false,
@@ -156,12 +180,12 @@
     },
     {
       "anchorPoint": {
-        "x": 2.044772089544179,
-        "y": 1.5205390410780824
+        "x": 1.8097854209323705,
+        "y": 1.51
       },
       "prevControl": {
-        "x": 2.482313408094507,
-        "y": 1.5205390410780824
+        "x": 2.247326739482699,
+        "y": 1.51
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -171,6 +195,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Elevator Cube High",
           "Claw Outtake"
         ],
         "executionBehavior": "sequential",
@@ -184,7 +209,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 1.9636363636363636,
+      "position": 1.56,
       "names": [
         "Elevator Cube Intake"
       ]
@@ -202,27 +227,15 @@
       ]
     },
     {
-      "position": 3.939790482954545,
+      "position": 0.05,
+      "names": [
+        "Elevator Half"
+      ]
+    },
+    {
+      "position": 3.15,
       "names": [
         "Elevator Drive"
-      ]
-    },
-    {
-      "position": 0.38181818181819027,
-      "names": [
-        "Elevator Half"
-      ]
-    },
-    {
-      "position": 3.4363636363636374,
-      "names": [
-        "Elevator Half"
-      ]
-    },
-    {
-      "position": 5.509090909090908,
-      "names": [
-        "Elevator Cube High"
       ]
     }
   ]

@@ -2,7 +2,9 @@ package org.sert2521.chargedup2023.subsystems
 
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.ElectronicIDs
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.commands.LedIdle
@@ -41,6 +43,10 @@ object LEDs : SubsystemBase() {
 
 
     fun update() {
+        if (RobotController.getBatteryVoltage() <= ConfigConstants.preLEDBrownOutVoltage) {
+            setAllLEDRGB(0, 0, 0)
+        }
+
         ledStrip.setData(ledBuffer)
     }
 

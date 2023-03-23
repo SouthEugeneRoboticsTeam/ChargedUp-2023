@@ -8,6 +8,7 @@ import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import kotlin.math.abs
 
+// Only Front back work
 class OntoChargeStation(private val driveVector: Translation2d) : CommandBase() {
     private val tiltFilter = LinearFilter.movingAverage(TunedConstants.standardFilterTaps)
 

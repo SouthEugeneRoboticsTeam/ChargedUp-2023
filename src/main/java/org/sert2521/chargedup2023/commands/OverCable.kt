@@ -9,7 +9,7 @@ import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 
-// Should be run with a timeout
+// Should be run with a timeout and is probably broken
 class OverCable(private val driveVector: Translation2d) : CommandBase() {
     private val tiltFilter = LinearFilter.movingAverage(TunedConstants.overCableFilterTaps)
     private var startCablePose = Pose2d()

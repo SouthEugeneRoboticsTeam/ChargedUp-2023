@@ -20,7 +20,7 @@
           "Elevator Drive",
           "Elevator Cone High",
           "Claw Outtake",
-          "Elevator Drive"
+          "Elevator Half"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -133,7 +133,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 2.102286044034092,
+      "position": 1.5636363636363635,
       "names": [
         "Elevator Cube Intake"
       ]

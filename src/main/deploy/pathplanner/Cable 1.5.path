@@ -20,7 +20,7 @@
           "Elevator Drive",
           "Elevator Cone High",
           "Claw Outtake",
-          "Elevator Drive"
+          "Elevator Half"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -93,8 +93,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "Elevator Drive"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -105,7 +107,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 2.102286044034092,
+      "position": 1.56,
       "names": [
         "Elevator Cube Intake"
       ]
