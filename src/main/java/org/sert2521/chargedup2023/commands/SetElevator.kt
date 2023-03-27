@@ -7,10 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 class SetElevator(private val extension: Double, private val angle: Double, private val ends: Boolean) : CommandBase() {
     private val extensionPID = ProfiledPIDController(TunedConstants.elevatorExtensionP, TunedConstants.elevatorExtensionI, TunedConstants.elevatorExtensionD, TrapezoidProfile.Constraints(TunedConstants.elevatorExtensionMaxV, TunedConstants.elevatorExtensionMaxA))
@@ -21,16 +18,14 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
     private val angleTooHigh = angle > TunedConstants.elevatorExtensionMaxAngleTarget
     private val angleSafe = !angleTooLow && !angleTooHigh
 
+    private var atSetpoint = false
+
     init {
         addRequirements(Elevator)
-
-        anglePID.setTolerance(TunedConstants.elevatorAngleTolerance)
-        extensionPID.setTolerance(TunedConstants.elevatorExtensionTolerance)
     }
 
     override fun initialize() {
         anglePID.reset(Elevator.angleMeasure())
-
         extensionPID.reset(Elevator.extensionMeasure())
     }
 
@@ -72,10 +67,14 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val extensionPIDResult = extensionPID.calculate(extensionMeasure, safeExtensionTarget)
         val extensionG = sin(safeAngleTarget) * (TunedConstants.elevatorExtensionG)
         Elevator.setExtend(extensionPIDResult + extensionG)
+
+        if (ends) {
+            atSetpoint = abs(angle - angleMeasure) <= TunedConstants.elevatorAngleTolerance || abs(extension - extensionMeasure) <= TunedConstants.elevatorExtensionTolerance
+        }
     }
 
     override fun isFinished(): Boolean {
-        return ends && anglePID.atGoal() && extensionPID.atGoal()
+        return atSetpoint
     }
 
     override fun end(interrupted: Boolean) {

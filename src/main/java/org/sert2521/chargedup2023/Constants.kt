@@ -17,6 +17,8 @@ import org.sert2521.chargedup2023.commands.*
 import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.*
 
+// This file is too big, it should probably be broken up
+
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
 object PhysicalConstants {
@@ -55,6 +57,8 @@ object PhysicalConstants {
     const val elevatorAngleCubeIntake = 0.02
     const val elevatorAngleConeUpIntake = 0.13
     const val elevatorAngleSingleSubstation = 0.685
+
+    const val clawVelocityConversion = 1.0 / 60.0
 
     const val halfSideLength = 0.286378246381
 
@@ -268,6 +272,12 @@ object TunedConstants {
     const val ledsRainbowC = 0.7
     const val ledsRainbowD = 3.8
     const val ledsRainbowE = 1.5
+
+    const val clawIntakeTryPower = 0.35
+    const val clawOuttakeTryPower = 0.35
+    const val clawIntakeStoppedSpeed = 0.25
+
+    const val clawDebounce = 0.25
 }
 
 object ConfigConstants {
@@ -303,8 +313,8 @@ object ConfigConstants {
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Elevator Half" to SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
         "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()))
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.6), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.6), Balance()))
         //"Align Vision Cube" to VisionAlignAuto(4.46, 2.0).withTimeout(2.0))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)

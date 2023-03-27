@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.sert2521.chargedup2023.commands.RumbleBlip
+import org.sert2521.chargedup2023.subsystems.Claw
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
 import java.io.File
@@ -51,10 +54,15 @@ object Output {
 
         bools.add(Pair("Vision Happy") { visionHappy })
 
+        bools.add(Pair("Claw Full") { Claw.clawFull })
+
         SmartDashboard.putData("Output/Field", field)
         SmartDashboard.putData("Output/VisionField", visionField)
 
         update()
+
+        // Constants?
+        Trigger { Claw.clawFull }.onTrue(RumbleBlip(0.7, 0.4))
     }
 
     fun update() {

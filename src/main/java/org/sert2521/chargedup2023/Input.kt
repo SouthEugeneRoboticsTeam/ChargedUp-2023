@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.*
@@ -162,5 +163,10 @@ object Input {
 
     fun getColor(): Alliance {
         return DriverStation.getAlliance()
+    }
+
+    // This kinda violates the spirit of Input and Output
+    fun rumble(amount: Double) {
+        driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount)
     }
 }
