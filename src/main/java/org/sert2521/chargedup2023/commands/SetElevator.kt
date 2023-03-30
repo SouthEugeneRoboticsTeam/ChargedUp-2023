@@ -30,9 +30,15 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
     }
 
     // Clamping the target is kind of just in case
-    // Could have it pull up the arm if angleMeasure varies significantly from angleWrapMeasure
     override fun execute() {
-        val angleTarget = if (angleSafe || extensionPID.atGoal()) {
+        val extensionMeasure = Elevator.extensionMeasure()
+        val angleMeasure = Elevator.angleMeasure()
+        val angleWrapMeasure = Elevator.angleWrapMeasure()
+
+        val shouldPullUp = angleMeasure - angleWrapMeasure > TunedConstants.elevatorPullUpAngleDifference
+        val angleTarget = if (shouldPullUp) {
+            angleMeasure
+        } else if (angleSafe || extensionPID.atGoal()) {
             angle
         } else if (angleTooLow) {
             TunedConstants.elevatorExtensionMinAngleTarget
@@ -40,19 +46,19 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             TunedConstants.elevatorExtensionMaxAngleTarget
         }
 
-        val extensionMeasure = Elevator.extensionMeasure()
-        val angleMeasure = Elevator.angleMeasure()
-        val angleWrapMeasure = Elevator.angleWrapMeasure()
-
-        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
+        val safeAngleTarget = clamp(angleTarget, PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         if (safeAngleTarget < angleMeasure) {
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxA + TunedConstants.elevatorAngleDownMaxAByAngle * cos(angleMeasure)))
         } else {
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleUpMaxV, TunedConstants.elevatorAngleUpMaxA))
         }
 
-        val t = clamp((abs(angleMeasure - safeAngleTarget) - TunedConstants.elevatorTrustWrapDistance) / (TunedConstants.elevatorTrustTrueAngleDistance - TunedConstants.elevatorTrustWrapDistance), 0.0, 1.0)
-        val combinedAngleMeasure = angleMeasure * t + angleWrapMeasure * (1.0 - t)
+        val combinedAngleMeasure = if (shouldPullUp) {
+            angleWrapMeasure
+        } else {
+            val t = clamp((abs(angleMeasure - safeAngleTarget) - TunedConstants.elevatorTrustWrapDistance) / (TunedConstants.elevatorTrustTrueAngleDistance - TunedConstants.elevatorTrustWrapDistance), 0.0, 1.0)
+            angleMeasure * t + angleWrapMeasure * (1.0 - t)
+        }
 
         val anglePIDResult = anglePID.calculate(combinedAngleMeasure, safeAngleTarget)
         val angleG = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
@@ -64,7 +70,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             extensionMeasure
         }
 
-        val safeExtensionTarget = clamp(min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure)), PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
+        val safeExtensionTarget = clamp(extensionTarget, PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
         val extensionPIDResult = extensionPID.calculate(extensionMeasure, safeExtensionTarget)
         val extensionG = sin(safeAngleTarget) * (TunedConstants.elevatorExtensionG)
         Elevator.setExtend(extensionPIDResult + extensionG)

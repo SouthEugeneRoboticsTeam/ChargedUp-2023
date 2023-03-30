@@ -109,10 +109,10 @@ object PhysicalConstants {
 
     const val cableDriveDistance = 1.0
 
-    // This should be removed if there is extra time
     // Polar is annoying
     // This takes points and makes them into a bunch of lines in polar coords
     // Then it uses them as boundaries
+    // I would add comments if I remembered how this works
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
@@ -217,6 +217,8 @@ object TunedConstants {
 
     const val elevatorTrustTrueAngleDistance = 0.03
     const val elevatorTrustWrapDistance = 0.07
+
+    const val elevatorPullUpAngleDifference = 0.1
 
     // Sysid these all
     const val swervePowerS = 0.3
