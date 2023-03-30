@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
-import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.sert2521.chargedup2023.commands.RumbleBlip
 import org.sert2521.chargedup2023.subsystems.Claw
 import org.sert2521.chargedup2023.subsystems.Drivetrain
@@ -18,6 +17,7 @@ object Output {
     private val visionField = Field2d()
 
     var visionHappy = false
+    private var lastClawFull = false
 
     init {
         val storageDevices = File("/media").listFiles()
@@ -31,7 +31,8 @@ object Output {
         values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
         values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
-        // Maybe make this more encapsulationy
+        // Maybe make these two more encapsulationy
+        values.add(Pair("Elevator Wrap Angle") { Elevator.angleMotorEncoder.position })
         values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
 
         values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
@@ -60,12 +61,15 @@ object Output {
         SmartDashboard.putData("Output/VisionField", visionField)
 
         update()
-
-        // Constants?
-        Trigger { Claw.clawFull }.onTrue(RumbleBlip(0.7, 0.4))
     }
 
     fun update() {
+        if (Claw.clawFull && !lastClawFull) {
+            // Constants?
+            RumbleBlip(1.0, 0.7).schedule()
+        }
+        lastClawFull = Claw.clawFull
+
         field.robotPose = Drivetrain.getPose()
         visionField.robotPose = Drivetrain.getVisionPose()
 

@@ -284,9 +284,9 @@ object TunedConstants {
 
     const val clawIntakeTryPower = 0.35
     const val clawOuttakeTryPower = 0.35
-    const val clawIntakeStoppedSpeed = 0.25
+    const val clawIntakeStoppedSpeed = 0.75
 
-    const val clawDebounce = 0.25
+    const val clawDebounce = 0.1
 }
 
 object ConfigConstants {
@@ -324,8 +324,8 @@ object ConfigConstants {
         "Elevator Half" to SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
         "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
         "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.6), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.6), Balance()))
-        //"Align Vision Cube" to VisionAlignAuto(4.46, 2.0).withTimeout(2.0))
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.6), Balance()),
+        "Align Vision Cube" to VisionAlignAuto(8.02 - 6.79, 2.0).withTimeout(2.0))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
     private val fastAutoConstraints = PathConstraints(2.6, 2.3)

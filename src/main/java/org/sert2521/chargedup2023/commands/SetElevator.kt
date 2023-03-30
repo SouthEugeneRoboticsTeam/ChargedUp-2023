@@ -76,7 +76,8 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         Elevator.setExtend(extensionPIDResult + extensionG)
 
         if (ends) {
-            atSetpoint = abs(angle - angleMeasure) <= TunedConstants.elevatorAngleTolerance || abs(extension - extensionMeasure) <= TunedConstants.elevatorExtensionTolerance
+            // Use clamped targets
+            atSetpoint = abs(angle - angleMeasure) <= TunedConstants.elevatorAngleTolerance && abs(extension - extensionMeasure) <= TunedConstants.elevatorExtensionTolerance
         }
     }
 

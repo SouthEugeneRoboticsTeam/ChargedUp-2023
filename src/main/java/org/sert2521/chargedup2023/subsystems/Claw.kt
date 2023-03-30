@@ -50,7 +50,7 @@ object Claw : SubsystemBase() {
         }
 
         clawFull = if (-currentSpeed >= TunedConstants.clawIntakeTryPower) {
-            fullFilter.calculate(encoder.velocity <= TunedConstants.clawIntakeStoppedSpeed)
+            fullFilter.calculate(-encoder.velocity <= TunedConstants.clawIntakeStoppedSpeed)
         } else if (currentSpeed >= TunedConstants.clawOuttakeTryPower) {
             fullFilter.calculate(false)
         } else {

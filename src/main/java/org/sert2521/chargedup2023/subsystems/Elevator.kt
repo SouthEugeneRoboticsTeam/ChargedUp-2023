@@ -25,10 +25,12 @@ object Elevator : SubsystemBase() {
     var angleInited = false
         private set
 
+    // Should be private
     val angleMotor = CANSparkMax(ElectronicIDs.elevatorAngleMotor, CANSparkMaxLowLevel.MotorType.kBrushless)
 
     // Add reset button for this encoder based on the other
-    private val angleMotorEncoder = angleMotor.encoder
+    // Should be private
+    val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     var brownedOut = false

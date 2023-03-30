@@ -180,12 +180,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.8097854209323705,
-        "y": 1.51
+        "x": 2.4615409230818464,
+        "y": 1.4423948847897694
       },
       "prevControl": {
-        "x": 2.247326739482699,
-        "y": 1.51
+        "x": 2.899082241632175,
+        "y": 1.4423948847897694
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -195,6 +195,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "Align Vision Cube",
           "Elevator Cube High",
           "Claw Outtake"
         ],
