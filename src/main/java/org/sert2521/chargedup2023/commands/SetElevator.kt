@@ -30,6 +30,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
     }
 
     // Clamping the target is kind of just in case
+    // Could have it pull up the arm if angleMeasure varies significantly from angleWrapMeasure
     override fun execute() {
         val angleTarget = if (angleSafe || extensionPID.atGoal()) {
             angle
