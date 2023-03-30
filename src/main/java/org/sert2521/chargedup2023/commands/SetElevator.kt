@@ -46,7 +46,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             TunedConstants.elevatorExtensionMaxAngleTarget
         }
 
-        val safeAngleTarget = clamp(angleTarget, PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
+        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         if (safeAngleTarget < angleMeasure) {
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxA + TunedConstants.elevatorAngleDownMaxAByAngle * cos(angleMeasure)))
         } else {
@@ -70,7 +70,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
             extensionMeasure
         }
 
-        val safeExtensionTarget = clamp(extensionTarget, PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
+        val safeExtensionTarget = clamp(min(extensionTarget, PhysicalConstants.maxExtensionWithAngle(angleMeasure)), PhysicalConstants.elevatorExtensionBottom, PhysicalConstants.elevatorExtensionTop)
         val extensionPIDResult = extensionPID.calculate(extensionMeasure, safeExtensionTarget)
         val extensionG = sin(safeAngleTarget) * (TunedConstants.elevatorExtensionG)
         Elevator.setExtend(extensionPIDResult + extensionG)
