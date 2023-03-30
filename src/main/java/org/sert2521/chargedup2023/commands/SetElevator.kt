@@ -41,19 +41,19 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
         val extensionMeasure = Elevator.extensionMeasure()
         val angleMeasure = Elevator.angleMeasure()
+        val angleWrapMeasure = Elevator.angleWrapMeasure()
 
-        var safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
+        val safeAngleTarget = clamp(max(angleTarget, PhysicalConstants.minAngleWithExtension(extensionMeasure)), PhysicalConstants.elevatorAngleBottom, PhysicalConstants.elevatorAngleTop)
         if (safeAngleTarget < angleMeasure) {
-            if (Elevator.angleSusness() >= TunedConstants.elevatorSusLimit) {
-                safeAngleTarget = angleMeasure
-            }
-
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleDownMaxV, TunedConstants.elevatorAngleDownMaxA + TunedConstants.elevatorAngleDownMaxAByAngle * cos(angleMeasure)))
         } else {
             anglePID.setConstraints(TrapezoidProfile.Constraints(TunedConstants.elevatorAngleUpMaxV, TunedConstants.elevatorAngleUpMaxA))
         }
 
-        val anglePIDResult = anglePID.calculate(angleMeasure, safeAngleTarget)
+        val t = clamp((abs(angleMeasure - safeAngleTarget) - TunedConstants.elevatorTrustWrapDistance) / (TunedConstants.elevatorTrustTrueAngleDistance - TunedConstants.elevatorTrustWrapDistance), 0.0, 1.0)
+        val combinedAngleMeasure = angleMeasure * t + angleWrapMeasure * (1.0 - t)
+
+        val anglePIDResult = anglePID.calculate(combinedAngleMeasure, safeAngleTarget)
         val angleG = cos(safeAngleTarget) * (TunedConstants.elevatorAngleG + extensionMeasure * TunedConstants.elevatorAngleGPerMeter)
         Elevator.setAngle(anglePIDResult + angleG)
 

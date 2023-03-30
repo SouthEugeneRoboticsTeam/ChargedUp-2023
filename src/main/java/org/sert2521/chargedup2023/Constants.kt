@@ -22,9 +22,12 @@ import kotlin.math.*
 class SwerveModuleData(val position: Translation2d, val powerMotorID: Int, val angleMotorID: Int, val angleEncoderID: Int, val angleOffset: Double, val inverted: Boolean)
 
 object PhysicalConstants {
+    // Difference of the ys over xs * conversions to meters
     const val elevatorExtensionConversion = (8.375 - 40.5625) / (-1.071426391601562 - 70.07333374023438) / 100.0 * 2.54
     const val elevatorAngleConversion = -2 * PI
+    // Difference of the ys over xs
     const val elevatorAngleMotorDistanceConversion = (0.000702229045117 - 1.15102295437296) / (-73.89722442626953 + 0.31786513328552246)
+    // Velocity is in rpm so needs / 60
     const val elevatorAngleMotorVelocityConversion = elevatorAngleMotorDistanceConversion / 60.0
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
@@ -58,11 +61,14 @@ object PhysicalConstants {
     const val elevatorAngleConeUpIntake = 0.13
     const val elevatorAngleSingleSubstation = 0.685
 
+    // Velocity is in rpm so needs / 60
     const val clawVelocityConversion = 1.0 / 60.0
 
     const val halfSideLength = 0.286378246381
 
+    // Pi * diameter / gear ratio
     const val powerEncoderMultiplierPosition = PI * 0.1016 / 8.14
+    // Velocity is in rpm so needs / 60
     const val powerEncoderMultiplierVelocity = powerEncoderMultiplierPosition / 60.0
 
     const val angleEncoderMultiplier = 0.01745329251
@@ -103,7 +109,7 @@ object PhysicalConstants {
 
     const val cableDriveDistance = 1.0
 
-    // This should be moved
+    // This should be removed if there is extra time
     // Polar is annoying
     // This takes points and makes them into a bunch of lines in polar coords
     // Then it uses them as boundaries
@@ -209,7 +215,8 @@ object TunedConstants {
 
     const val elevatorAngleTolerance = 0.025
 
-    const val elevatorSusLimit = 0.4
+    const val elevatorTrustTrueAngleDistance = 0.03
+    const val elevatorTrustWrapDistance = 0.07
 
     // Sysid these all
     const val swervePowerS = 0.3
