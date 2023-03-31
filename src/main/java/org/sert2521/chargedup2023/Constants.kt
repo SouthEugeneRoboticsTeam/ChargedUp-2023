@@ -341,7 +341,8 @@ object ConfigConstants {
         Pair("Cable 1.5 Balance", autoConstraints), // Yes
         Pair("Cable 1.5", autoConstraints), // Yes
         Pair("Cable 1", autoConstraints), // Yes
-        Pair("Cable 2", autoConstraints), // Mostly
+        Pair("Cable 2 (Visionless)", autoConstraints), // Mostly
+        Pair("Cable 2 (Vision)", autoConstraints),
         Pair("Forward", autoConstraints), // Yes
         Pair("No Cable Balance", autoConstraints), // Yes
         Pair("No Cable 1.5 Balance", autoConstraints), // Yes
@@ -349,7 +350,6 @@ object ConfigConstants {
         Pair("No Cable 2.5 Cube", fastishAutoConstraints), // Mostly
         Pair("No Cable 2.5 Cone", fastishAutoConstraints), // Mostly
         Pair("No Cable 2", autoConstraints), // Yes
-        //Pair("No Cable 2 Balance Far", fastAutoConstraints), // No
         Pair("No Cable 2 Balance Near", fastAutoConstraints)) // Mostly
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
