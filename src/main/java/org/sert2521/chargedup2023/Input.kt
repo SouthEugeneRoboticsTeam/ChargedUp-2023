@@ -31,8 +31,7 @@ object Input {
     private val slowButton = JoystickButton(driverController, 5)
     private val coneAlignButton = JoystickButton(driverController, 6)
 
-    //private val intakeSetOne = JoystickButton(gunnerController, 15)
-    private val intakeSetTwo = JoystickButton(gunnerController, 13)
+    private val intake = JoystickButton(gunnerController, 13)
     private val outtake = JoystickButton(gunnerController, 14)
 
     private val liftDrive = JoystickButton(gunnerController, 5)
@@ -95,12 +94,13 @@ object Input {
             Drivetrain.setNewVisionPose(Pose2d())
         }))
         coneAlignButton.whileTrue(VisionAlignCone())
-        Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
+        Trigger { driverController.leftTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
+        Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(JoystickDrive(false))
 
         //Intaking a cone is the same as outtaking a cube
         //intakeSetOne.whileTrue(ClawIntake(1.0))
 
-        intakeSetTwo.whileTrue(ClawIntake(1.0))
+        intake.whileTrue(ClawIntake(1.0))
 
         outtake.whileTrue(ClawIntake(-1.0))
 

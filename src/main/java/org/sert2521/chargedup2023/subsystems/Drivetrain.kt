@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
 import org.sert2521.chargedup2023.*
+import org.sert2521.chargedup2023.commands.JoystickDrive
 import kotlin.math.*
 
 class SwerveModule(private val powerMotor: CANSparkMax,
@@ -192,6 +193,8 @@ object Drivetrain : SubsystemBase() {
 
         cams = camsList.toTypedArray()
         photonPoseEstimators = photonPoseEstimatorsList.toTypedArray()
+
+        Drivetrain.defaultCommand = JoystickDrive(true)
     }
 
     // Fix this nonsense
