@@ -116,7 +116,7 @@ object PhysicalConstants {
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
-    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(0.805, 0.55), Pair(1.9, 1.3))
+    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(0.805, 0.1), Pair(1.9, 1.3))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -319,6 +319,7 @@ object ConfigConstants {
         "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
         "Elevator Cone Intake" to SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, true),
         "Claw Cube Intake" to ClawIntake(-0.7),
+        "Claw Cone Intake" to ClawIntake(-1.0),
         "Claw Stop" to InstantCommand({  }, Claw),
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Elevator Half" to SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),

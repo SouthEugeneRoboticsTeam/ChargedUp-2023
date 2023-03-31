@@ -187,12 +187,12 @@
     },
     {
       "anchorPoint": {
-        "x": 6.316652633305267,
-        "y": 3.9560319120638248
+        "x": 7.296058758784185,
+        "y": 3.757620015240031
       },
       "prevControl": {
-        "x": 5.496138992277986,
-        "y": 4.685377370754743
+        "x": 5.431165862331725,
+        "y": 5.30241935483871
       },
       "nextControl": null,
       "holonomicAngle": -33.69006752597977,
@@ -201,9 +201,11 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Elevator Drive"
+        ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
+        "waitBehavior": "before",
         "waitTime": 1.0
       }
     }
@@ -253,6 +255,12 @@
       "position": 5.3090909090909095,
       "names": [
         "Elevator Cone Intake"
+      ]
+    },
+    {
+      "position": 6.490909090909092,
+      "names": [
+        "Claw Cone Intake"
       ]
     }
   ]
