@@ -306,14 +306,17 @@ object Drivetrain : SubsystemBase() {
         poseEstimator.setVisionMeasurementStdDevs(TunedConstants.alignVisionDeviations)
     }
 
-    fun camerasConnected(): Boolean {
-        for (cam in cams) {
-            if (!cam.isConnected) {
-                return false
-            }
+    fun visionSeeingThings(): Boolean {
+        val time = Timer.getFPGATimestamp()
+        if (camerasConnected()) {
+            return cams.any { time - it.latestResult.timestampSeconds < TunedConstants.visionTimeout }
         }
 
-        return true
+        return false
+    }
+
+    fun camerasConnected(): Boolean {
+        return cams.all { it.isConnected }
     }
 
     fun getAccelSqr(): Double {

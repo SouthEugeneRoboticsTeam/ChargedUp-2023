@@ -50,24 +50,28 @@ class VisionAlignCone : JoystickCommand() {
         // Move 0.12 to constants (or get rid of it)
         val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider() * sliderDirection)
 
-        // Moving the y on the stick will affect the rate of change of the x
-        if (yTarget != null && (!positionPID.atSetpoint() || !anglePID.atSetpoint())) {
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
-            Output.visionHappy = false
-        } else {
-            // To update stuff
-            if (yTarget != null) {
-                positionPID.calculate(pose.y, yTarget)
+        if (Drivetrain.visionSeeingThings() && yTarget != null) {
+            // Moving the y on the stick will affect the rate of change of the x
+            if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, positionPID.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
+                Output.visionHappy = false
             } else {
-                positionPID.reset()
-            }
-            anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
+                // To update stuff
+                positionPID.calculate(pose.y, yTarget)
+                anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
 
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
-            Output.visionHappy = true
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(readJoystick().x, 0.0, 0.0, pose.rotation))
+                Output.visionHappy = true
+            }
+        } else {
+            positionPID.reset()
+            anglePID.reset()
+
+            Drivetrain.stop()
+            Output.visionHappy = false
         }
 
-        if (Output.visionHappy){
+        if (Output.visionHappy) {
             LedSolid(60, 255, 255).schedule()
         }else{
             LedSolid(10, 255,255).schedule()

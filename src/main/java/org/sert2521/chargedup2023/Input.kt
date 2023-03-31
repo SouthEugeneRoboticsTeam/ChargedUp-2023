@@ -97,7 +97,7 @@ object Input {
         Trigger { driverController.leftTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(JoystickDrive(false))
 
-        //Intaking a cone is the same as outtaking a cube
+        // Intaking a cone is the same as outtaking a cube
         //intakeSetOne.whileTrue(ClawIntake(1.0))
 
         intake.whileTrue(ClawIntake(1.0))

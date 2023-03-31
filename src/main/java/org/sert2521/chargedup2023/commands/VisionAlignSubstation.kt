@@ -44,25 +44,34 @@ class VisionAlignSubstation : JoystickCommand() {
             DriverStation.Alliance.Invalid -> 0.0
         }
 
-        // Moving the x on the stick will affect the rate of change of the y
-        if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
-            val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
-            val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
+        if (Drivetrain.visionSeeingThings()) {
+            // Moving the x on the stick will affect the rate of change of the y
+            if (!positionPID.atSetpoint() || !anglePID.atSetpoint()) {
+                val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
+                val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
 
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, PhysicalConstants.substationX), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset), pose.rotation))
-            Output.visionHappy = false
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPID.calculate(pose.x, PhysicalConstants.substationX), readJoystick().y, anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset), pose.rotation))
+                Output.visionHappy = false
+            } else {
+                // To update stuff
+                val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
+                val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
+
+                positionPID.calculate(pose.y, PhysicalConstants.substationX)
+                anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset)
+
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, readJoystick().y, 0.0, pose.rotation))
+                Output.visionHappy = true
+            }
         } else {
-            // To update stuff
-            val t = clamp((abs(pose.x - PhysicalConstants.substationX) - PhysicalConstants.substationCloseAngleAtDistance.second) / (PhysicalConstants.substationFarAngleAtDistance.second - PhysicalConstants.substationCloseAngleAtDistance.second), 0.0, 1.0)
-            val angleTarget = t * (PhysicalConstants.substationFarAngleAtDistance.first - PhysicalConstants.substationCloseAngleAtDistance.first) + PhysicalConstants.substationCloseAngleAtDistance.first
+            positionPID.reset()
+            anglePID.reset()
 
-            positionPID.calculate(pose.y, PhysicalConstants.substationX)
-            anglePID.calculate(pose.rotation.radians, angleTarget + angleOffset)
-
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, readJoystick().y, 0.0, pose.rotation))
-            Output.visionHappy = true
+            Drivetrain.stop()
+            Output.visionHappy = false
         }
-        if (Output.visionHappy){
+
+        if (Output.visionHappy) {
             LedSolid(60, 255,255).schedule()
         }else{
             LedSolid(10, 255,255).schedule()

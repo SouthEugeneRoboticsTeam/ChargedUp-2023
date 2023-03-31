@@ -254,6 +254,9 @@ object TunedConstants {
     const val swerveSubstationAlignAngleI = 0.0
     const val swerveSubstationAlignAngleD = 0.0
 
+    // This should be higher (it is low to test if the cameras see apriltags when aligning cones)
+    const val visionTimeout = 0.1
+
     const val standardFilterTaps = 20
     const val overCableFilterTaps = 4
 

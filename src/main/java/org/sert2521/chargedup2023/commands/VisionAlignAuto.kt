@@ -10,7 +10,6 @@ import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import java.lang.Math.PI
-import kotlin.math.abs
 
 class VisionAlignAuto(private val inYTarget: Double, private val xTarget: Double) : CommandBase() {
     private val positionPIDY = PIDController(TunedConstants.swerveAlignDistanceP, TunedConstants.swerveAlignDistanceI, TunedConstants.swerveAlignDistanceD)
@@ -45,26 +44,30 @@ class VisionAlignAuto(private val inYTarget: Double, private val xTarget: Double
             DriverStation.Alliance.Invalid -> null
         }
 
-        // Moving the y on the stick will affect the rate of change of the x
-        if (yTarget != null && (!positionPIDY.atSetpoint() || !anglePID.atSetpoint())) {
-            positionPIDX.calculate(pose.x, xTarget)
+        if (Drivetrain.visionSeeingThings() && yTarget != null) {
+            if (!positionPIDY.atSetpoint() || !anglePID.atSetpoint()) {
+                positionPIDX.calculate(pose.x, xTarget)
 
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, positionPIDY.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
-            Output.visionHappy = false
-        } else {
-            // To update stuff
-            if (yTarget != null) {
-                positionPIDY.calculate(pose.y, yTarget)
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, positionPIDY.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
+                Output.visionHappy = false
             } else {
-                positionPIDY.reset()
-            }
-            anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
+                // To update stuff
+                positionPIDY.calculate(pose.y, yTarget)
+                anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
 
-            Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPIDX.calculate(pose.x, xTarget), 0.0, 0.0, pose.rotation))
-            Output.visionHappy = true
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPIDX.calculate(pose.x, xTarget), 0.0, 0.0, pose.rotation))
+                Output.visionHappy = true
+            }
+        } else {
+            positionPIDY.reset()
+            positionPIDX.reset()
+            anglePID.reset()
+
+            Drivetrain.stop()
+            Output.visionHappy = false
         }
 
-        if (Output.visionHappy){
+        if (Output.visionHappy) {
             LedSolid(60, 255, 255).schedule()
         }else{
             LedSolid(10, 255,255).schedule()
