@@ -55,21 +55,27 @@ abstract class JoystickCommand : CommandBase() {
         val changeY = currY - y
         val change = sqrt(changeX.pow(2) + changeY.pow(2))
 
-        val normalizedChangeX = changeX / change
-        val normalizedChangeY = changeY / change
+        if (change != 0.0) {
+            val normalizedChangeX = changeX / change
+            val normalizedChangeY = changeY / change
 
-        // This takes the dot product of the normalized change vector and the normalized current output vector
-        // Then it uses that to create a weighted average based on the slowdown speed and speedup speed
-        val outwardDot = (x * normalizedChangeX + y * normalizedChangeY) / sqrt(x.pow(2) + y.pow(2))
-        val maxChangeRate = (ConfigConstants.driveSpeedupChangeSpeed * (outwardDot + 1.0) + ConfigConstants.driveSlowdownChangeSpeed * (1.0 - outwardDot)) / 2.0
+            // This takes the dot product of the normalized change vector and the normalized current output vector
+            // Then it uses that to create a weighted average based on the slowdown speed and speedup speed
+            val maxChangeRate = if (x == 0.0 && y == 0.0) {
+                ConfigConstants.driveSpeedupChangeSpeed
+            } else {
+                val outwardDot = (x * normalizedChangeX + y * normalizedChangeY) / sqrt(x.pow(2) + y.pow(2))
+                (ConfigConstants.driveSpeedupChangeSpeed * (outwardDot + 1.0) + ConfigConstants.driveSlowdownChangeSpeed * (1.0 - outwardDot)) / 2.0
+            }
 
-        // Moves the current output to the input on just sets it if it would overshoot
-        if (change <= maxChangeRate) {
-            x = currX
-            y = currY
-        } else {
-            x += normalizedChangeX * maxChangeRate * diffTime
-            y += normalizedChangeY * maxChangeRate * diffTime
+            // Moves the current output to the input on just sets it if it would overshoot
+            if (change <= maxChangeRate) {
+                x = currX
+                y = currY
+            } else {
+                x += normalizedChangeX * maxChangeRate * diffTime
+                y += normalizedChangeY * maxChangeRate * diffTime
+            }
         }
 
         var rot = Input.getRot()

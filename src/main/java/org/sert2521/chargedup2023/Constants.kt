@@ -116,7 +116,7 @@ object PhysicalConstants {
     private const val extensionExtra = 0.76
     // There should be no vertical lines or horizontal lines one of them will break the code maybe
     // Something seems to be wrong with y values
-    private val safePoints = arrayOf(Pair(0.80, 0.0), Pair(0.81, 0.8), Pair(1.3, 1.3))
+    private val safePoints = arrayOf(Pair(0.8, 0.0), Pair(0.805, 0.55), Pair(1.9, 1.3))
     private val safeLineDefinitions = generateLineDefinitions(safePoints)
     private val safeLineBounds = generateLineBounds(safePoints)
 
@@ -206,11 +206,11 @@ object TunedConstants {
     const val elevatorAngleG = 0.5
     const val elevatorAngleGPerMeter = 0.0
 
-    const val elevatorAngleDownMaxV = 2.0
-    const val elevatorAngleDownMaxA = 0.8
-    const val elevatorAngleDownMaxAByAngle = 0.8
+    const val elevatorAngleDownMaxV = 6.0
+    const val elevatorAngleDownMaxA = 1.8
+    const val elevatorAngleDownMaxAByAngle = 2.0
 
-    const val elevatorAngleUpMaxV = 3.0
+    const val elevatorAngleUpMaxV = 4.0
     const val elevatorAngleUpMaxA = 4.5
 
     const val elevatorAngleTolerance = 0.025
@@ -306,8 +306,8 @@ object ConfigConstants {
     const val rotSpeed = 3.5
     const val rotSpeedup = 2.75
 
-    const val driveSpeedupChangeSpeed = 0.8
-    const val driveSlowdownChangeSpeed = 0.4
+    const val driveSpeedupChangeSpeed = 6.0
+    const val driveSlowdownChangeSpeed = 6.0
 
     const val preBrownOutVoltage = 8.25
     const val preLEDBrownOutVoltage = 11.0
