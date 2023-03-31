@@ -45,17 +45,16 @@ class VisionAlignAuto(private val inYTarget: Double, private val xTarget: Double
         }
 
         if (Drivetrain.visionSeeingThings() && yTarget != null) {
-            if (!positionPIDY.atSetpoint() || !anglePID.atSetpoint()) {
-                positionPIDX.calculate(pose.x, xTarget)
-
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.0, positionPIDY.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
+            if (!positionPIDX.atSetpoint() || !positionPIDY.atSetpoint() || !anglePID.atSetpoint()) {
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPIDX.calculate(pose.x, xTarget), positionPIDY.calculate(pose.y, yTarget), anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle), pose.rotation))
                 Output.visionHappy = false
             } else {
                 // To update stuff
                 positionPIDY.calculate(pose.y, yTarget)
+                positionPIDX.calculate(pose.x, xTarget)
                 anglePID.calculate(pose.rotation.radians, PhysicalConstants.coneAngle)
 
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(positionPIDX.calculate(pose.x, xTarget), 0.0, 0.0, pose.rotation))
+                Drivetrain.stop()
                 Output.visionHappy = true
             }
         } else {
