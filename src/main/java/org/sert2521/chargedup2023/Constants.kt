@@ -57,8 +57,8 @@ object PhysicalConstants {
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
     const val elevatorAngleConeTippedIntake = 0.0
-    const val elevatorAngleCubeIntake = 0.02
-    const val elevatorAngleConeUpIntake = 0.13
+    const val elevatorAngleCubeIntake = 0.04
+    const val elevatorAngleConeUpIntake = 0.145
     const val elevatorAngleSingleSubstation = 0.685
 
     // Velocity is in rpm so needs / 60
@@ -85,8 +85,8 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    // These may be wrong
-    val conePointsBlue = listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
+    // 7.44, 6.28, 5.795, 4.645, 4.09
+    val conePointsBlue = listOf(8.02 - 7.44, 8.02 - 6.28, 8.02 - 5.795, 8.02 - 4.645, 8.02 - 4.09)//listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
     val conePointsRed: List<Double>
     init {
         val conePointsRedMut = mutableListOf<Double>()
@@ -207,11 +207,11 @@ object TunedConstants {
     const val elevatorAngleGPerMeter = 0.0
 
     const val elevatorAngleDownMaxV = 6.0
-    const val elevatorAngleDownMaxA = 1.8
-    const val elevatorAngleDownMaxAByAngle = 2.0
+    const val elevatorAngleDownMaxA = 2.1
+    const val elevatorAngleDownMaxAByAngle = 2.6
 
-    const val elevatorAngleUpMaxV = 4.0
-    const val elevatorAngleUpMaxA = 4.5
+    const val elevatorAngleUpMaxV = 4.5
+    const val elevatorAngleUpMaxA = 5.5
 
     const val elevatorAngleTolerance = 0.025
 
@@ -309,8 +309,8 @@ object ConfigConstants {
     const val rotSpeed = 3.5
     const val rotSpeedup = 2.75
 
-    const val driveSpeedupChangeSpeed = 3.0
-    const val driveSlowdownChangeSpeed = 6.0
+    const val driveSpeedupChangeSpeed = 4.5
+    const val driveSlowdownChangeSpeed = 4.5
 
     const val preBrownOutVoltage = 8.25
     const val preLEDBrownOutVoltage = 11.0

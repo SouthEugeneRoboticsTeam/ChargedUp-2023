@@ -48,7 +48,7 @@ class VisionAlignCone : JoystickCommand() {
         }
 
         // Move 0.12 to constants (or get rid of it)
-        val yTarget = conePoints?.minBy { abs(it - pose.y) }?.plus(0.12 * Input.getSlider() * sliderDirection)
+        val yTarget = conePoints?.minBy { abs(it - pose.y) }//?.plus(0.12 * Input.getSlider() * sliderDirection)
 
         if (Drivetrain.visionSeeingThings() && yTarget != null) {
             // Moving the y on the stick will affect the rate of change of the x
