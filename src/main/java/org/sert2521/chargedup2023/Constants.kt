@@ -309,8 +309,8 @@ object ConfigConstants {
     const val rotSpeed = 3.5
     const val rotSpeedup = 2.75
 
-    const val driveSpeedupChangeSpeed = 4.5
-    const val driveSlowdownChangeSpeed = 4.5
+    const val driveSpeedupChangeSpeed = 6.5
+    const val driveSlowdownChangeSpeed = 36.0
 
     const val preBrownOutVoltage = 8.25
     const val preLEDBrownOutVoltage = 11.0
