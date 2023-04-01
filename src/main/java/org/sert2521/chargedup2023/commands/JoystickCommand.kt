@@ -69,12 +69,13 @@ abstract class JoystickCommand : CommandBase() {
             }
 
             // Moves the current output to the input on just sets it if it would overshoot
-            if (change <= maxChangeRate) {
+            val maxChange = maxChangeRate * diffTime
+            if (change <= maxChange) {
                 x = currX
                 y = currY
             } else {
-                x += normalizedChangeX * maxChangeRate * diffTime
-                y += normalizedChangeY * maxChangeRate * diffTime
+                x += normalizedChangeX * maxChange
+                y += normalizedChangeY * maxChange
             }
         }
 
