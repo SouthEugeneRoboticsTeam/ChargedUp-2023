@@ -20,7 +20,7 @@
           "Elevator Drive",
           "Elevator Cone High",
           "Claw Outtake",
-          "Elevator Drive"
+          "Elevator Half"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -54,12 +54,12 @@
     },
     {
       "anchorPoint": {
-        "x": 5.373452155574302,
-        "y": 3.2967442001607212
+        "x": 5.365898731797464,
+        "y": 2.9531819063638127
       },
       "prevControl": {
-        "x": 6.487077451629718,
-        "y": 3.317498148271979
+        "x": 6.47952402785288,
+        "y": 2.9739358544750707
       },
       "nextControl": null,
       "holonomicAngle": 180.0,

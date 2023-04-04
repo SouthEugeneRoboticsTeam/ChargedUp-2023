@@ -30,7 +30,7 @@ object Elevator : SubsystemBase() {
 
     // Add reset button for this encoder based on the other
     // Should be private
-    val angleMotorEncoder = angleMotor.encoder
+    private val angleMotorEncoder = angleMotor.encoder
     private val trueAngleEncoder = DutyCycleEncoder(ElectronicIDs.elevatorEncoder)
 
     var brownedOut = false
@@ -129,7 +129,6 @@ object Elevator : SubsystemBase() {
     fun angleWrapMeasure(): Double {
         return angleMotorEncoder.position
     }
-
 
     fun extensionAtTop(): Boolean {
         return !upperExtension.get()

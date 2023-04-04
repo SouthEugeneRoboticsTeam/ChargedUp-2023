@@ -73,16 +73,15 @@ object Input {
         // Fix this nonsense
         autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-            ConfigConstants.eventMap["Elevator Drive"],
-            ConfigConstants.eventMap["Elevator Cone High"],
+            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
             ClawIntake(0.7).withTimeout(0.4),
             InstantCommand({ }, Claw),
-            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+            SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
             OntoChargeStation(Translation2d(1.5, 0.0)),
             DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7),
-            WaitCommand(0.8),
-            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.25),
-            Balance()) }
+            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.1),
+            Balance()) } // No
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
 

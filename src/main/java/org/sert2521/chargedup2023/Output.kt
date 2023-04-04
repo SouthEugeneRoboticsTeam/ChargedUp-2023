@@ -32,7 +32,7 @@ object Output {
         values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
         values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
         // Maybe make these two more encapsulationy
-        values.add(Pair("Elevator Wrap Angle") { Elevator.angleMotorEncoder.position })
+        values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
         values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
 
         values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })

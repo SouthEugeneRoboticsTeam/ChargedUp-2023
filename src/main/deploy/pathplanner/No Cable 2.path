@@ -147,7 +147,8 @@
       "stopEvent": {
         "names": [
           "Elevator Cube High",
-          "Claw Cube Outtake"
+          "Claw Cube Outtake",
+          "Elevator Drive"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -160,7 +161,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 1.0909090909090908,
+      "position": 1.2272727272727275,
       "names": [
         "Elevator Cube Intake"
       ]

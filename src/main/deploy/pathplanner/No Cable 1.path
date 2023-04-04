@@ -20,7 +20,7 @@
           "Elevator Drive",
           "Elevator Cone High",
           "Claw Outtake",
-          "Elevator Drive"
+          "Elevator Half"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",

@@ -79,15 +79,15 @@
     {
       "anchorPoint": {
         "x": 6.720397440794882,
-        "y": 4.711425422850846
+        "y": 4.81
       },
       "prevControl": {
         "x": 5.951979903959808,
-        "y": 4.67235334470669
+        "y": 4.770927921855844
       },
       "nextControl": {
         "x": 5.951979903959808,
-        "y": 4.67235334470669
+        "y": 4.770927921855844
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -187,7 +187,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.10909090909090909,
+      "position": 1.0363636363636364,
       "names": [
         "Elevator Cube Intake"
       ]

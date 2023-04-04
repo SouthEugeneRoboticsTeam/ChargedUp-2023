@@ -135,12 +135,12 @@
         "y": 4.476992953985908
       },
       "prevControl": {
-        "x": 3.3211266422532852,
-        "y": 4.437920875841751
+        "x": 3.529511059022118,
+        "y": 4.698401396802794
       },
       "nextControl": {
-        "x": 3.3211266422532852,
-        "y": 4.437920875841751
+        "x": 3.529511059022118,
+        "y": 4.698401396802794
       },
       "holonomicAngle": 180.0,
       "isReversal": true,
@@ -187,25 +187,23 @@
     },
     {
       "anchorPoint": {
-        "x": 7.296058758784185,
-        "y": 3.757620015240031
+        "x": 6.32967665935332,
+        "y": 3.1355182710365423
       },
       "prevControl": {
-        "x": 5.431165862331725,
-        "y": 5.30241935483871
+        "x": 6.121292242584485,
+        "y": 4.6853773707547415
       },
       "nextControl": null,
-      "holonomicAngle": -33.69006752597977,
+      "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "Elevator Drive"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
-        "waitBehavior": "before",
+        "waitBehavior": "none",
         "waitTime": 1.0
       }
     }
@@ -215,7 +213,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.44545454545454544,
+      "position": 1.081818181818182,
       "names": [
         "Elevator Cube Intake"
       ]
@@ -227,7 +225,7 @@
       ]
     },
     {
-      "position": 3.3818181818181796,
+      "position": 3.28,
       "names": [
         "Elevator Drive"
       ]
@@ -255,12 +253,6 @@
       "position": 5.3090909090909095,
       "names": [
         "Elevator Cone Intake"
-      ]
-    },
-    {
-      "position": 6.490909090909092,
-      "names": [
-        "Claw Cone Intake"
       ]
     }
   ]

@@ -35,10 +35,11 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val angleMeasure = Elevator.angleMeasure()
         val angleWrapMeasure = Elevator.angleWrapMeasure()
 
+        val extensionAtGoal = abs(extension - extensionMeasure) <= TunedConstants.elevatorExtensionTolerance
         val shouldPullUp = angleMeasure - angleWrapMeasure > TunedConstants.elevatorPullUpAngleDifference
         val angleTarget = if (shouldPullUp) {
             angleMeasure
-        } else if (angleSafe || extensionPID.atGoal()) {
+        } else if (angleSafe || extensionAtGoal) {
             angle
         } else if (angleTooLow) {
             TunedConstants.elevatorExtensionMinAngleTarget
@@ -56,7 +57,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
         val combinedAngleMeasure = if (shouldPullUp) {
             angleWrapMeasure
         } else {
-            val t = clamp((abs(angleMeasure - safeAngleTarget) - TunedConstants.elevatorTrustWrapDistance) / (TunedConstants.elevatorTrustTrueAngleDistance - TunedConstants.elevatorTrustWrapDistance), 0.0, 1.0)
+            val t = clamp(((angleMeasure - safeAngleTarget) - TunedConstants.elevatorTrustWrapDistance) / (TunedConstants.elevatorTrustTrueAngleDistance - TunedConstants.elevatorTrustWrapDistance), 0.0, 1.0)
             angleMeasure * t + angleWrapMeasure * (1.0 - t)
         }
 
@@ -77,7 +78,7 @@ class SetElevator(private val extension: Double, private val angle: Double, priv
 
         if (ends) {
             // Use clamped targets
-            atSetpoint = abs(angle - angleMeasure) <= TunedConstants.elevatorAngleTolerance && abs(extension - extensionMeasure) <= TunedConstants.elevatorExtensionTolerance
+            atSetpoint = abs(angle - angleMeasure) <= TunedConstants.elevatorAngleTolerance && extensionAtGoal
         }
     }
 
