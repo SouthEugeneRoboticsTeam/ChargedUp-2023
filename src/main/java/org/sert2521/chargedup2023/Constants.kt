@@ -85,8 +85,7 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    // 7.44, 6.28, 5.795, 4.645, 4.09
-    val conePointsBlue = listOf(8.02 - 7.44, 8.02 - 6.28, 8.02 - 5.795, 8.02 - 4.645, 8.02 - 4.09)//listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
+    val conePointsBlue = listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
     val conePointsRed: List<Double>
     init {
         val conePointsRedMut = mutableListOf<Double>()
