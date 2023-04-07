@@ -85,16 +85,16 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    val conePointsBlue = listOf(4.97, 3.85, 3.28, 2.17, 1.62, 0.50)
-    val conePointsRed: List<Double>
-    init {
+    val conePointsBlue = listOf(4.94, 3.78, 3.39, 2.24, 1.69, 0.57)
+    val conePointsRed = listOf(3.00, 4.10, 4.63, 5.78, 6.33, 7.45)
+    /*init {
         val conePointsRedMut = mutableListOf<Double>()
         for (conePointBlue in conePointsBlue) {
             conePointsRedMut.add(fieldWidth - conePointBlue)
         }
 
         conePointsRed = conePointsRedMut
-    }
+    }*/
 
     const val substationX = fieldLength - 2.48
     val substationFarAngleAtDistance = Pair(PI / 4, 0.3)
