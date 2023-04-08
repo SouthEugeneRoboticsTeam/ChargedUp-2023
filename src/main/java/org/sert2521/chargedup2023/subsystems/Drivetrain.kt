@@ -283,7 +283,7 @@ object Drivetrain : SubsystemBase() {
         odometry.resetPosition(-imu.rotation2d, positionsArray, pose)
     }
 
-    fun setNewVisionPose(newPose: Pose2d, useColor: Boolean = true) {
+    fun setNewVisionPose(newPose: Pose2d) {
         visionPose = Pose2d(newPose.y, newPose.x, -newPose.rotation)
 
         val positions = mutableListOf<SwerveModulePosition>()

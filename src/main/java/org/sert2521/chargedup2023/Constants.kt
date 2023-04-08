@@ -73,8 +73,8 @@ object PhysicalConstants {
 
     const val angleEncoderMultiplier = 0.01745329251
 
-    val rightPose = Transform3d(Translation3d(0.02872994, -0.3009138, 0.65), Rotation3d(0.0, -0.0873, -0.436))
-    val leftPose = Transform3d(Translation3d(0.02872994, 0.3009138, 0.65), Rotation3d(0.0, -0.0873, 0.436))
+    val rightPose = Transform3d(Translation3d(0.02872994, -0.3009138, 0.59), Rotation3d(0.0, -0.0873, -0.436))
+    val leftPose = Transform3d(Translation3d(0.02872994, 0.3009138, 0.59), Rotation3d(0.0, -0.0873, 0.436))
 
     val field: AprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField()
     const val fieldLength = 16.54
@@ -85,8 +85,8 @@ object PhysicalConstants {
     }
 
     const val coneAngle = -PI
-    val conePointsBlue = listOf(4.94, 3.78, 3.39, 2.24, 1.69, 0.57)
-    val conePointsRed = listOf(3.00, 4.10, 4.63, 5.78, 6.33, 7.45)
+    val conePointsBlue = listOf(4.975, 3.866, 3.30, 2.17, 1.62, 0.484)
+    val conePointsRed = listOf(3.01, 4.10, 4.67, 5.80, 6.3525, 7.52)
     /*init {
         val conePointsRedMut = mutableListOf<Double>()
         for (conePointBlue in conePointsBlue) {
@@ -275,8 +275,8 @@ object TunedConstants {
     const val visionSubstationAngleTolerance = 0.02
 
     val encoderDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 0.01)
-    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 100.0)
-    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(3.0, 3.0, 0.5)
+    val defaultVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(1.0, 1.0, 1000.0)
+    val alignVisionDeviations: Matrix<N3, N1> = MatBuilder(Nat.N3(), Nat.N1()).fill(3.0, 3.0, 1000.0)
 
     const val ledsRainbowA = 2.0
     const val ledsRainbowB = 1.1
