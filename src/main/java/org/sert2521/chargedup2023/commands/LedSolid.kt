@@ -11,11 +11,11 @@ class LedSolid(private val h: Int, private val s: Int, private val v: Int) : Com
         addRequirements(LEDs)
     }
 
-    override fun initialize() {}
-
-    override fun execute() {
+    override fun initialize() {
         LEDs.setAllLEDHSV(h, s, v)
     }
+
+    override fun execute() {}
 
     override fun isFinished(): Boolean {
         // TODO: Make this return true when this Command no longer needs to run execute()

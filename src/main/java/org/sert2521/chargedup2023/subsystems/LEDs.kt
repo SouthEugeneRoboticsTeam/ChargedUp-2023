@@ -12,6 +12,7 @@ import org.sert2521.chargedup2023.commands.LedIdle
 object LEDs : SubsystemBase() {
     private val ledStrip = AddressableLED(ElectronicIDs.ledId)
     private var ledBuffer = AddressableLEDBuffer(PhysicalConstants.ledLength)
+    private var hasBrownedOut = false
     init {
         ledStrip.setLength(PhysicalConstants.ledLength)
         ledStrip.start()
@@ -25,28 +26,34 @@ object LEDs : SubsystemBase() {
 
     fun setLEDHSV(i: Int, h: Int, s: Int, v: Int) {
         ledBuffer.setHSV(i, h, s, v)
-
     }
 
     fun setAllLEDRGB(r: Int, g: Int, b: Int){
         for (i in 0..PhysicalConstants.ledLength-1) {
-            setLEDRGB(i, r, g, b)
+            if (i%2 == 0){
+                setLEDRGB(i, (r/2), (g/2), (b/2))
+            }
         }
     }
 
     fun setAllLEDHSV(h: Int, s: Int, v: Int){
         for (i in 0..PhysicalConstants.ledLength-1) {
-            setLEDHSV(i, h, s, v)
+            if (i%2 == 0){
+                setLEDHSV(i, h, s, (v/2))
+            }
         }
     }
 
 
 
     fun update() {
-        if (RobotController.getBatteryVoltage() <= ConfigConstants.preLEDBrownOutVoltage) {
-            setAllLEDRGB(0, 0, 0)
+        if (hasBrownedOut){
+            return
         }
-
+        if (RobotController.getBatteryVoltage() <= ConfigConstants.preLEDBrownOutVoltage) {
+            ledBuffer = AddressableLEDBuffer(PhysicalConstants.ledLength)
+            hasBrownedOut = true
+        }
         ledStrip.setData(ledBuffer)
     }
 

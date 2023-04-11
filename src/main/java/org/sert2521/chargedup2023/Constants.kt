@@ -44,7 +44,7 @@ object PhysicalConstants {
     const val elevatorExtensionDrive = 0.0
     const val elevatorExtensionConeHigh = 0.508
     const val elevatorExtensionCubeHigh = 0.4953
-    const val elevatorExtensionMid = 0.1651
+    const val elevatorExtensionMid = 0.173
     const val elevatorExtensionLow = 0.0
     const val elevatorExtensionConeTippedIntake = 0.0
     const val elevatorExtensionCubeIntake = 0.0
@@ -266,6 +266,14 @@ object TunedConstants {
 
     const val balanceAngleStart = 0.1
     const val balanceDriveUpSpeed = 1.2
+
+    const val fastBalanceA = 0.1
+    const val fastBalanceB = 0.7
+    const val fastBalanceC = -0.17
+
+    const val fastBalanceAcceptableRange = 0.0
+
+    const val fastBalanceCorrectionSpeed = 0.1
 
     const val cableTipLimit = 0.1
 
