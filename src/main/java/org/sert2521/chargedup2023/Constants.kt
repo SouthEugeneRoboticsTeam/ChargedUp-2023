@@ -25,8 +25,8 @@ object PhysicalConstants {
     // Difference of the ys over xs * conversions to meters
     const val elevatorExtensionConversion = (8.375 - 40.5625) / (-1.071426391601562 - 70.07333374023438) / 100.0 * 2.54
     const val elevatorAngleConversion = -2 * PI
-    // Difference of the ys over xs
-    const val elevatorAngleMotorDistanceConversion = (0.000702229045117 - 1.15102295437296) / (-73.89722442626953 + 0.31786513328552246)
+    // Difference of the ys over xs twice
+    const val elevatorAngleMotorDistanceConversion = ((1.143374432707317 - 0.07117047244852) / (1.140501856803895 - 0.155170455574989)) * ((0.000702229045117 - 1.15102295437296) / (-73.89722442626953 + 0.31786513328552246))
     // Velocity is in rpm so needs / 60
     const val elevatorAngleMotorVelocityConversion = elevatorAngleMotorDistanceConversion / 60.0
     const val elevatorFlipOffset = 0.085541770703388 - PI
@@ -349,10 +349,10 @@ object ConfigConstants {
         Pair("No Cable 1 Balance", autoConstraints), // Yes
         Pair("No Cable 1.5 Balance", autoConstraints), // Yes
         Pair("No Cable 1", autoConstraints), // Yes
-        Pair("No Cable 2.5 Cube", fastishAutoConstraints), // No / Straighten
-        Pair("No Cable 2.5 Cone", fastishAutoConstraints), // No / Straighten
-        Pair("No Cable 2", autoConstraints), // Yes
-        Pair("No Cable 2 Balance Near", fastAutoConstraints)) // No
+        //Pair("No Cable 2.5 Cube", fastishAutoConstraints), // No / Straighten
+            Pair("No Cable 2.5 Cone", fastishAutoConstraints), // No / Straighten
+            Pair("No Cable 2", autoConstraints), // Yes
+            Pair("No Cable 2 Balance Near", fastAutoConstraints)) // No
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {
