@@ -74,6 +74,7 @@ object Input {
 
         // Fix this nonsense
         autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
+            // There may be a bug when this starts of blue (or red)
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))); Drivetrain.setNewVisionPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
             SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
             SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
@@ -84,6 +85,18 @@ object Input {
             DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7),
             DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.1),
             Balance()) } // Yes
+
+        /*autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
+            InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))); Drivetrain.setNewVisionPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
+            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
+            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
+            ClawIntake(0.7).withTimeout(0.4),
+            InstantCommand({ }, Claw),
+            SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
+            OntoChargeStation(Translation2d(1.5, 0.0)).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
+            DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
+            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.1).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
+            Balance().alongWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))) } // Yes*/
 
         /*autoChooser.addOption("Center 1 Balance") { SequentialCommandGroup(
             InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),

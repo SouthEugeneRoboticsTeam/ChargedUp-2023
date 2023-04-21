@@ -326,8 +326,8 @@ object ConfigConstants {
         "Elevator Cube High" to SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, true),
         "Elevator Half" to SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
         "Claw Cube Outtake" to ClawIntake(0.75).withTimeout(0.4),
-        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.45), Balance()),
-        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.3), Balance()),
+        "Drive Back Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(-1.0, 0.0)), DriveUpChargeStation().withTimeout(1.5), Balance()),
+        "Drive Front Onto Charge Station" to SequentialCommandGroup(OntoChargeStation(Translation2d(1.0, 0.0)), DriveUpChargeStation().withTimeout(1.5), Balance()),
         "Align Vision Cube" to VisionAlignAuto(8.02 - 6.79, 2.0).withTimeout(2.0))
 
     private val autoConstraints = PathConstraints(1.8, 1.7)
@@ -350,9 +350,9 @@ object ConfigConstants {
         Pair("No Cable 1.5 Balance", autoConstraints), // Yes
         Pair("No Cable 1", autoConstraints), // Yes
         //Pair("No Cable 2.5 Cube", fastishAutoConstraints), // No / Straighten
-            Pair("No Cable 2.5 Cone", fastishAutoConstraints), // No / Straighten
-            Pair("No Cable 2", autoConstraints), // Yes
-            Pair("No Cable 2 Balance Near", fastAutoConstraints)) // No
+        Pair("No Cable 2.5 Cone", fastishAutoConstraints), // No / Straighten
+        Pair("No Cable 2", autoConstraints), // Yes
+        Pair("No Cable 2 Balance Near", fastAutoConstraints)) // No
 
     val paths: Array<Pair<String, List<PathPlannerTrajectory>>>
     init {
