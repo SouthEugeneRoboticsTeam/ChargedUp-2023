@@ -83,7 +83,7 @@ object Input {
             SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
             OntoChargeStation(Translation2d(1.5, 0.0)),
             DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7),
-            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.1),
+            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(1.95),
             Balance()) } // Yes
 
         /*autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
@@ -95,7 +95,7 @@ object Input {
             SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
             OntoChargeStation(Translation2d(1.5, 0.0)).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
             DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
-            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(2.1).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
+            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(1.95).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
             Balance().alongWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))) } // Yes*/
 
         /*autoChooser.addOption("Center 1 Balance") { SequentialCommandGroup(
