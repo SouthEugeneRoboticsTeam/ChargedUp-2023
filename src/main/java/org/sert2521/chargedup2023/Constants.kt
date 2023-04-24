@@ -259,7 +259,7 @@ object TunedConstants {
     const val standardFilterTaps = 20
     const val overCableFilterTaps = 4
 
-    const val balanceSpeed = 0.2
+    const val balanceSpeed = 0.2//0.35 maybe
     const val balanceAngleSignificantRate = 0.15
     const val balanceAngleTolerance = 0.04
 
