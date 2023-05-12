@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj.XboxController.Button
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.*
@@ -189,6 +188,14 @@ object Input {
 
     fun getColor(): Alliance {
         return DriverStation.getAlliance()
+    }
+
+    fun getAngle(): Double {
+        return if (driverController.aButton) { 1.0 } else { 0.0 } + if (driverController.bButton) { -1.0 } else { 0.0 }
+    }
+
+    fun getExtend(): Double {
+        return if (driverController.xButton) { 1.0 } else { 0.0 } + if (driverController.yButton) { -1.0 } else { 0.0 }
     }
 
     // This kinda violates the spirit of Input and Output

@@ -387,3 +387,8 @@ object ElectronicIDs {
 
     val camData = listOf(Pair("Right2", PhysicalConstants.rightPose), Pair("Left2", PhysicalConstants.leftPose))
 }
+
+object DemoConstants {
+    const val angleMultiplier = 0.3
+    const val extendMultiplier = 0.3
+}
