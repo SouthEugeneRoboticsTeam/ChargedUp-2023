@@ -52,6 +52,9 @@ class SwerveModule(private val powerMotor: CANSparkMax,
         powerMotor.encoder.velocityConversionFactor = PhysicalConstants.powerEncoderMultiplierVelocity
 
         position = SwerveModulePosition(powerMotor.encoder.position, getAngle())
+
+        powerMotor.setSmartCurrentLimit(40)
+        angleMotor.setSmartCurrentLimit(40)
     }
 
     private fun getAngle(): Rotation2d {

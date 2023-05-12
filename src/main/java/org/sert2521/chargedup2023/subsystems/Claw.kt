@@ -31,7 +31,7 @@ object Claw : SubsystemBase() {
     override fun periodic() {
         if (currentSpeed == 0.0){
             if (prev != 20) {
-                motor.setSmartCurrentLimit(20)
+                motor.setSmartCurrentLimit(15)
             }
 
             motor.set(-0.1)
@@ -39,11 +39,11 @@ object Claw : SubsystemBase() {
         } else {
             if (RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage) {
                 if (prev != 20) {
-                    motor.setSmartCurrentLimit(20)
+                    motor.setSmartCurrentLimit(15)
                 }
             } else {
                 if (prev != 45) {
-                    motor.setSmartCurrentLimit(45)
+                    motor.setSmartCurrentLimit(30)
                 }
             }
 
