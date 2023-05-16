@@ -12,7 +12,6 @@ class ManualElevator : CommandBase() {
         addRequirements(Elevator)
     }
 
-    // Clamping the target is kind of just in case
     override fun execute() {
         val extensionMeasure = Elevator.extensionMeasure()
         val angleWrapMeasure = Elevator.angleWrapMeasure()
