@@ -35,6 +35,7 @@ object PhysicalConstants {
     const val elevatorExtensionTop = 0.520943999290466
     const val elevatorExtensionBottom = 0.005745772912799999
 
+
     const val elevatorAngleTop = 1.19
     const val elevatorExtensionMaxAngle = 1.16
     const val elevatorAngleBottom = 0.005
@@ -60,6 +61,10 @@ object PhysicalConstants {
     const val elevatorAngleCubeIntake = 0.04
     const val elevatorAngleConeUpIntake = 0.145
     const val elevatorAngleSingleSubstation = 0.685
+
+    val elevatorDemoTriggerExtension = elevatorExtensionBottom+(elevatorExtensionTop-elevatorExtensionBottom)/8
+    val elevatorDemoTriggerAngle = elevatorAngleBottom+(elevatorAngleTop- elevatorAngleBottom)/8
+
 
     // Velocity is in rpm so needs / 60
     const val clawVelocityConversion = 1.0 / 60.0
@@ -296,6 +301,13 @@ object ConfigConstants {
     const val angleInitAngle = 1.175
     const val angleResetVoltage = 5.5
     const val resetAngle = 0.98
+
+    // Tune
+    const val demoModeDriveMultiplier = 0.7
+    const val demoModeDriveArmMultiplier = 0.4
+    const val demoModeRotateMultiplier = 0.7
+    const val demoModeRotateArmMultiplier = 0.2
+
 
     const val drivetrainOptimized = true
 

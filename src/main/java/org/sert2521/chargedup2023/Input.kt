@@ -27,23 +27,13 @@ object Input {
     private val driverController = XboxController(0)
     private val gunnerController = Joystick(1)
 
-    private val resetAngle = JoystickButton(driverController, 4)
-    private val slowButton = JoystickButton(driverController, 5)
-    private val coneAlignButton = JoystickButton(driverController, 6)
-    private val coneAlignConeRot = JoystickButton(driverController, 1)
+    private val outtake = JoystickButton(driverController, 5)
+    private val intake = JoystickButton(driverController, 6)
 
-    private val outtake = JoystickButton(gunnerController, 13)
-    private val intake = JoystickButton(gunnerController, 14)
-
-    private val liftDrive = JoystickButton(gunnerController, 5)
-    private val liftConeHigh = JoystickButton(gunnerController, 6)
-    private val liftCubeHigh = JoystickButton(gunnerController, 7)
-    private val liftMid = JoystickButton(gunnerController, 8)
-    private val liftLow = JoystickButton(gunnerController, 9)
-    private val liftIntakeTippedCone = JoystickButton(gunnerController, 10)
-    private val liftIntakeCube = JoystickButton(gunnerController, 16)
-    private val liftIntakeCone = JoystickButton(gunnerController, 15)
-    private val liftSingleSubstation = JoystickButton(gunnerController, 11)
+    private val armUpManual = JoystickButton(driverController, 4)
+    private val armDownManual = JoystickButton(driverController, 1)
+    private val armExtend = JoystickButton(driverController, 3)
+    private val armRetract = JoystickButton(driverController, 2)
 
     // Has to do this function thing so the robot can do andThen(auto) more than once
     private val autoChooser = SendableChooser<() -> Command?>()
@@ -113,11 +103,7 @@ object Input {
         // Replace numbers with constants
 
         // Clamp to reasonable positions
-        resetAngle.onTrue(InstantCommand({
-            Drivetrain.setNewPose(Pose2d())
-            Drivetrain.setNewVisionPose(Pose2d())
-        }))
-        coneAlignButton.whileTrue(VisionAlignCone())
+
         //coneAlignConeRot.whileTrue(VisionAlignConeRot())
         Trigger { driverController.leftTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(JoystickDrive(false))
@@ -129,23 +115,17 @@ object Input {
 
         intake.whileTrue(ClawIntake(-1.0))
 
-        liftDrive.onTrue(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))
-        liftConeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false))
-        liftCubeHigh.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeHigh, PhysicalConstants.elevatorAngleCubeHigh, false))
-        liftMid.onTrue(SetElevator(PhysicalConstants.elevatorExtensionMid, PhysicalConstants.elevatorAngleMid, false))
-        liftLow.onTrue(SetElevator(PhysicalConstants.elevatorExtensionLow, PhysicalConstants.elevatorAngleLow, false))
-        liftIntakeTippedCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, false))
-        liftIntakeCube.onTrue(SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, false))
-        liftIntakeCone.onTrue(SetElevator(PhysicalConstants.elevatorExtensionConeUpIntake, PhysicalConstants.elevatorAngleConeUpIntake, false))
-        liftSingleSubstation.onTrue(SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, false))
+        armDownManual.whileTrue(ManualElevator())
+        armUpManual.whileTrue(ManualElevator())
+        armExtend.whileTrue(ManualElevator())
+        armRetract.whileTrue(ManualElevator())
+
 
         val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
         val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
 
         ledCube.toggleOnTrue(currentCubePattern)
         ledCone.toggleOnTrue(currentConePattern)
-
-        slowButton.onTrue(InstantCommand({ slowMode = !slowMode }))
     }
 
     fun getAuto(): Command? {
