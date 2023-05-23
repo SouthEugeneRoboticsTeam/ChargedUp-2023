@@ -25,7 +25,6 @@ import kotlin.math.PI
 object Input {
     // Replace with constants
     private val driverController = XboxController(0)
-    private val gunnerController = Joystick(1)
 
     private val outtake = JoystickButton(driverController, 5)
     private val intake = JoystickButton(driverController, 6)
@@ -35,119 +34,14 @@ object Input {
     private val armExtend = JoystickButton(driverController, 3)
     private val armRetract = JoystickButton(driverController, 2)
 
-    // Has to do this function thing so the robot can do andThen(auto) more than once
-    private val autoChooser = SendableChooser<() -> Command?>()
-    private val autoBuilder = SwerveAutoBuilder(
-        Drivetrain::getPose,
-        { Drivetrain.setNewPose(it); Drivetrain.setNewVisionPose(it) },
-        PIDConstants(TunedConstants.swerveAutoDistanceP, TunedConstants.swerveAutoDistanceI, TunedConstants.swerveAutoDistanceD),
-        PIDConstants(TunedConstants.swerveAutoAngleP, TunedConstants.swerveAutoAngleI, TunedConstants.swerveAutoAngleD),
-        Drivetrain::drive,
-        ConfigConstants.eventMap,
-        true,
-        Drivetrain
-    )
-
-    private val ledCube = JoystickButton(gunnerController, 3)
-
-    private val ledCone = JoystickButton(gunnerController, 4)
-
-    var slowMode = false
-
     init {
-        // Put these strings in constants maybe
-        autoChooser.setDefaultOption("Nothing") { null }
-        for (path in ConfigConstants.paths) {
-            autoChooser.addOption(path.first) { autoBuilder.fullAuto(path.second) }
-        }
-
-        // Fix this nonsense
-        autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
-            // There may be a bug when this starts of blue (or red)
-            InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))); Drivetrain.setNewVisionPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
-            ClawIntake(0.7).withTimeout(0.4),
-            InstantCommand({ }, Claw),
-            SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
-            OntoChargeStation(Translation2d(1.5, 0.0)),
-            DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7),
-            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(1.95),
-            Balance()) } // Yes
-
-        /*autoChooser.addOption("Center 1 Over And Back Balance") { SequentialCommandGroup(
-            InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))); Drivetrain.setNewVisionPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
-            ClawIntake(0.7).withTimeout(0.4),
-            InstantCommand({ }, Claw),
-            SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
-            OntoChargeStation(Translation2d(1.5, 0.0)).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
-            DriveInDirection(Translation2d(1.5, 0.0)).withTimeout(2.7).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
-            DriveInDirection(Translation2d(-1.5, 0.0)).withTimeout(1.95).deadlineWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false)),
-            Balance().alongWith(SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, false))) } // Yes*/
-
-        /*autoChooser.addOption("Center 1 Balance") { SequentialCommandGroup(
-            InstantCommand({ Drivetrain.setNewPose(Pose2d(0.0, 0.0, Rotation2d(PI))) }),
-            SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
-            SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
-            ClawIntake(0.7).withTimeout(0.4),
-            InstantCommand({ }, Claw),
-            SetElevator(PhysicalConstants.elevatorExtensionSingleSubstation, PhysicalConstants.elevatorAngleSingleSubstation, true),
-            OntoChargeStation(Translation2d(1.0, 0.0)),
-            DriveUpChargeStation().withTimeout(1.3),
-            Balance()) } // No*/
-
-        SmartDashboard.putData("Auto Chooser", autoChooser)
-
-        // Replace numbers with constants
-
-        // Clamp to reasonable positions
-
-        //coneAlignConeRot.whileTrue(VisionAlignConeRot())
-        Trigger { driverController.leftTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
-        Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(JoystickDrive(false))
-
-        // Intaking a cone is the same as outtaking a cube
-        //intakeSetOne.whileTrue(ClawIntake(1.0))
-
         outtake.whileTrue(ClawIntake(1.0))
 
         intake.whileTrue(ClawIntake(-1.0))
-
-        armDownManual.whileTrue(ManualElevator())
-        armUpManual.whileTrue(ManualElevator())
-        armExtend.whileTrue(ManualElevator())
-        armRetract.whileTrue(ManualElevator())
-
-
-        val currentCubePattern = LedFlash(PhysicalConstants.ledPurpleHSV[0], PhysicalConstants.ledPurpleHSV[1], PhysicalConstants.ledPurpleHSV[2], 1.0)
-        val currentConePattern = LedFlash(PhysicalConstants.ledYellowHSV[0], PhysicalConstants.ledYellowHSV[1], PhysicalConstants.ledYellowHSV[2], 1.0)
-
-        ledCube.toggleOnTrue(currentCubePattern)
-        ledCone.toggleOnTrue(currentConePattern)
-    }
-
-    fun getAuto(): Command? {
-        val selected = autoChooser.selected
-        return if (selected == null) {
-            null
-        } else {
-            selected()
-        }
     }
 
     fun getBrakePos(): Boolean {
         return driverController.xButton
-    }
-
-    // Rename fast stuff because it actually slows it
-    fun getFast(): Double {
-        return if (!slowMode) {
-            driverController.leftTriggerAxis
-        } else {
-            1.0
-        }
     }
 
     fun getX(): Double {
@@ -160,10 +54,6 @@ object Input {
 
     fun getRot(): Double {
         return -driverController.rightX
-    }
-
-    fun getSlider(): Double {
-        return gunnerController.getRawAxis(3)
     }
 
     fun getColor(): Alliance {

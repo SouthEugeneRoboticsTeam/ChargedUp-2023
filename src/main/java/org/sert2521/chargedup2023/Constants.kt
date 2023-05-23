@@ -62,9 +62,6 @@ object PhysicalConstants {
     const val elevatorAngleConeUpIntake = 0.145
     const val elevatorAngleSingleSubstation = 0.685
 
-    val elevatorDemoTriggerExtension = elevatorExtensionBottom+(elevatorExtensionTop-elevatorExtensionBottom)/8
-    val elevatorDemoTriggerAngle = elevatorAngleBottom+(elevatorAngleTop- elevatorAngleBottom)/8
-
 
     // Velocity is in rpm so needs / 60
     const val clawVelocityConversion = 1.0 / 60.0
@@ -302,23 +299,11 @@ object ConfigConstants {
     const val angleResetVoltage = 5.5
     const val resetAngle = 0.98
 
-    // Tune
-    const val demoModeDriveMultiplier = 0.7
-    const val demoModeDriveArmMultiplier = 0.4
-    const val demoModeRotateMultiplier = 0.7
-    const val demoModeRotateArmMultiplier = 0.2
-
-
     const val drivetrainOptimized = true
 
     // Add actual joystick deadband
     const val powerDeadband = 0.075
     const val rotDeadband = 0.075
-
-    const val driveSpeed = 3.5
-    const val driveSpeedup = 2.75
-    const val rotSpeed = 3.5
-    const val rotSpeedup = 2.75
 
     const val driveSpeedupChangeSpeed = 6.5
     const val driveSlowdownChangeSpeed = 36.0
@@ -401,6 +386,15 @@ object ElectronicIDs {
 }
 
 object DemoConstants {
-    const val angleMultiplier = 0.3
-    const val extendMultiplier = 0.3
+    const val angleMultiplier = 4.0
+    const val extendMultiplier = 4.0
+
+    const val driveArmMultiplier = 0.4
+    const val rotateArmMultiplier = 0.2
+
+    const val elevatorDemoTriggerExtension = PhysicalConstants.elevatorExtensionBottom + (PhysicalConstants.elevatorExtensionTop - PhysicalConstants.elevatorExtensionBottom) / 8
+    const val elevatorDemoTriggerAngle = PhysicalConstants.elevatorAngleBottom + (PhysicalConstants.elevatorAngleTop - PhysicalConstants.elevatorAngleBottom) / 8
+
+    const val driveSpeed = 1.0
+    const val rotSpeed = 1.0
 }

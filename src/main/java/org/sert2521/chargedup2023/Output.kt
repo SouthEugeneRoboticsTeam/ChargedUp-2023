@@ -51,8 +51,6 @@ object Output {
         bools.add(Pair("Elevator Angle Inited") { Elevator.angleInited })
         bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
 
-        bools.add(Pair("Slow Mode") { Input.slowMode })
-
         bools.add(Pair("Vision Happy") { visionHappy })
 
         bools.add(Pair("Claw Full") { Claw.clawFull })

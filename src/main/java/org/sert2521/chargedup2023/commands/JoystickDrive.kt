@@ -2,6 +2,7 @@ package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import org.sert2521.chargedup2023.ConfigConstants
+import org.sert2521.chargedup2023.DemoConstants
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.Input
 import org.sert2521.chargedup2023.PhysicalConstants
@@ -20,18 +21,18 @@ class JoystickDrive(private val fieldOrientated: Boolean) : JoystickCommand() {
             } else {
                 Drivetrain.stop()
             }
-        } else if (!(Elevator.extensionMeasure()>PhysicalConstants.elevatorDemoTriggerExtension
-                        || Elevator.angleMeasure()>PhysicalConstants.elevatorDemoTriggerAngle)){
+        } else if (!(Elevator.extensionMeasure()>DemoConstants.elevatorDemoTriggerExtension
+                        || Elevator.angleMeasure()>DemoConstants.elevatorDemoTriggerAngle)){
             if (fieldOrientated) {
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(joystickData.x*ConfigConstants.demoModeDriveMultiplier, joystickData.y*ConfigConstants.demoModeDriveMultiplier, joystickData.z*ConfigConstants.demoModeRotateMultiplier, Drivetrain.getPose().rotation))
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(joystickData.x, joystickData.y, joystickData.z, Drivetrain.getPose().rotation))
             } else {
-                Drivetrain.drive(ChassisSpeeds(joystickData.x*ConfigConstants.demoModeDriveMultiplier, joystickData.y*ConfigConstants.demoModeDriveMultiplier, joystickData.z*ConfigConstants.demoModeRotateMultiplier))
+                Drivetrain.drive(ChassisSpeeds(joystickData.x, joystickData.y, joystickData.z))
             }
         } else {
             if (fieldOrientated) {
-                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(joystickData.x*ConfigConstants.demoModeDriveArmMultiplier, joystickData.y*ConfigConstants.demoModeDriveArmMultiplier, joystickData.z*ConfigConstants.demoModeRotateArmMultiplier, Drivetrain.getPose().rotation))
+                Drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(joystickData.x, joystickData.y, joystickData.z, Drivetrain.getPose().rotation))
             } else {
-                Drivetrain.drive(ChassisSpeeds(joystickData.x*ConfigConstants.demoModeDriveArmMultiplier, joystickData.y*ConfigConstants.demoModeDriveArmMultiplier, joystickData.z*ConfigConstants.demoModeRotateArmMultiplier))
+                Drivetrain.drive(ChassisSpeeds(joystickData.x, joystickData.y, joystickData.z))
             }
         }
     }

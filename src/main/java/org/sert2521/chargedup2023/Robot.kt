@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.sert2521.chargedup2023.commands.InitElevator
+import org.sert2521.chargedup2023.commands.ManualElevator
 import org.sert2521.chargedup2023.subsystems.Drivetrain
 import org.sert2521.chargedup2023.subsystems.Elevator
 import org.sert2521.chargedup2023.subsystems.LEDs
@@ -18,8 +19,6 @@ object Robot : TimedRobot() {
         Elevator
 
         LEDs
-
-        PathPlannerServer.startServer(5811)
     }
 
     override fun robotPeriodic() {
@@ -29,7 +28,9 @@ object Robot : TimedRobot() {
 
     override fun disabledExit() {
         if (!Elevator.extensionInited || !Elevator.angleInited) {
-            InitElevator().withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).schedule()
+            InitElevator().withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming).andThen(ManualElevator()).schedule()
+        } else {
+            ManualElevator().schedule()
         }
     }
 
