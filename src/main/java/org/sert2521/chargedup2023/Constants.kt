@@ -395,6 +395,8 @@ object DemoConstants {
     const val elevatorDemoTriggerExtension = PhysicalConstants.elevatorExtensionTop - (PhysicalConstants.elevatorExtensionTop - PhysicalConstants.elevatorExtensionBottom) / 4
     const val elevatorDemoTriggerAngle = PhysicalConstants.elevatorAngleTop - (PhysicalConstants.elevatorAngleTop - PhysicalConstants.elevatorAngleBottom) / 4
 
+    const val elevatorSlowWhenExtended = 0.3
+
     const val driveSpeed = 0.75
     const val rotSpeed = 1.0
 }
