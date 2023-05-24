@@ -29,15 +29,15 @@ object Input {
     private val outtake = JoystickButton(driverController, 5)
     private val intake = JoystickButton(driverController, 6)
 
-    private val armUpManual = JoystickButton(driverController, 4)
-    private val armDownManual = JoystickButton(driverController, 1)
-    private val armExtend = JoystickButton(driverController, 3)
-    private val armRetract = JoystickButton(driverController, 2)
+    private val resetRot = JoystickButton(driverController, 7)
+    private val resetRot2 = JoystickButton(driverController, 8)
 
     init {
         outtake.whileTrue(ClawIntake(1.0))
 
         intake.whileTrue(ClawIntake(-1.0))
+
+        resetRot.and(resetRot2).whileTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
     }
 
     fun getBrakePos(): Boolean {
@@ -61,11 +61,11 @@ object Input {
     }
 
     fun getAngle(): Double {
-        return if (driverController.aButton) { 1.0 } else { 0.0 } + if (driverController.bButton) { -1.0 } else { 0.0 }
+        return if (driverController.bButton) { 1.0 } else { 0.0 } + if (driverController.aButton) { -1.0 } else { 0.0 }
     }
 
     fun getExtend(): Double {
-        return if (driverController.xButton) { 1.0 } else { 0.0 } + if (driverController.yButton) { -1.0 } else { 0.0 }
+        return if (driverController.yButton) { 1.0 } else { 0.0 } + if (driverController.xButton) { -1.0 } else { 0.0 }
     }
 
     // This kinda violates the spirit of Input and Output

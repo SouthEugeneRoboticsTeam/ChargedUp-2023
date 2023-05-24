@@ -3,6 +3,7 @@ package org.sert2521.chargedup2023.commands
 
 import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
+import org.sert2521.chargedup2023.DemoConstants
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.TunedConstants.ledsRainbowA
 import org.sert2521.chargedup2023.TunedConstants.ledsRainbowB
@@ -35,13 +36,13 @@ class LedIdle : CommandBase() {
         driveSpeed = 50 * kotlin.math.sqrt((lastPose.x - Drivetrain.getPose().x).pow(2) + (lastPose.y - Drivetrain.getPose().y).pow(2))
         lastPose = Drivetrain.getPose()
 
-        hueTimer += (-ledsRainbowA.pow(ledsRainbowB/(driveSpeed/ConfigConstants.driveSpeed + ledsRainbowC))+ledsRainbowD)*ledsRainbowE
+        hueTimer += (-ledsRainbowA.pow(ledsRainbowB/(driveSpeed/DemoConstants.driveSpeed + ledsRainbowC))+ledsRainbowD)*ledsRainbowE
 
 
 
         for (i in 0 until PhysicalConstants.ledLength){
             LEDs.setLEDHSV(i, hueTimer.toInt()+i*4, 255,
-                min((255.0*driveSpeed/ConfigConstants.driveSpeed).toInt(), 255).coerceAtLeast(15)
+                min((255.0*driveSpeed/ DemoConstants.driveSpeed).toInt(), 255).coerceAtLeast(15)
             )
         }
     }

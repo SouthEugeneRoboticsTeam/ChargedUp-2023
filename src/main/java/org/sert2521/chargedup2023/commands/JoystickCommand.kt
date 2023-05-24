@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase
 import org.sert2521.chargedup2023.ConfigConstants
 import org.sert2521.chargedup2023.DemoConstants
 import org.sert2521.chargedup2023.Input
+import org.sert2521.chargedup2023.subsystems.Elevator
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -46,7 +47,11 @@ abstract class JoystickCommand : CommandBase() {
         }
 
         // Converts the x and y input into m/s so the rate limiters apply in m/s
-        val trueSpeed = DemoConstants.driveSpeed * DemoConstants.driveArmMultiplier
+        val trueSpeed = if (Elevator.extensionMeasure()<DemoConstants.elevatorDemoTriggerExtension || Elevator.angleMeasure() < DemoConstants.elevatorDemoTriggerAngle) {
+            DemoConstants.driveSpeed * DemoConstants.driveArmMultiplier
+        } else {
+            DemoConstants.driveSpeed
+        }
         currX *= trueSpeed
         currY *= trueSpeed
 
@@ -83,8 +88,10 @@ abstract class JoystickCommand : CommandBase() {
         if (abs(rot) <= ConfigConstants.rotDeadband) {
             rot = 0.0
         }
-        rot *= DemoConstants.rotSpeed * DemoConstants.rotateArmMultiplier
-
+        rot *= DemoConstants.rotSpeed
+        if (Elevator.angleMeasure()<DemoConstants.elevatorDemoTriggerAngle || Elevator.extensionMeasure()>DemoConstants.elevatorDemoTriggerExtension) {
+            rot *= DemoConstants.rotateArmMultiplier
+        }
         return Translation3d(x, y, rot)
     }
 }
