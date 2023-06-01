@@ -35,6 +35,7 @@ object Input {
     init {
         outtake.whileTrue(ClawIntake(1.0))
 
+
         intake.whileTrue(ClawIntake(-1.0))
 
         resetRot.and(resetRot2).whileTrue(InstantCommand({ Drivetrain.setNewPose(Pose2d()) }))
@@ -45,6 +46,7 @@ object Input {
     }
 
     fun getX(): Double {
+
         return -driverController.leftY
     }
 

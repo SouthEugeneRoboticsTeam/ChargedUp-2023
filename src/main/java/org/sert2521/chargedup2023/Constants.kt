@@ -32,7 +32,7 @@ object PhysicalConstants {
     const val elevatorFlipOffset = 0.085541770703388 - PI
     const val elevatorAngleOffset = -0.638255487307134
 
-    const val elevatorExtensionTop = 0.520943999290466
+    const val elevatorExtensionTop = 0.520943999290466/2.0
     const val elevatorExtensionBottom = 0.005745772912799999
 
 
@@ -390,7 +390,7 @@ object DemoConstants {
     const val extendMultiplier = 4.0
 
     const val driveArmMultiplier = 0.6
-    const val rotateArmMultiplier = 0.2
+    const val rotateArmMultiplier = 0.4
 
     const val elevatorDemoTriggerExtension = PhysicalConstants.elevatorExtensionTop - (PhysicalConstants.elevatorExtensionTop - PhysicalConstants.elevatorExtensionBottom) / 4
     const val elevatorDemoTriggerAngle = PhysicalConstants.elevatorAngleTop - (PhysicalConstants.elevatorAngleTop - PhysicalConstants.elevatorAngleBottom) / 4
