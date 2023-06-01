@@ -221,6 +221,10 @@ object TunedConstants {
 
     const val elevatorPullUpAngleDifference = 0.1
 
+    const val elevatorAngleHomeP = 0.4
+    const val elevatorAngleHomeI = 0.0
+    const val elevatorAngleHomeD = 0.0
+
     // Sysid these all
     const val swervePowerS = 0.3
     const val swervePowerV = 3.0
@@ -388,6 +392,8 @@ object ElectronicIDs {
 object DemoConstants {
     const val angleMultiplier = 4.0
     const val extendMultiplier = 4.0
+
+    const val autoHomeTrigger = 0.2
 
     const val driveArmMultiplier = 0.6
     const val rotateArmMultiplier = 0.2
