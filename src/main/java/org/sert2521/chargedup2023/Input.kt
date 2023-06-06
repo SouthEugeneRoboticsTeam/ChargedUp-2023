@@ -42,7 +42,11 @@ object Input {
     }
 
     fun getBrakePos(): Boolean {
-        return driverController.xButton
+        return false
+    }
+
+    fun getIntake(): Boolean {
+        return driverController.rightBumper
     }
 
     fun getX(): Double {

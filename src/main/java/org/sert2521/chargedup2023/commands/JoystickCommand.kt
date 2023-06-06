@@ -33,6 +33,10 @@ abstract class JoystickCommand : CommandBase() {
 
         var currX = Input.getX()
         var currY = Input.getY()
+        if (Input.getIntake()){
+            currX = 0.7
+            currY = 0.0
+        }
 
         // Checks if the joystick is outputting a magnitude greater than 1 and if it is normalizes the input
         // Otherwise it deadbands the input
@@ -47,7 +51,7 @@ abstract class JoystickCommand : CommandBase() {
         }
 
         // Converts the x and y input into m/s so the rate limiters apply in m/s
-        val trueSpeed = if (Elevator.extensionMeasure()<DemoConstants.elevatorDemoTriggerExtension || Elevator.angleMeasure() < DemoConstants.elevatorDemoTriggerAngle) {
+        val trueSpeed = if (Elevator.extensionMeasure()<DemoConstants.elevatorDemoTriggerExtension) {
             DemoConstants.driveSpeed * DemoConstants.driveArmMultiplier
         } else {
             DemoConstants.driveSpeed
@@ -89,7 +93,7 @@ abstract class JoystickCommand : CommandBase() {
             rot = 0.0
         }
         rot *= DemoConstants.rotSpeed
-        if (Elevator.angleMeasure()<DemoConstants.elevatorDemoTriggerAngle || Elevator.extensionMeasure()>DemoConstants.elevatorDemoTriggerExtension) {
+        if (Elevator.extensionMeasure()>DemoConstants.elevatorDemoTriggerExtension) {
             rot *= DemoConstants.rotateArmMultiplier
         }
         return Translation3d(x, y, rot)

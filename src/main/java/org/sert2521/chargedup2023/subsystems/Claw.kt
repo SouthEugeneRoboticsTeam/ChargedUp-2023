@@ -34,8 +34,8 @@ object Claw : SubsystemBase() {
                 motor.setSmartCurrentLimit(30)
             }
 
-            motor.set(-0.7)
-            currentSpeed = -0.7
+            motor.set(-0.1)
+            currentSpeed = -0.1
         } else {
             if (RobotController.getBatteryVoltage() <= ConfigConstants.preBrownOutVoltage) {
                 if (prev != 30) {

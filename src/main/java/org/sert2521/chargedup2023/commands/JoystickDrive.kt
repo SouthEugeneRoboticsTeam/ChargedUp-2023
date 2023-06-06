@@ -8,12 +8,13 @@ import org.sert2521.chargedup2023.Input
 import org.sert2521.chargedup2023.PhysicalConstants
 import org.sert2521.chargedup2023.subsystems.Elevator
 
-class JoystickDrive(private val fieldOrientated: Boolean) : JoystickCommand() {
+class JoystickDrive(private var fieldOrientated: Boolean) : JoystickCommand() {
     init {
         addRequirements(Drivetrain)
     }
 
     override fun execute() {
+        fieldOrientated = !Input.getIntake()
         val joystickData = readJoystick()
         if (joystickData.x == 0.0 && joystickData.y == 0.0 && joystickData.z == 0.0) {
             if (Input.getBrakePos()) {

@@ -60,7 +60,6 @@ object Elevator : SubsystemBase() {
         val safe = extensionSafe()
 
         if (atTopExtension) {
-            extendEncoder.position = PhysicalConstants.elevatorExtensionTop
             extensionInited = true
         }
 
@@ -131,7 +130,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun extensionAtTop(): Boolean {
-        return !upperExtension.get()
+        return this.extensionMeasure() >= PhysicalConstants.elevatorExtensionTop || !upperExtension.get()
     }
 
     fun extensionAtBottom(): Boolean {
