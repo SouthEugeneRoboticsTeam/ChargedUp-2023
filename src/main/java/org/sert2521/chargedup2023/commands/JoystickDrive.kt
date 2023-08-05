@@ -14,7 +14,7 @@ class JoystickDrive(private var fieldOrientated: Boolean) : JoystickCommand() {
     }
 
     override fun execute() {
-        fieldOrientated = !Input.getIntake()
+        fieldOrientated = !Input.getIntake() || !Elevator.angleAtBottom()
         val joystickData = readJoystick()
         if (joystickData.x == 0.0 && joystickData.y == 0.0 && joystickData.z == 0.0) {
             if (Input.getBrakePos()) {

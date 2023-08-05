@@ -33,7 +33,7 @@ abstract class JoystickCommand : CommandBase() {
 
         var currX = Input.getX()
         var currY = Input.getY()
-        if (Input.getIntake()){
+        if (Input.getIntake() && Elevator.angleAtBottom()){
             currX = 0.7
             currY = 0.0
         }
@@ -51,7 +51,7 @@ abstract class JoystickCommand : CommandBase() {
         }
 
         // Converts the x and y input into m/s so the rate limiters apply in m/s
-        val trueSpeed = if (Elevator.extensionMeasure()<DemoConstants.elevatorDemoTriggerExtension) {
+        val trueSpeed = if (Elevator.extensionMeasure()>DemoConstants.elevatorDemoTriggerExtension) {
             DemoConstants.driveSpeed * DemoConstants.driveArmMultiplier
         } else {
             DemoConstants.driveSpeed

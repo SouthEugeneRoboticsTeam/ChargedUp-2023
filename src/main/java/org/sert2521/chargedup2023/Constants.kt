@@ -305,8 +305,8 @@ object ConfigConstants {
     const val drivetrainOptimized = true
 
     // Add actual joystick deadband
-    const val powerDeadband = 0.075
-    const val rotDeadband = 0.075
+    const val powerDeadband = 0.25
+    const val rotDeadband = 0.1
 
     const val driveSpeedupChangeSpeed = 6.5
     const val driveSlowdownChangeSpeed = 36.0

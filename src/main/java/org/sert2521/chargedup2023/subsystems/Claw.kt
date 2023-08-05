@@ -31,7 +31,7 @@ object Claw : SubsystemBase() {
     override fun periodic() {
         if (currentSpeed == 0.0){
             if (prev != 30) {
-                motor.setSmartCurrentLimit(30)
+                motor.setSmartCurrentLimit(60)
             }
 
             motor.set(-0.1)
@@ -44,7 +44,7 @@ object Claw : SubsystemBase() {
             } else {
                 if (currentSpeed < 0) {
                     if (prev != 30) {
-                        motor.setSmartCurrentLimit(30)
+                        motor.setSmartCurrentLimit(60)
                     }
                 } else {
                     if (prev != 60) {
