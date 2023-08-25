@@ -57,7 +57,7 @@ class SwerveModule(private val powerMotor: CANSparkMax,
         angleMotor.setSmartCurrentLimit(40)
     }
 
-    private fun getAngle(): Rotation2d {
+    fun getAngle(): Rotation2d {
         return if (inverted) {
             Rotation2d(-(angleEncoder.absolutePosition * PhysicalConstants.angleEncoderMultiplier - angleOffset))
         } else {
@@ -232,7 +232,9 @@ object Drivetrain : SubsystemBase() {
         for (module in modules) {
             module.updateState()
             positions.add(module.position)
+            print(module.getAngle())
         }
+        println()
 
         val positionsArray = positions.toTypedArray()
 
