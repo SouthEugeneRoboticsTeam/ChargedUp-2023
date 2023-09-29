@@ -54,7 +54,7 @@ class SwerveModule(private val powerMotor: CANSparkMax,
         position = SwerveModulePosition(powerMotor.encoder.position, getAngle())
     }
 
-    private fun getAngle(): Rotation2d {
+    fun getAngle(): Rotation2d {
         return if (inverted) {
             Rotation2d(-(angleEncoder.absolutePosition * PhysicalConstants.angleEncoderMultiplier - angleOffset))
         } else {
@@ -230,6 +230,7 @@ object Drivetrain : SubsystemBase() {
             module.updateState()
             positions.add(module.position)
         }
+        println(listOf(modules[0].getAngle().radians, modules[1].getAngle().radians, modules[2].getAngle().radians, modules[3].getAngle().radians))
 
         val positionsArray = positions.toTypedArray()
 
