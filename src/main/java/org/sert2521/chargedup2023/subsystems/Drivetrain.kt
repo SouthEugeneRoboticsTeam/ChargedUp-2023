@@ -226,14 +226,11 @@ object Drivetrain : SubsystemBase() {
     override fun periodic() {
         val positions = mutableListOf<SwerveModulePosition>()
 
-
-
         for (module in modules) {
             module.updateState()
             positions.add(module.position)
-            println(module.getAngle())
         }
-        println()
+        println(listOf(modules[0].getAngle().radians, modules[1].getAngle().radians, modules[2].getAngle().radians, modules[3].getAngle().radians))
 
         val positionsArray = positions.toTypedArray()
 

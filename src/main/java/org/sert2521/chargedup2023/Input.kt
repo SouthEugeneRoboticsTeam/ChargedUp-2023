@@ -30,10 +30,10 @@ object Input {
 
     private val resetAngle = JoystickButton(driverController, 4)
     private val slowButton = JoystickButton(driverController, 5)
-    private val coneAlignButton = JoystickButton(driverController, 6)
-    private val coneAlignConeRot = JoystickButton(driverController, 1)
+    //private val coneAlignButton = JoystickButton(driverController, 6)
+    //private val coneAlignConeRot = JoystickButton(driverController, 1)
 
-    private val outtake = JoystickButton(gunnerController, 13)
+    private val outtake = JoystickButton(gunnerController, 13).or(JoystickButton(driverController, 6))
     private val intake = JoystickButton(gunnerController, 14)
 
     private val liftDrive = JoystickButton(gunnerController, 5)
@@ -118,7 +118,7 @@ object Input {
             Drivetrain.setNewPose(Pose2d())
             Drivetrain.setNewVisionPose(Pose2d())
         }))
-        coneAlignButton.whileTrue(VisionAlignCone())
+        //coneAlignButton.whileTrue(VisionAlignCone())
         //coneAlignConeRot.whileTrue(VisionAlignConeRot())
         Trigger { driverController.leftTriggerAxis > 0.5 }.whileTrue(VisionAlignSubstation())
         Trigger { driverController.rightTriggerAxis > 0.5 }.whileTrue(JoystickDrive(false))

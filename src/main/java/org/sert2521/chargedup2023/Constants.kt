@@ -37,9 +37,9 @@ object PhysicalConstants {
 
     const val elevatorAngleTop = 1.19
     const val elevatorExtensionMaxAngle = 1.16
-    const val elevatorAngleBottom = 0.005
-    const val elevatorAngleMotorBottom = -0.3
-    const val elevatorExtensionMinAngle = 0.05
+    const val elevatorAngleBottom = -0.1
+    const val elevatorAngleMotorBottom = -0.1
+    const val elevatorExtensionMinAngle = -0.13
 
     const val elevatorExtensionDrive = 0.0
     const val elevatorExtensionConeHigh = 0.508
@@ -56,7 +56,7 @@ object PhysicalConstants {
     const val elevatorAngleCubeHigh = 0.58
     const val elevatorAngleMid = 0.68
     const val elevatorAngleLow = 0.22
-    const val elevatorAngleConeTippedIntake = 0.0
+    const val elevatorAngleConeTippedIntake = -0.09
     const val elevatorAngleCubeIntake = 0.04
     const val elevatorAngleConeUpIntake = 0.145
     const val elevatorAngleSingleSubstation = 0.685
@@ -196,7 +196,7 @@ object TunedConstants {
     const val elevatorExtensionTolerance = 0.035
 
     const val elevatorExtensionMaxAngleTarget = 1.1
-    const val elevatorExtensionMinAngleTarget = 0.1
+    const val elevatorExtensionMinAngleTarget = -0.2
 
     const val elevatorAngleP = 40.0
     const val elevatorAngleI = 0.0
@@ -217,7 +217,7 @@ object TunedConstants {
     const val elevatorTrustTrueAngleDistance = 0.03
     const val elevatorTrustWrapDistance = 0.07
 
-    const val elevatorPullUpAngleDifference = 0.1
+    const val elevatorPullUpAngleDifference = 0.3
 
     // Sysid these all
     const val swervePowerS = 0.3
@@ -300,8 +300,8 @@ object ConfigConstants {
     const val drivetrainOptimized = true
 
     // Add actual joystick deadband
-    const val powerDeadband = 0.075
-    const val rotDeadband = 0.075
+    const val powerDeadband = 0.1
+    const val rotDeadband = 0.1
 
     const val driveSpeed = 3.5
     const val driveSpeedup = 2.75
