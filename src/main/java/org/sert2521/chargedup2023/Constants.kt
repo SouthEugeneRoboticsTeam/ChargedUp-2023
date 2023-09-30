@@ -303,7 +303,7 @@ object ConfigConstants {
     const val powerDeadband = 0.1
     const val rotDeadband = 0.1
 
-    const val driveSpeed = 3.5
+    const val driveSpeed = 2.5
     const val driveSpeedup = 2.75
     const val rotSpeed = 3.5
     const val rotSpeedup = 2.75
@@ -378,10 +378,10 @@ object ElectronicIDs {
     const val elevatorLowerExtension = 1
 
     val swerveModuleData = listOf(
-        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 5, 14, -2.27 + PI / 2 + 4.62 + 1.54 - PI + 1.49, true),
-        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI  + 2.05, true),
-        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI +1.59, true),
-        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI +4.67 , true))
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 4, 5, 14, -2.27 + PI / 2 + 4.62 + 1.54 - PI + 1.49 -2.08 +PI/2 +2.165 +PI + PI/2, true), //Back Left
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, -PhysicalConstants.halfSideLength), 1, 2, 16, -1.63 - PI + 4.79 + 1.61 - PI  + 2.05 +1.53 +PI/2 -1.52 +PI/2, true), //Back Right
+        SwerveModuleData(Translation2d(PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 12, 11, 13, -0.76 + PI / 2 - 1.43 + 1.57 - PI +1.59+4.375+PI/2 -1.19 +PI/2, true), //Front Left
+        SwerveModuleData(Translation2d(-PhysicalConstants.halfSideLength, PhysicalConstants.halfSideLength), 7, 8, 15, -4.10 - PI / 2 + 5.12 + 1.75 - PI +4.67 +1.59+PI/2 -1.53 +PI/2, true)) //Front Right
 
     const val ledId = 0
 
