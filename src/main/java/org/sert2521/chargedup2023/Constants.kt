@@ -303,10 +303,10 @@ object ConfigConstants {
     const val powerDeadband = 0.1
     const val rotDeadband = 0.1
 
-    const val driveSpeed = 3.5
-    const val driveSpeedup = 2.75
-    const val rotSpeed = 3.5
-    const val rotSpeedup = 2.75
+    const val driveSpeed = 3.5 * (5.0/7.0)
+    const val driveSpeedup = 2.75 * (5.0/7.0)
+    const val rotSpeed = 3.5 * (5.0/7.0)
+    const val rotSpeedup = 2.75 * (5.0/7.0)
 
     const val driveSpeedupChangeSpeed = 6.5
     const val driveSlowdownChangeSpeed = 36.0

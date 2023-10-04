@@ -46,7 +46,7 @@ abstract class JoystickCommand : CommandBase() {
         }
 
         // Converts the x and y input into m/s so the rate limiters apply in m/s
-        val trueSpeed = ConfigConstants.driveSpeed - (ConfigConstants.driveSpeedup * fast)
+        val trueSpeed = abs(ConfigConstants.driveSpeed - (ConfigConstants.driveSpeedup * fast))
         currX *= trueSpeed
         currY *= trueSpeed
 
