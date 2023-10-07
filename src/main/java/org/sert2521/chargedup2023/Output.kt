@@ -28,37 +28,37 @@ object Output {
             }
         }
 
-        values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
-        values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
-        values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
+        //values.add(Pair("Elevator Extension") { Elevator.extensionMeasure() })
+        //values.add(Pair("Elevator Angle") { Elevator.angleMeasure() })
+        //values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
         // Maybe make these two more encapsulationy
-        values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
-        values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
+        //values.add(Pair("Elevator Wrap Angle") { Elevator.angleWrapMeasure() })
+        //values.add(Pair("Elevator Angle Power") { Elevator.angleMotor.appliedOutput })
 
-        values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
-        values.add(Pair("Drivetrain Delta Pose X") { Drivetrain.deltaPose.x })
-        values.add(Pair("Drivetrain Delta Pose Y") { Drivetrain.deltaPose.y })
-        values.add(Pair("Drivetrain Delta Pose Rot") { Drivetrain.deltaPose.rotation.radians })
+        //values.add(Pair("Drivetrain Tilt") { Drivetrain.getTilt() })
+        //values.add(Pair("Drivetrain Delta Pose X") { Drivetrain.deltaPose.x })
+        //values.add(Pair("Drivetrain Delta Pose Y") { Drivetrain.deltaPose.y })
+        //values.add(Pair("Drivetrain Delta Pose Rot") { Drivetrain.deltaPose.rotation.radians })
 
-        bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
-        bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })
-        bools.add(Pair("Elevator Browned Out") { Elevator.brownedOut })
+        //bools.add(Pair("Elevator Extension At Top") { Elevator.extensionAtTop() })
+        //bools.add(Pair("Elevator Extension At Bottom") { Elevator.extensionAtBottom() })
+        //bools.add(Pair("Elevator Browned Out") { Elevator.brownedOut })
 
-        bools.add(Pair("Elevator Angle At Top") { Elevator.angleAtTop() })
-        bools.add(Pair("Elevator Angle At Bottom") { Elevator.angleAtBottom() })
+        //bools.add(Pair("Elevator Angle At Top") { Elevator.angleAtTop() })
+        //bools.add(Pair("Elevator Angle At Bottom") { Elevator.angleAtBottom() })
 
-        bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
-        bools.add(Pair("Elevator Angle Inited") { Elevator.angleInited })
-        bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
+        //bools.add(Pair("Elevator Extension Inited") { Elevator.extensionInited })
+        //bools.add(Pair("Elevator Angle Inited") { Elevator.angleInited })
+        //bools.add(Pair("Elevator Extension Safe") { Elevator.extensionSafe() })
 
-        bools.add(Pair("Slow Mode") { Input.slowMode })
+        //bools.add(Pair("Slow Mode") { Input.slowMode })
 
-        bools.add(Pair("Vision Happy") { visionHappy })
+        //bools.add(Pair("Vision Happy") { visionHappy })
 
-        bools.add(Pair("Claw Full") { Claw.clawFull })
+        //bools.add(Pair("Claw Full") { Claw.clawFull })
 
-        SmartDashboard.putData("Output/Field", field)
-        SmartDashboard.putData("Output/VisionField", visionField)
+        //SmartDashboard.putData("Output/Field", field)
+        //SmartDashboard.putData("Output/VisionField", visionField)
 
         update()
     }

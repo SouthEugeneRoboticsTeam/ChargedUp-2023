@@ -259,7 +259,7 @@ object TunedConstants {
     const val standardFilterTaps = 20
     const val overCableFilterTaps = 4
 
-    const val balanceSpeed = 0.2//0.35 maybe
+    const val balanceSpeed = 0.4//0.35 maybe
     const val balanceAngleSignificantRate = 0.15
     const val balanceAngleTolerance = 0.04
 
@@ -318,7 +318,7 @@ object ConfigConstants {
     val eventMap = mapOf("Elevator Drive" to SetElevator(PhysicalConstants.elevatorExtensionDrive, PhysicalConstants.elevatorAngleDrive, true),
         "Elevator Cone High" to SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, true).andThen(SetElevator(PhysicalConstants.elevatorExtensionConeHigh, PhysicalConstants.elevatorAngleConeHigh, false).withTimeout(0.25)),
         "Claw Outtake" to ClawIntake(1.0).withTimeout(0.4),
-        "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleCubeIntake, true),
+        "Elevator Cube Intake" to SetElevator(PhysicalConstants.elevatorExtensionCubeIntake, PhysicalConstants.elevatorAngleConeTippedIntake, true),
         "Elevator Cone Intake" to SetElevator(PhysicalConstants.elevatorExtensionConeTippedIntake, PhysicalConstants.elevatorAngleConeTippedIntake, true),
         "Claw Cube Intake" to ClawIntake(-0.7),
         "Claw Cone Intake" to ClawIntake(-1.0),

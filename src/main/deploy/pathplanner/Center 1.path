@@ -1,0 +1,54 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.88230251460503,
+        "y": 2.184986453306241
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.88230251460503,
+        "y": 2.184986453306241
+      },
+      "holonomicAngle": -180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Elevator Drive",
+          "Elevator Cone High",
+          "Claw Outtake",
+          "Elevator Drive"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.3,
+        "y": 2.18
+      },
+      "prevControl": {
+        "x": 2.3,
+        "y": 2.18
+      },
+      "nextControl": null,
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}
