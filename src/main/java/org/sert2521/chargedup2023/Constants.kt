@@ -300,8 +300,8 @@ object ConfigConstants {
     const val drivetrainOptimized = true
 
     // Add actual joystick deadband
-    const val powerDeadband = 0.1
-    const val rotDeadband = 0.1
+    const val powerDeadband = 0.2
+    const val rotDeadband = 0.2
 
     const val driveSpeed = 3.5 * (5.0/7.0)
     const val driveSpeedup = 2.75 * (5.0/7.0)
@@ -369,7 +369,7 @@ object ConfigConstants {
 object ElectronicIDs {
     const val clawMotorId = 9
     const val elevatorMotorOne = 6
-    const val elevatorMotorTwo = 10
+    //const val elevatorMotorTwo = 10
     const val elevatorAngleMotor = 3
 
     const val elevatorEncoder = 5

@@ -13,7 +13,7 @@ import kotlin.math.PI
 
 object Elevator : SubsystemBase() {
     private val extendMotorOne = CANSparkMax(ElectronicIDs.elevatorMotorOne, CANSparkMaxLowLevel.MotorType.kBrushless)
-    private val extendMotorTwo = CANSparkMax(ElectronicIDs.elevatorMotorTwo, CANSparkMaxLowLevel.MotorType.kBrushless)
+    //private val extendMotorTwo = CANSparkMax(ElectronicIDs.elevatorMotorTwo, CANSparkMaxLowLevel.MotorType.kBrushless)
     private val extendEncoder = extendMotorOne.encoder
 
     private val upperExtension = DigitalInput(ElectronicIDs.elevatorUpperExtension)
@@ -38,10 +38,10 @@ object Elevator : SubsystemBase() {
 
     init {
         extendMotorOne.idleMode = CANSparkMax.IdleMode.kBrake
-        extendMotorTwo.idleMode = CANSparkMax.IdleMode.kBrake
+        //extendMotorTwo.idleMode = CANSparkMax.IdleMode.kBrake
         angleMotor.idleMode = CANSparkMax.IdleMode.kBrake
 
-        extendMotorTwo.follow(extendMotorOne, true)
+        //extendMotorTwo.follow(extendMotorOne, true)
         extendEncoder.positionConversionFactor = PhysicalConstants.elevatorExtensionConversion
 
         angleMotorEncoder.positionConversionFactor = PhysicalConstants.elevatorAngleMotorDistanceConversion
