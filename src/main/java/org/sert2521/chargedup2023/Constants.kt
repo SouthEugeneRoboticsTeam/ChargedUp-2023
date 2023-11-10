@@ -14,7 +14,6 @@ import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import org.sert2521.chargedup2023.commands.*
-import org.sert2521.chargedup2023.subsystems.Claw
 import kotlin.math.*
 
 // This file is too big, it should probably be broken up

@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
-import org.sert2521.chargedup2023.commands.InitElevator
 import org.sert2521.chargedup2023.subsystems.Drivetrain
-import org.sert2521.chargedup2023.subsystems.Elevator
-import org.sert2521.chargedup2023.subsystems.LEDs
 
 object Robot : TimedRobot() {
     private val commandScheduler = CommandScheduler.getInstance()
