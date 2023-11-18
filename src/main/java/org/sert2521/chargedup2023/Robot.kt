@@ -12,42 +12,18 @@ object Robot : TimedRobot() {
 
     init {
         Input
-        // Just so braking mode engages (maybe?)
-        Elevator
-
-        LEDs
 
         PathPlannerServer.startServer(5811)
     }
 
     override fun robotPeriodic() {
         commandScheduler.run()
-        Output.update()
     }
 
     override fun disabledExit() {
-        // Make it maybe drive while initing
-        if (!Elevator.extensionInited || !Elevator.angleInited) {
-            val initElevator = InitElevator().withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-            val auto = Input.getAuto()
-            if (auto != null && isAutonomous) {
-                initElevator.andThen(auto.andThen(InstantCommand({ Drivetrain.stop() }))).schedule()
-            } else {
-                initElevator.schedule()
-            }
-        } else {
-            if (isAutonomous) {
-                Input.getAuto()?.andThen(InstantCommand({ Drivetrain.stop() }))?.schedule()
-            }
-        }
     }
 
     override fun disabledPeriodic() {
-        if (Drivetrain.camerasConnected()) {
-            LEDs.setAllLEDRGB(0, 50, 0)
-        } else {
-            LEDs.setAllLEDRGB(50, 0, 0)
-        }
     }
 
     override fun disabledInit() {
